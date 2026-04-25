@@ -1,0 +1,23 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  background: #06040f;
+  color: #e8dcc8;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+  scroll-behavior: smooth;
+}
+
+#app {
+  min-height: 100%;
+  width: 100%;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(200, 160, 74, 0.35); border-radius: 2px; }

@@ -1,0 +1,421 @@
+[2m下午9:40:48[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "@/views/HomeView.vue" from "src/router/index.js". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/router/index.js[39m:7:72
+[33m  5  |    { path: '/login',        name: 'Login',       component: () => import('@/views/LoginView.vue') },
+  6  |    { path: '/callback',     name: 'Callback',    component: () => import('@/views/CallbackView.vue') },
+  7  |  ...',             name: 'Home',        component: () => import('@/views/HomeView.vue'),        meta: { auth: true } },
+     |                                                                 ^
+  8  |    { path: '/profile',      name: 'Profile',     component: () => import('@/views/ProfileView.vue'),     meta: { auth:...
+  9  |    { path: '/backpack',     name: 'Backpack',    component: () => import('@/views/BackpackView.vue'),    meta: { auth:...[39m
+[2m下午9:40:48[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/HomeView.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/router/index.js[39m:7:72
+[33m  5  |    { path: '/login',        name: 'Login',       component: () => import('@/views/LoginView.vue') },
+  6  |    { path: '/callback',     name: 'Callback',    component: () => import('@/views/CallbackView.vue') },
+  7  |  ...',             name: 'Home',        component: () => import('@/views/HomeView.vue'),        meta: { auth: true } },
+     |                                                                 ^
+  8  |    { path: '/profile',      name: 'Profile',     component: () => import('@/views/ProfileView.vue'),     meta: { auth:...
+  9  |    { path: '/backpack',     name: 'Backpack',    component: () => import('@/views/BackpackView.vue'),    meta: { auth:...[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30354:39)
+      at TransformPluginContext.error (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30351:14)
+      at normalizeUrl (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27633:18)
+      at async file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27696:30
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27664:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30143:14)
+      at async loadAndTransform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24468:26)
+      at async viteTransformMiddleware (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24262:20)
+[2m下午9:40:54[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "@/views/HomeView.vue" from "src/router/index.js". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/router/index.js[39m:7:72
+[33m  5  |    { path: '/login',        name: 'Login',       component: () => import('@/views/LoginView.vue') },
+  6  |    { path: '/callback',     name: 'Callback',    component: () => import('@/views/CallbackView.vue') },
+  7  |  ...',             name: 'Home',        component: () => import('@/views/HomeView.vue'),        meta: { auth: true } },
+     |                                                                 ^
+  8  |    { path: '/profile',      name: 'Profile',     component: () => import('@/views/ProfileView.vue'),     meta: { auth:...
+  9  |    { path: '/backpack',     name: 'Backpack',    component: () => import('@/views/BackpackView.vue'),    meta: { auth:...[39m
+[2m下午9:40:54[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/HomeView.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/router/index.js[39m:7:72
+[33m  5  |    { path: '/login',        name: 'Login',       component: () => import('@/views/LoginView.vue') },
+  6  |    { path: '/callback',     name: 'Callback',    component: () => import('@/views/CallbackView.vue') },
+  7  |  ...',             name: 'Home',        component: () => import('@/views/HomeView.vue'),        meta: { auth: true } },
+     |                                                                 ^
+  8  |    { path: '/profile',      name: 'Profile',     component: () => import('@/views/ProfileView.vue'),     meta: { auth:...
+  9  |    { path: '/backpack',     name: 'Backpack',    component: () => import('@/views/BackpackView.vue'),    meta: { auth:...[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30354:39)
+      at TransformPluginContext.error (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30351:14)
+      at normalizeUrl (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27633:18)
+      at async file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27696:30
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27664:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30143:14)
+      at async loadAndTransform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24468:26)
+      at async viteTransformMiddleware (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24262:20)
+[2m下午9:40:59[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "@/views/HomeView.vue" from "src/router/index.js". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/router/index.js[39m:7:72
+[33m  5  |    { path: '/login',        name: 'Login',       component: () => import('@/views/LoginView.vue') },
+  6  |    { path: '/callback',     name: 'Callback',    component: () => import('@/views/CallbackView.vue') },
+  7  |  ...',             name: 'Home',        component: () => import('@/views/HomeView.vue'),        meta: { auth: true } },
+     |                                                                 ^
+  8  |    { path: '/profile',      name: 'Profile',     component: () => import('@/views/ProfileView.vue'),     meta: { auth:...
+  9  |    { path: '/backpack',     name: 'Backpack',    component: () => import('@/views/BackpackView.vue'),    meta: { auth:...[39m
+[2m下午9:41:00[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/HomeView.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/router/index.js[39m:7:72
+[33m  5  |    { path: '/login',        name: 'Login',       component: () => import('@/views/LoginView.vue') },
+  6  |    { path: '/callback',     name: 'Callback',    component: () => import('@/views/CallbackView.vue') },
+  7  |  ...',             name: 'Home',        component: () => import('@/views/HomeView.vue'),        meta: { auth: true } },
+     |                                                                 ^
+  8  |    { path: '/profile',      name: 'Profile',     component: () => import('@/views/ProfileView.vue'),     meta: { auth:...
+  9  |    { path: '/backpack',     name: 'Backpack',    component: () => import('@/views/BackpackView.vue'),    meta: { auth:...[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30354:39)
+      at TransformPluginContext.error (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30351:14)
+      at normalizeUrl (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27633:18)
+      at async file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27696:30
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27664:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30143:14)
+      at async loadAndTransform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24468:26)
+      at async viteTransformMiddleware (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24262:20)
+[2m下午9:41:17[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/HomeView.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/router/index.js[39m:7:72
+[33m  5  |    { path: '/login',        name: 'Login',       component: () => import('@/views/LoginView.vue') },
+  6  |    { path: '/callback',     name: 'Callback',    component: () => import('@/views/CallbackView.vue') },
+  7  |  ...',             name: 'Home',        component: () => import('@/views/HomeView.vue'),        meta: { auth: true } },
+     |                                                                 ^
+  8  |    { path: '/profile',      name: 'Profile',     component: () => import('@/views/ProfileView.vue'),     meta: { auth:...
+  9  |    { path: '/backpack',     name: 'Backpack',    component: () => import('@/views/BackpackView.vue'),    meta: { auth:...[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30354:39)
+      at TransformPluginContext.error (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30351:14)
+      at normalizeUrl (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27633:18)
+      at async file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27696:30
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27664:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30143:14)
+      at async loadAndTransform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24468:26)
+      at async viteTransformMiddleware (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24262:20)
+[2m下午10:33:53[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/views/HomeView.vue. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m下午10:59:22[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22m[Vue warn]: Unhandled error during execution of native event handler 
+  at <HomeView onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< {} > > 
+  at <RouterView> 
+  at <App>
+[2m下午10:59:22[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled rejection] [1mError[22m: unsupported currency source: quest_reward
+[39m > request src/api/client.js:22:11
+    20 |    if (!res.ok) {
+    21 |      const msg = data?.message || data?.error || `HTTP ${res.status}`
+    22 |      throw new Error(msg)
+       |             ^
+    23 |    }
+    24 |    return data
+ > Proxy.claimMission src/views/HomeView.vue:253:17
+
+[2m下午10:59:23[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22m[Vue warn]: Unhandled error during execution of native event handler 
+  at <HomeView onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< {} > > 
+  at <RouterView> 
+  at <App>
+[2m下午10:59:23[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled rejection] [1mError[22m: 獎勵已領取
+[39m > request src/api/client.js:22:11
+    20 |    if (!res.ok) {
+    21 |      const msg = data?.message || data?.error || `HTTP ${res.status}`
+    22 |      throw new Error(msg)
+       |             ^
+    23 |    }
+    24 |    return data
+ > Proxy.claimMission src/views/HomeView.vue:253:17
+
+[2m下午10:59:24[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22m[Vue warn]: Unhandled error during execution of native event handler 
+  at <HomeView onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< {} > > 
+  at <RouterView> 
+  at <App>
+[2m下午10:59:24[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled rejection] [1mError[22m: 獎勵已領取
+[39m > request src/api/client.js:22:11
+    20 |    if (!res.ok) {
+    21 |      const msg = data?.message || data?.error || `HTTP ${res.status}`
+    22 |      throw new Error(msg)
+       |             ^
+    23 |    }
+    24 |    return data
+ > Proxy.claimMission src/views/HomeView.vue:253:17
+
+[2m下午10:59:24[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22m[Vue warn]: Unhandled error during execution of native event handler 
+  at <HomeView onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< {} > > 
+  at <RouterView> 
+  at <App>
+[2m下午10:59:24[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled rejection] [1mError[22m: 獎勵已領取
+[39m > request src/api/client.js:22:11
+    20 |    if (!res.ok) {
+    21 |      const msg = data?.message || data?.error || `HTTP ${res.status}`
+    22 |      throw new Error(msg)
+       |             ^
+    23 |    }
+    24 |    return data
+ > Proxy.claimMission src/views/HomeView.vue:253:17
+
+[2m下午10:59:24[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22m[Vue warn]: Unhandled error during execution of native event handler 
+  at <HomeView onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< {} > > 
+  at <RouterView> 
+  at <App>
+[2m下午10:59:24[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled rejection] [1mError[22m: 獎勵已領取
+[39m > request src/api/client.js:22:11
+    20 |    if (!res.ok) {
+    21 |      const msg = data?.message || data?.error || `HTTP ${res.status}`
+    22 |      throw new Error(msg)
+       |             ^
+    23 |    }
+    24 |    return data
+ > Proxy.claimMission src/views/HomeView.vue:253:17
+
+[2m下午9:06:56[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to parse source for import analysis because the content contains invalid JS syntax. Install @vitejs/plugin-vue to handle .vue files.
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/App.vue[39m:3:11
+[33m  1  |  <template>
+  2  |    <RouterView />
+  3  |  </template>
+     |             ^
+  4  |  [39m
+[2m下午9:06:56[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "@/views/LandingView.vue" from "src/router/index.js". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/router/index.js[39m:7:28
+[33m  5  |      path: '/',
+  6  |      name: 'Landing',
+  7  |      component: () => import('@/views/LandingView.vue'),
+     |                              ^
+  8  |    },
+  9  |    { path: '/:pathMatch(.*)*', redirect: '/' },[39m
+[2m下午9:06:56[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/LandingView.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/router/index.js[39m:7:28
+[33m  5  |      path: '/',
+  6  |      name: 'Landing',
+  7  |      component: () => import('@/views/LandingView.vue'),
+     |                              ^
+  8  |    },
+  9  |    { path: '/:pathMatch(.*)*', redirect: '/' },[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30354:39)
+      at TransformPluginContext.error (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30351:14)
+      at normalizeUrl (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27633:18)
+      at async file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27696:30
+      at async Promise.all (index 1)
+      at async TransformPluginContext.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27664:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30143:14)
+      at async loadAndTransform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24468:26)
+      at async viteTransformMiddleware (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24262:20)
+[2m下午9:06:56[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to parse source for import analysis because the content contains invalid JS syntax. Install @vitejs/plugin-vue to handle .vue files.[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/App.vue[39m:3:11
+[33m  1  |  <template>
+  2  |    <RouterView />
+  3  |  </template>
+     |             ^
+  4  |  [39m
+      at TransformPluginContext._formatLog (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30354:39)
+      at TransformPluginContext.error (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30351:14)
+      at TransformPluginContext.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27597:10)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30143:14)
+      at async loadAndTransform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24468:26)
+      at async viteTransformMiddleware (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24262:20)
+[2m下午9:06:59[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/LandingView.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/router/index.js[39m:7:28
+[33m  5  |      path: '/',
+  6  |      name: 'Landing',
+  7  |      component: () => import('@/views/LandingView.vue'),
+     |                              ^
+  8  |    },
+  9  |    { path: '/:pathMatch(.*)*', redirect: '/' },[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30354:39)
+      at TransformPluginContext.error (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30351:14)
+      at normalizeUrl (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27633:18)
+      at async file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27696:30
+      at async Promise.all (index 1)
+      at async TransformPluginContext.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27664:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30143:14)
+      at async loadAndTransform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24468:26)
+      at async viteTransformMiddleware (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24262:20)
+[2m下午9:06:59[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to parse source for import analysis because the content contains invalid JS syntax. Install @vitejs/plugin-vue to handle .vue files.[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/App.vue[39m:3:11
+[33m  1  |  <template>
+  2  |    <RouterView />
+  3  |  </template>
+     |             ^
+  4  |  [39m
+      at TransformPluginContext._formatLog (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30354:39)
+      at TransformPluginContext.error (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30351:14)
+      at TransformPluginContext.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27597:10)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30143:14)
+      at async loadAndTransform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24468:26)
+      at async viteTransformMiddleware (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24262:20)
+[2m上午9:29:43[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/LandingView.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/router/index.js[39m:7:28
+[33m  5  |      path: '/',
+  6  |      name: 'Landing',
+  7  |      component: () => import('@/views/LandingView.vue'),
+     |                              ^
+  8  |    },
+  9  |    { path: '/:pathMatch(.*)*', redirect: '/' },[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30354:39)
+      at TransformPluginContext.error (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30351:14)
+      at normalizeUrl (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27633:18)
+      at async file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27696:30
+      at async Promise.all (index 1)
+      at async TransformPluginContext.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27664:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30143:14)
+      at async loadAndTransform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24468:26)
+      at async viteTransformMiddleware (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24262:20)
+[2m上午9:29:43[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to parse source for import analysis because the content contains invalid JS syntax. Install @vitejs/plugin-vue to handle .vue files.[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/App.vue[39m:3:11
+[33m  1  |  <template>
+  2  |    <RouterView />
+  3  |  </template>
+     |             ^
+  4  |  [39m
+      at TransformPluginContext._formatLog (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30354:39)
+      at TransformPluginContext.error (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30351:14)
+      at TransformPluginContext.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27597:10)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30143:14)
+      at async loadAndTransform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24468:26)
+      at async viteTransformMiddleware (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24262:20)
+[2m上午9:29:46[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to parse source for import analysis because the content contains invalid JS syntax. Install @vitejs/plugin-vue to handle .vue files.[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/App.vue[39m:3:11
+[33m  1  |  <template>
+  2  |    <RouterView />
+  3  |  </template>
+     |             ^
+  4  |  [39m
+      at TransformPluginContext._formatLog (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30354:39)
+      at TransformPluginContext.error (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30351:14)
+      at TransformPluginContext.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27597:10)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30143:14)
+      at async loadAndTransform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24468:26)
+      at async viteTransformMiddleware (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24262:20)
+[2m上午9:29:46[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/LandingView.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/router/index.js[39m:7:28
+[33m  5  |      path: '/',
+  6  |      name: 'Landing',
+  7  |      component: () => import('@/views/LandingView.vue'),
+     |                              ^
+  8  |    },
+  9  |    { path: '/:pathMatch(.*)*', redirect: '/' },[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30354:39)
+      at TransformPluginContext.error (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30351:14)
+      at normalizeUrl (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27633:18)
+      at async file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27696:30
+      at async Promise.all (index 1)
+      at async TransformPluginContext.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27664:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30143:14)
+      at async loadAndTransform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24468:26)
+      at async viteTransformMiddleware (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24262:20)
+[2m上午9:30:15[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to parse source for import analysis because the content contains invalid JS syntax. Install @vitejs/plugin-vue to handle .vue files.
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/App.vue[39m:3:11
+[33m  1  |  <template>
+  2  |    <RouterView />
+  3  |  </template>
+     |             ^
+  4  |  [39m
+[2m上午9:30:15[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to parse source for import analysis because the content contains invalid JS syntax. Install @vitejs/plugin-vue to handle .vue files.[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/App.vue[39m:3:11
+[33m  1  |  <template>
+  2  |    <RouterView />
+  3  |  </template>
+     |             ^
+  4  |  [39m
+      at TransformPluginContext._formatLog (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30354:39)
+      at TransformPluginContext.error (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30351:14)
+      at TransformPluginContext.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27597:10)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30143:14)
+      at async loadAndTransform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24468:26)
+      at async viteTransformMiddleware (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24262:20)
+[2m上午9:30:19[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to parse source for import analysis because the content contains invalid JS syntax. Install @vitejs/plugin-vue to handle .vue files.[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/App.vue[39m:3:11
+[33m  1  |  <template>
+  2  |    <RouterView />
+  3  |  </template>
+     |             ^
+  4  |  [39m
+      at TransformPluginContext._formatLog (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30354:39)
+      at TransformPluginContext.error (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30351:14)
+      at TransformPluginContext.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27597:10)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30143:14)
+      at async loadAndTransform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24468:26)
+      at async viteTransformMiddleware (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24262:20)
+[2m上午9:30:19[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to parse source for import analysis because the content contains invalid JS syntax. Install @vitejs/plugin-vue to handle .vue files.[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/App.vue[39m:3:11
+[33m  1  |  <template>
+  2  |    <RouterView />
+  3  |  </template>
+     |             ^
+  4  |  [39m
+      at TransformPluginContext._formatLog (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30354:39)
+      at TransformPluginContext.error (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30351:14)
+      at TransformPluginContext.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27597:10)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30143:14)
+      at async loadAndTransform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24468:26)
+      at async viteTransformMiddleware (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24262:20)
+[2m上午9:31:53[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to parse source for import analysis because the content contains invalid JS syntax. Install @vitejs/plugin-vue to handle .vue files.[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/App.vue[39m:3:11
+[33m  1  |  <template>
+  2  |    <RouterView />
+  3  |  </template>
+     |             ^
+  4  |  [39m
+      at TransformPluginContext._formatLog (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30354:39)
+      at TransformPluginContext.error (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30351:14)
+      at TransformPluginContext.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27597:10)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30143:14)
+      at async loadAndTransform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24468:26)
+      at async viteTransformMiddleware (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24262:20)
+[2m上午9:31:55[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to parse source for import analysis because the content contains invalid JS syntax. Install @vitejs/plugin-vue to handle .vue files.[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/App.vue[39m:3:11
+[33m  1  |  <template>
+  2  |    <RouterView />
+  3  |  </template>
+     |             ^
+  4  |  [39m
+      at TransformPluginContext._formatLog (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30354:39)
+      at TransformPluginContext.error (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30351:14)
+      at TransformPluginContext.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27597:10)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30143:14)
+      at async loadAndTransform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24468:26)
+      at async viteTransformMiddleware (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24262:20)
+[2m上午9:32:36[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to parse source for import analysis because the content contains invalid JS syntax. Install @vitejs/plugin-vue to handle .vue files.[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/App.vue[39m:3:11
+[33m  1  |  <template>
+  2  |    <RouterView />
+  3  |  </template>
+     |             ^
+  4  |  [39m
+      at TransformPluginContext._formatLog (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30354:39)
+      at TransformPluginContext.error (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30351:14)
+      at TransformPluginContext.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27597:10)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30143:14)
+      at async loadAndTransform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24468:26)
+      at async viteTransformMiddleware (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24262:20)
+[2m上午9:32:39[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to parse source for import analysis because the content contains invalid JS syntax. Install @vitejs/plugin-vue to handle .vue files.[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/appsk/Documents/Github/equipmentGAME-web/src/App.vue[39m:3:11
+[33m  1  |  <template>
+  2  |    <RouterView />
+  3  |  </template>
+     |             ^
+  4  |  [39m
+      at TransformPluginContext._formatLog (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30354:39)
+      at TransformPluginContext.error (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30351:14)
+      at TransformPluginContext.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:27597:10)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:30143:14)
+      at async loadAndTransform (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24468:26)
+      at async viteTransformMiddleware (file:///C:/Users/appsk/Documents/Github/equipmentGAME-web/node_modules/vite/dist/node/chunks/node.js:24262:20)
