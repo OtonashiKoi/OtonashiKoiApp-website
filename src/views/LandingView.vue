@@ -33,12 +33,10 @@ onMounted(() => {
       p.y += p.vy
       p.flicker += 0.03
       p.alpha += Math.sin(p.flicker * 2) * 0.015
-
       if (p.y < -10 || p.alpha <= 0) {
         particles[i] = createParticle(W, H, true)
         return
       }
-
       ctx.save()
       ctx.globalAlpha = Math.max(0, Math.min(1, p.alpha))
       ctx.shadowBlur = 8
@@ -65,7 +63,7 @@ onMounted(() => {
   })
 })
 
-// Intersection Observer for scroll reveals
+// Scroll reveals
 onMounted(() => {
   const els = document.querySelectorAll('.reveal')
   const obs = new IntersectionObserver(
@@ -75,71 +73,208 @@ onMounted(() => {
   els.forEach((el) => obs.observe(el))
 })
 
-const jobs = [
-  { icon: '⚔️', name: '劍士', sub: 'SWORDSMAN', color: '#e8a04a', desc: '格擋後反擊，以一敵萬' },
-  { icon: '🪓', name: '戰士', sub: 'WARRIOR', color: '#e05252', desc: '瀕死爆發，絕境翻盤' },
-  { icon: '🏹', name: '弓箭手', sub: 'ARCHER', color: '#52b86e', desc: '命中要害，必殺一擊' },
-  { icon: '🗡️', name: '盜賊', sub: 'ROGUE', color: '#a78bfa', desc: '連擊加速，如影隨形' },
-  { icon: '🔮', name: '法師', sub: 'MAGE', color: '#60a5fa', desc: '魔法穿防，智慧碾壓' },
-  { icon: '🏥', name: '治療師', sub: 'HEALER', color: '#f0e040', desc: '在場光環，守護全隊' },
-  { icon: '🥊', name: '矮人', sub: 'DWARF', color: '#fb923c', desc: '高血防守，如銅牆鐵壁' },
+// ─── Modal ───
+const activeModal = ref(null)
+function openModal(type, data) { activeModal.value = { type, data } }
+function closeModal() { activeModal.value = null }
+onMounted(() => {
+  window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal() })
+})
+
+// ─── Data ───
+const zones = [
+  {
+    key: 'beginner', emoji: '🌱', name: '新手區', lv: 'Lv.1–3', color: '#4ade80', monsters: 5,
+    desc: '踏上旅途，學習基礎戰鬥',
+    detail: {
+      intro: '音無樂園的起點，專為剛踏上旅途的冒險者設計。怪物相對溫和，是熟悉戰鬥系統與指令操作的最佳場所。',
+      monsterList: ['🐾 史萊姆', '🌿 藥草精靈', '🐀 巨齒鼠', '🐛 毒毛蟲', '🍄 毒菇怪'],
+      drops: '新手裝備・少量金幣・初級藥水',
+      tips: '先在此區刷到 Lv.3，熟悉戰鬥指令後再往一般區挑戰。怪物掉落率較高，是新手累積初期裝備的好地方。',
+      recommend: '任何職業皆可 / 無需特定裝備',
+    },
+  },
+  {
+    key: 'normal', emoji: '⚔️', name: '一般區', lv: 'Lv.1–10', color: '#facc15', monsters: 12,
+    desc: '鍛煉身手，挑戰更強的敵人',
+    detail: {
+      intro: '適合有一定基礎的冒險者，怪物種類繁多，戰鬥節奏較快，需要開始注意裝備配置與屬性搭配。',
+      monsterList: ['💀 骷髏劍士', '🌵 沙漠蠍', '🦅 銳爪鷹', '🐺 荒野狼', '🧟 殭屍兵'],
+      drops: '普通裝備・金幣・初級強化素材',
+      tips: '推薦裝備強化至 +2 以上再挑戰。法師和弓箭手在此區因距離優勢表現尤為出色。',
+      recommend: 'Lv.3+ / 建議裝備強化 +1',
+    },
+  },
+  {
+    key: 'mid', emoji: '✦', name: '中級區', lv: 'Lv.10+', color: '#fb923c', monsters: 10,
+    desc: '中階冒險者的試煉場地',
+    detail: {
+      intro: '通往精英區的必經之路。中級區怪物開始擁有特殊技能，需要靈活應對各種異常狀態，考驗職業搭配。',
+      monsterList: ['🔥 熔岩精靈', '🌊 深海魔神', '⚡ 雷霆鷹王', '🌑 暗影刺客', '🐉 幼龍'],
+      drops: '稀有裝備・魔法寶石・技能書',
+      tips: '注意怪物的 Debuff 技能，準備狀態解除道具，並確保 HP 維持在 70% 以上。治療師的光環在此區價值大幅提升。',
+      recommend: 'Lv.10+ / 建議裝備強化 +3',
+    },
+  },
+  {
+    key: 'hard', emoji: '🔥', name: '高級區', lv: 'Lv.20+', color: '#f87171', monsters: 15,
+    desc: '古城遺蹟中的強大怪物',
+    detail: {
+      intro: '古老城堡的地下遺蹟，埋藏著無數強大怪物與傳說裝備。只有真正的勇者才能在此立足生存。',
+      monsterList: ['⚔️ 黑鐵騎士', '🧙 古城法師', '👹 遺蹟守衛', '🦂 毒化蠍王', '💎 結晶巨人'],
+      drops: '高級裝備・傳說素材・稀有寶石',
+      tips: '需要完整的聖騎士或治療師支援。建議攜帶足夠的回復道具，計算好每回合的傷害承受量。',
+      recommend: 'Lv.20+ / 建議裝備強化 +5',
+    },
+  },
+  {
+    key: 'elite', emoji: '💀', name: '精英區', lv: 'Lv.30+', color: '#c084fc', monsters: 10,
+    desc: '傳說級別的凶猛敵人',
+    detail: {
+      intro: '音無樂園最危險的領域，只有頂尖冒險者才敢踏足。怪物擁有毀滅性力量，但掉落的裝備也是最珍貴的傳說等級。',
+      monsterList: ['👑 邪神使徒', '🌑 虛空巫王', '🔱 神話龍王', '⚰️ 死靈領主', '💫 星界獵人'],
+      drops: '傳說裝備・神話素材・限定稱號',
+      tips: '此區不容任何失誤。滿強化裝備與最優屬性配置是基本要求，強烈建議多人同時討伐。',
+      recommend: 'Lv.30+ / 裝備強化 +8 以上',
+    },
+  },
 ]
 
-const zones = [
-  { key: 'beginner', emoji: '🌱', name: '新手區', lv: 'Lv.1–3', color: '#4ade80', monsters: 5, desc: '踏上旅途，學習基礎戰鬥' },
-  { key: 'normal', emoji: '⚔️', name: '一般區', lv: 'Lv.1–10', color: '#facc15', monsters: 12, desc: '鍛煉身手，挑戰更強的敵人' },
-  { key: 'mid', emoji: '✦', name: '中級區', lv: 'Lv.10+', color: '#fb923c', monsters: 10, desc: '中階冒險者的試煉場地' },
-  { key: 'hard', emoji: '🔥', name: '高級區', lv: 'Lv.20+', color: '#f87171', monsters: 15, desc: '古城遺蹟中的強大怪物' },
-  { key: 'elite', emoji: '💀', name: '精英區', lv: 'Lv.30+', color: '#c084fc', monsters: 10, desc: '傳說級別的凶猛敵人' },
+const jobs = [
+  {
+    icon: '⚔️', name: '劍士', sub: 'SWORDSMAN', color: '#e8a04a', desc: '格擋後反擊，以一敵萬',
+    detail: {
+      mainStats: ['STR', 'VIT'],
+      mechanic: '受到攻擊時有機率觸發「格擋」，成功格擋後立即進行一次反擊，反擊傷害享有額外加成。格擋率隨 VIT 提升而增加。',
+      style: '防禦反擊型',
+      tips: '均衡配置 STR 和 VIT，面對多段攻擊的怪物時表現最為出色。不要只堆一項屬性。',
+    },
+  },
+  {
+    icon: '🪓', name: '戰士', sub: 'WARRIOR', color: '#e05252', desc: '瀕死爆發，絕境翻盤',
+    detail: {
+      mainStats: ['STR', 'VIT'],
+      mechanic: 'HP 低於 30% 時進入「憤怒」狀態，攻擊力大幅提升。越接近死亡，爆發力越驚人，是真正的絕境翻盤機。',
+      style: '爆發輸出型',
+      tips: '可主動讓自己保持低血量來維持高傷害輸出，但需精確計算安全邊界，避免被一發秒殺。',
+    },
+  },
+  {
+    icon: '🏹', name: '弓箭手', sub: 'ARCHER', color: '#52b86e', desc: '命中要害，必殺一擊',
+    detail: {
+      mainStats: ['DEX', 'AGI'],
+      mechanic: '每次攻擊有機率觸發「命中要害」，造成額外傷害，且可與普通暴擊效果疊加，實現超高單發傷害。DEX 越高觸發率越高。',
+      style: '高爆發遠程型',
+      tips: '優先堆疊 DEX 提升要害觸發率，搭配 AGI 提高攻速，實現高頻率的驚人輸出爆發。',
+    },
+  },
+  {
+    icon: '🗡️', name: '盜賊', sub: 'ROGUE', color: '#a78bfa', desc: '連擊加速，如影隨形',
+    detail: {
+      mainStats: ['AGI', 'LUK'],
+      mechanic: '攻擊時有機率觸發「連擊」，連續打出多段傷害。AGI 同時大幅提升閃避率，讓盜賊如幽靈般難以捕捉。',
+      style: '連擊閃避型',
+      tips: '大量堆疊 AGI 是盜賊的核心策略。達到閃避觸發後立即反擊，可以形成恐怖的循環輸出。',
+    },
+  },
+  {
+    icon: '🔮', name: '法師', sub: 'MAGE', color: '#60a5fa', desc: '魔法穿防，智慧碾壓',
+    detail: {
+      mainStats: ['INT'],
+      mechanic: '魔法傷害可無視部分物理防禦，純 INT 配置可達最大魔法輸出。INT 同時提升魔法防禦，形成攻防一體的體系。',
+      style: '高傷害魔法型',
+      tips: '全力堆疊 INT，搭配魔法加成裝備可達驚人爆發。但需注意物理防禦較低，避免被近戰反打。',
+    },
+  },
+  {
+    icon: '🏥', name: '治療師', sub: 'HEALER', color: '#f0e040', desc: '在場光環，守護全隊',
+    detail: {
+      mainStats: ['INT', 'VIT'],
+      mechanic: '「在場光環」效果：治療師在場時，同區所有玩家獲得持續回血效果。光環效果會持久化，你的存在即是隊伍最大資產。',
+      style: '支援輔助型',
+      tips: '在熱門討伐區頻繁現身，INT 提升治療量，VIT 確保自身存活。光環效果對精英區團隊至關重要。',
+    },
+  },
+  {
+    icon: '🥊', name: '矮人', sub: 'DWARF', color: '#fb923c', desc: '高血防守，如銅牆鐵壁',
+    detail: {
+      mainStats: ['VIT', 'STR'],
+      mechanic: '全職業最高的 HP 和防禦成長，受到攻擊時傷害減免效果更為顯著。天生的肉盾擔當，讓隊友安心輸出。',
+      style: '坦克防守型',
+      tips: '主力堆疊 VIT 提升防禦和 HP 上限。在精英區長時間鏖戰也不用擔心被秒，是最穩定的存在。',
+    },
+  },
 ]
 
 const attrs = [
-  { key: 'STR', name: '力量', color: '#ef4444', desc: '物理攻擊、砍傷' },
-  { key: 'AGI', name: '敏捷', color: '#22d3ee', desc: '攻速、閃避、連擊' },
-  { key: 'VIT', name: '體力', color: '#84cc16', desc: '最大HP、防禦' },
-  { key: 'INT', name: '智力', color: '#818cf8', desc: '魔法傷害、魔防' },
-  { key: 'DEX', name: '靈巧', color: '#f59e0b', desc: '命中率、暴擊' },
-  { key: 'LUK', name: '幸運', color: '#ec4899', desc: '暴擊率、稀有掉落' },
+  {
+    key: 'STR', name: '力量', color: '#ef4444', desc: '物理攻擊、砍傷',
+    detail: {
+      effect: '直接提升物理攻擊力，影響劈砍、穿刺等所有物理技能傷害輸出',
+      threshold: '無特殊閾值，線性穩定成長',
+      bestFor: ['⚔️ 劍士', '🪓 戰士', '🥊 矮人'],
+      tips: '近戰物理職業的主屬性。搭配高 STR 武器效果加倍。法師與治療師不需優先投入此屬性。',
+    },
+  },
+  {
+    key: 'AGI', name: '敏捷', color: '#22d3ee', desc: '攻速、閃避、連擊',
+    detail: {
+      effect: '提升攻擊速度（最快達 0.5秒/回合）、閃避率，以及盜賊連擊觸發率',
+      threshold: '⚡ AGI 40 = 最快攻速 0.5s/回合（重要閾值）',
+      bestFor: ['🗡️ 盜賊', '🏹 弓箭手'],
+      tips: 'AGI 40 是攻速的最大閾值，超過後僅提升閃避。盜賊建議優先衝到 40 點再分配其他屬性。',
+    },
+  },
+  {
+    key: 'VIT', name: '體力', color: '#84cc16', desc: '最大HP、防禦',
+    detail: {
+      effect: '提升最大 HP 上限和物理防禦力，同時影響劍士的格擋率',
+      threshold: '無特殊閾值，但精英區幾乎是生存必需屬性',
+      bestFor: ['🥊 矮人', '⚔️ 劍士', '🏥 治療師'],
+      tips: '所有職業都應投入一定的 VIT，特別是前往高難度區域前。純輸出職業可在後期補點。',
+    },
+  },
+  {
+    key: 'INT', name: '智力', color: '#818cf8', desc: '魔法傷害、魔防',
+    detail: {
+      effect: '提升魔法技能傷害、魔法防禦力，以及治療師的治療量',
+      threshold: '無特殊閾值，與魔法裝備加乘效果顯著',
+      bestFor: ['🔮 法師', '🏥 治療師'],
+      tips: '法師應將 INT 投到最高。其他職業若不使用魔法技能，可將此屬性點投入其他更有效的方向。',
+    },
+  },
+  {
+    key: 'DEX', name: '靈巧', color: '#f59e0b', desc: '命中率、暴擊',
+    detail: {
+      effect: '提升命中率和暴擊率基礎值，弓箭手的「命中要害」觸發率也與 DEX 直接掛鉤',
+      threshold: '命中不足時攻擊大量落空，須確保基本的 DEX 投入',
+      bestFor: ['🏹 弓箭手', '🗡️ 盜賊'],
+      tips: '命中率不足時攻擊頻繁落空，所有職業都需要保持基本的 DEX 值。弓箭手應作為主屬性全力培養。',
+    },
+  },
+  {
+    key: 'LUK', name: '幸運', color: '#ec4899', desc: '暴擊率、稀有掉落',
+    detail: {
+      effect: '提升暴擊率和稀有道具掉落率，是格鬥家（矮人）的核心爆發屬性',
+      threshold: '無特殊閾值，高 LUK 在農稀有裝備時效益顯著',
+      bestFor: ['🥊 矮人（格鬥家）', '🗡️ 盜賊'],
+      tips: '想要提高稀有道具掉落率時非常有用。高 LUK 搭配暴擊裝備，能打出讓對手絕望的瞬間爆發。',
+    },
+  },
 ]
 
 const features = [
-  {
-    icon: '🗡️',
-    title: '裝備強化',
-    desc: '使用強化寶石提升裝備能力，四個等階、無上限突破，打造你的最強裝備。',
-  },
-  {
-    icon: '🃏',
-    title: '怪物卡片',
-    desc: '40+1 張稀有卡片，戰鬥中觸發 Buff/Debuff，掌握技能就能左右戰局。',
-  },
-  {
-    icon: '🌐',
-    title: '世界 Boss',
-    desc: '定時出現的強力 Boss，全服玩家聯合挑戰，搶奪限定稀有戰利品。',
-  },
-  {
-    icon: '🏆',
-    title: '拍賣行',
-    desc: '自由交易市場，玩家之間競標稀有裝備，累積財富成為商會大亨。',
-  },
-  {
-    icon: '📜',
-    title: '每日任務',
-    desc: '每日、每週、新手任務三大系統，完成任務獲取豐厚獎勵與特殊道具。',
-  },
-  {
-    icon: '⚡',
-    title: '即時戰鬥',
-    desc: 'Discord 頻道內直接開打，自動回合戰鬥，完整戰報即時呈現。',
-  },
+  { icon: '🗡️', title: '裝備強化', desc: '使用強化寶石提升裝備能力，四個等階、無上限突破，打造你的最強裝備。' },
+  { icon: '🃏', title: '怪物卡片', desc: '40+1 張稀有卡片，戰鬥中觸發 Buff/Debuff，掌握技能就能左右戰局。' },
+  { icon: '🌐', title: '世界 Boss', desc: '定時出現的強力 Boss，全服玩家聯合挑戰，搶奪限定稀有戰利品。' },
+  { icon: '🏆', title: '拍賣行', desc: '自由交易市場，玩家之間競標稀有裝備，累積財富成為商會大亨。' },
+  { icon: '📜', title: '每日任務', desc: '每日、每週、新手任務三大系統，完成任務獲取豐厚獎勵與特殊道具。' },
+  { icon: '⚡', title: '即時戰鬥', desc: 'Discord 頻道內直接開打，自動回合戰鬥，完整戰報即時呈現。' },
 ]
-
 </script>
 
 <template>
   <div class="landing">
-    <!-- Particle Canvas -->
     <canvas ref="canvasRef" class="particle-canvas" />
 
     <!-- ===== HERO ===== -->
@@ -175,12 +310,17 @@ const features = [
         <p class="sect-sub">由新手到精英，每個區域都有獨特的怪物與挑戰</p>
       </div>
       <div class="zones-grid">
-        <div v-for="z in zones" :key="z.key" class="zone-card" :style="{ '--zc': z.color }">
+        <div
+          v-for="z in zones" :key="z.key"
+          class="zone-card" :style="{ '--zc': z.color }"
+          @click="openModal('zone', z)"
+        >
           <div class="zone-emoji">{{ z.emoji }}</div>
           <div class="zone-lv">{{ z.lv }}</div>
           <div class="zone-name">{{ z.name }}</div>
           <div class="zone-desc">{{ z.desc }}</div>
           <div class="zone-monsters">怪物數：{{ z.monsters }}</div>
+          <div class="card-hint">點擊查看詳情 ▸</div>
           <div class="zone-glow" />
         </div>
       </div>
@@ -194,11 +334,16 @@ const features = [
         <p class="sect-sub">每個職業擁有獨特的戰鬥機制，選擇最適合你的風格</p>
       </div>
       <div class="jobs-grid">
-        <div v-for="j in jobs" :key="j.sub" class="job-card" :style="{ '--jc': j.color }">
+        <div
+          v-for="j in jobs" :key="j.sub"
+          class="job-card" :style="{ '--jc': j.color }"
+          @click="openModal('job', j)"
+        >
           <div class="job-icon">{{ j.icon }}</div>
           <div class="job-sub">{{ j.sub }}</div>
           <div class="job-name">{{ j.name }}</div>
           <div class="job-desc">{{ j.desc }}</div>
+          <div class="card-hint">點擊查看詳情 ▸</div>
           <div class="job-shine" />
         </div>
       </div>
@@ -209,13 +354,18 @@ const features = [
       <div class="section-header">
         <div class="sect-ornament">⟨ 屬性成長 ⟩</div>
         <h2 class="sect-title">六大核心屬性</h2>
-        <p class="sect-sub">合理分配屬性點，發揮職業最大潛能</p>
+        <p class="sect-sub">隨機分配屬性點，獨一無二的BUILD</p>
       </div>
       <div class="attrs-grid">
-        <div v-for="a in attrs" :key="a.key" class="attr-card" :style="{ '--ac': a.color }">
+        <div
+          v-for="a in attrs" :key="a.key"
+          class="attr-card" :style="{ '--ac': a.color }"
+          @click="openModal('attr', a)"
+        >
           <div class="attr-key">{{ a.key }}</div>
           <div class="attr-name">{{ a.name }}</div>
           <div class="attr-desc">{{ a.desc }}</div>
+          <div class="card-hint">點擊查看詳情 ▸</div>
           <div class="attr-border" />
         </div>
       </div>
@@ -257,10 +407,85 @@ const features = [
         <div class="cta-corner bl" />
         <div class="cta-corner br" />
       </div>
-      <div class="footer-copy">
-        © 2026 音無樂園 ・ Built with ⚔️ &amp; Discord
-      </div>
+      <div class="footer-copy">© 2026 音無樂園 ・ Built with ⚔️ &amp; Discord</div>
     </section>
+
+    <!-- ===== MODAL ===== -->
+    <Transition name="modal">
+      <div v-if="activeModal" class="modal-backdrop" @click.self="closeModal">
+        <div class="modal-panel" :style="{ '--mc': activeModal.data.color || '#c8a04a' }">
+          <button class="modal-close" @click="closeModal">✕</button>
+          <div class="modal-corner tl" /><div class="modal-corner tr" />
+          <div class="modal-corner bl" /><div class="modal-corner br" />
+
+          <!-- Zone modal -->
+          <template v-if="activeModal.type === 'zone'">
+            <div class="modal-head">
+              <span class="modal-emoji">{{ activeModal.data.emoji }}</span>
+              <div>
+                <div class="modal-badge-text">{{ activeModal.data.lv }}</div>
+                <div class="modal-title">{{ activeModal.data.name }}</div>
+              </div>
+            </div>
+            <div class="modal-deco-line" />
+            <p class="modal-intro">{{ activeModal.data.detail.intro }}</p>
+            <div class="modal-section-label">⚔ 怪物列表</div>
+            <div class="modal-tags">
+              <span v-for="m in activeModal.data.detail.monsterList" :key="m" class="modal-tag">{{ m }}</span>
+            </div>
+            <div class="modal-section-label">💰 主要掉落</div>
+            <div class="modal-drops">{{ activeModal.data.detail.drops }}</div>
+            <div class="modal-section-label">📌 冒險建議</div>
+            <p class="modal-tips">{{ activeModal.data.detail.tips }}</p>
+            <div class="modal-recommend">推薦條件：{{ activeModal.data.detail.recommend }}</div>
+          </template>
+
+          <!-- Job modal -->
+          <template v-else-if="activeModal.type === 'job'">
+            <div class="modal-head">
+              <span class="modal-emoji">{{ activeModal.data.icon }}</span>
+              <div>
+                <div class="modal-badge-text">{{ activeModal.data.sub }}</div>
+                <div class="modal-title">{{ activeModal.data.name }}</div>
+              </div>
+            </div>
+            <div class="modal-deco-line" />
+            <div class="modal-section-label">📊 主要屬性</div>
+            <div class="modal-tags">
+              <span v-for="s in activeModal.data.detail.mainStats" :key="s" class="modal-tag modal-tag-stat">{{ s }}</span>
+            </div>
+            <div class="modal-section-label">⚙ 核心機制</div>
+            <p class="modal-intro">{{ activeModal.data.detail.mechanic }}</p>
+            <div class="modal-section-label">🎯 戰鬥風格</div>
+            <div class="modal-drops">{{ activeModal.data.detail.style }}</div>
+            <div class="modal-section-label">📌 攻略提示</div>
+            <p class="modal-tips">{{ activeModal.data.detail.tips }}</p>
+          </template>
+
+          <!-- Attr modal -->
+          <template v-else-if="activeModal.type === 'attr'">
+            <div class="modal-head">
+              <span class="modal-attr-key">{{ activeModal.data.key }}</span>
+              <div>
+                <div class="modal-badge-text">ATTRIBUTE</div>
+                <div class="modal-title">{{ activeModal.data.name }}</div>
+              </div>
+            </div>
+            <div class="modal-deco-line" />
+            <div class="modal-section-label">📈 效果說明</div>
+            <p class="modal-intro">{{ activeModal.data.detail.effect }}</p>
+            <div class="modal-section-label">⚡ 特殊閾值</div>
+            <div class="modal-drops">{{ activeModal.data.detail.threshold }}</div>
+            <div class="modal-section-label">🏆 最佳職業</div>
+            <div class="modal-tags">
+              <span v-for="b in activeModal.data.detail.bestFor" :key="b" class="modal-tag">{{ b }}</span>
+            </div>
+            <div class="modal-section-label">📌 配點建議</div>
+            <p class="modal-tips">{{ activeModal.data.detail.tips }}</p>
+          </template>
+        </div>
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -329,9 +554,7 @@ const features = [
   50% { box-shadow: 0 0 18px 2px rgba(200, 160, 74, 0.25); }
 }
 
-.hero-title-wrap {
-  margin-bottom: 30px;
-}
+.hero-title-wrap { margin-bottom: 30px; }
 
 .hero-deco-line {
   height: 1px;
@@ -342,9 +565,7 @@ const features = [
   opacity: 0.6;
 }
 
-.hero-title {
-  margin: 0;
-}
+.hero-title { margin: 0; }
 
 .hero-jp {
   display: block;
@@ -355,7 +576,6 @@ const features = [
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-shadow: none;
   filter: drop-shadow(0 0 30px rgba(200, 160, 74, 0.5));
   animation: title-glow 4s ease-in-out infinite;
 }
@@ -383,7 +603,6 @@ const features = [
   max-width: 520px;
 }
 
-/* Corner ornaments */
 .hero-corner, .cta-corner {
   position: absolute;
   width: 28px;
@@ -468,6 +687,19 @@ const features = [
   transform: translateY(0);
 }
 
+/* ─── Card hint ─── */
+.card-hint {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--zc, var(--jc, var(--ac, #c8a04a)));
+  opacity: 0;
+  margin-top: 10px;
+  transition: opacity 0.25s;
+}
+.zone-card:hover .card-hint,
+.job-card:hover .card-hint,
+.attr-card:hover .card-hint { opacity: 0.7; }
+
 /* ─── Zones Grid ─── */
 .zones-grid {
   display: flex;
@@ -480,64 +712,25 @@ const features = [
 .zone-card {
   flex: 0 0 200px;
   max-width: 220px;
-}
-
-.zone-card {
   position: relative;
   padding: 28px 20px;
   text-align: center;
   border: 1px solid color-mix(in srgb, var(--zc) 40%, transparent);
   border-radius: 2px;
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--zc) 8%, #06040f) 0%,
-    #06040f 100%
-  );
+  background: linear-gradient(180deg, color-mix(in srgb, var(--zc) 8%, #06040f) 0%, #06040f 100%);
   overflow: hidden;
-  cursor: default;
+  cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
 }
-
 .zone-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 12px 36px color-mix(in srgb, var(--zc) 30%, transparent);
 }
-
-.zone-emoji {
-  font-size: 36px;
-  margin-bottom: 10px;
-  display: block;
-  filter: drop-shadow(0 0 8px var(--zc));
-}
-
-.zone-lv {
-  font-size: 11px;
-  letter-spacing: 3px;
-  color: var(--zc);
-  margin-bottom: 8px;
-  opacity: 0.85;
-}
-
-.zone-name {
-  font-size: 18px;
-  letter-spacing: 0.15em;
-  margin-bottom: 10px;
-  color: #f0e8d8;
-}
-
-.zone-desc {
-  font-size: 12px;
-  color: #7a6e60;
-  line-height: 1.6;
-  margin-bottom: 12px;
-}
-
-.zone-monsters {
-  font-size: 11px;
-  letter-spacing: 2px;
-  color: color-mix(in srgb, var(--zc) 70%, #888);
-}
-
+.zone-emoji { font-size: 36px; margin-bottom: 10px; display: block; filter: drop-shadow(0 0 8px var(--zc)); }
+.zone-lv { font-size: 11px; letter-spacing: 3px; color: var(--zc); margin-bottom: 8px; opacity: 0.85; }
+.zone-name { font-size: 18px; letter-spacing: 0.15em; margin-bottom: 10px; color: #f0e8d8; }
+.zone-desc { font-size: 12px; color: #7a6e60; line-height: 1.6; margin-bottom: 12px; }
+.zone-monsters { font-size: 11px; letter-spacing: 2px; color: color-mix(in srgb, var(--zc) 70%, #888); }
 .zone-glow {
   position: absolute;
   bottom: 0; left: 0; right: 0;
@@ -558,70 +751,32 @@ const features = [
 .job-card {
   flex: 0 0 160px;
   max-width: 180px;
-}
-
-.job-card {
   position: relative;
   padding: 28px 16px;
   text-align: center;
   border: 1px solid color-mix(in srgb, var(--jc) 30%, transparent);
   border-radius: 2px;
-  background: linear-gradient(
-    160deg,
-    color-mix(in srgb, var(--jc) 6%, #0a0812) 0%,
-    #0a0812 100%
-  );
+  background: linear-gradient(160deg, color-mix(in srgb, var(--jc) 6%, #0a0812) 0%, #0a0812 100%);
   overflow: hidden;
+  cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
-  cursor: default;
 }
-
 .job-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 30px color-mix(in srgb, var(--jc) 35%, transparent);
 }
-
-.job-icon {
-  font-size: 32px;
-  margin-bottom: 10px;
-  display: block;
-  filter: drop-shadow(0 0 6px var(--jc));
-}
-
-.job-sub {
-  font-size: 9px;
-  letter-spacing: 5px;
-  color: var(--jc);
-  margin-bottom: 6px;
-  opacity: 0.7;
-  font-family: 'Courier New', monospace;
-}
-
-.job-name {
-  font-size: 18px;
-  letter-spacing: 0.2em;
-  margin-bottom: 10px;
-  color: #f0e8d8;
-}
-
-.job-desc {
-  font-size: 11px;
-  color: #6a6058;
-  line-height: 1.6;
-}
-
+.job-icon { font-size: 32px; margin-bottom: 10px; display: block; filter: drop-shadow(0 0 6px var(--jc)); }
+.job-sub { font-size: 9px; letter-spacing: 5px; color: var(--jc); margin-bottom: 6px; opacity: 0.7; font-family: 'Courier New', monospace; }
+.job-name { font-size: 18px; letter-spacing: 0.2em; margin-bottom: 10px; color: #f0e8d8; }
+.job-desc { font-size: 11px; color: #6a6058; line-height: 1.6; }
 .job-shine {
   position: absolute;
   top: 0; left: -100%;
-  width: 60%;
-  height: 100%;
-  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.04), transparent);
+  width: 60%; height: 100%;
+  background: linear-gradient(105deg, transparent, rgba(255,255,255,0.04), transparent);
   transition: left 0.5s;
 }
-
-.job-card:hover .job-shine {
-  left: 150%;
-}
+.job-card:hover .job-shine { left: 150%; }
 
 /* ─── Attributes Grid ─── */
 .attrs-grid {
@@ -635,22 +790,16 @@ const features = [
 .attr-card {
   flex: 0 0 160px;
   max-width: 180px;
-}
-
-.attr-card {
   position: relative;
   padding: 24px 16px;
   text-align: center;
   background: rgba(255, 255, 255, 0.02);
   border-radius: 2px;
   overflow: hidden;
+  cursor: pointer;
   transition: transform 0.3s;
 }
-
-.attr-card:hover {
-  transform: scale(1.05);
-}
-
+.attr-card:hover { transform: scale(1.05); }
 .attr-border {
   position: absolute;
   inset: 0;
@@ -658,29 +807,9 @@ const features = [
   border-radius: 2px;
   pointer-events: none;
 }
-
-.attr-key {
-  font-size: 30px;
-  font-family: 'Courier New', monospace;
-  font-weight: 700;
-  letter-spacing: 3px;
-  color: var(--ac);
-  text-shadow: 0 0 20px var(--ac);
-  margin-bottom: 6px;
-}
-
-.attr-name {
-  font-size: 14px;
-  letter-spacing: 0.3em;
-  color: #c0a870;
-  margin-bottom: 8px;
-}
-
-.attr-desc {
-  font-size: 11px;
-  color: #5a5048;
-  line-height: 1.5;
-}
+.attr-key { font-size: 30px; font-family: 'Courier New', monospace; font-weight: 700; letter-spacing: 3px; color: var(--ac); text-shadow: 0 0 20px var(--ac); margin-bottom: 6px; }
+.attr-name { font-size: 14px; letter-spacing: 0.3em; color: #c0a870; margin-bottom: 8px; }
+.attr-desc { font-size: 11px; color: #5a5048; line-height: 1.5; }
 
 /* ─── Features Grid ─── */
 .features-grid {
@@ -694,38 +823,16 @@ const features = [
 .feat-card {
   flex: 0 0 280px;
   max-width: 300px;
-}
-
-.feat-card {
   padding: 28px 24px;
   border: 1px solid rgba(200, 160, 74, 0.12);
   border-radius: 2px;
   background: rgba(200, 160, 74, 0.03);
   transition: background 0.3s, border-color 0.3s;
 }
-
-.feat-card:hover {
-  background: rgba(200, 160, 74, 0.07);
-  border-color: rgba(200, 160, 74, 0.3);
-}
-
-.feat-icon {
-  font-size: 28px;
-  margin-bottom: 12px;
-}
-
-.feat-title {
-  font-size: 16px;
-  letter-spacing: 0.15em;
-  color: #dac890;
-  margin-bottom: 10px;
-}
-
-.feat-desc {
-  font-size: 13px;
-  color: #6a6058;
-  line-height: 1.7;
-}
+.feat-card:hover { background: rgba(200, 160, 74, 0.07); border-color: rgba(200, 160, 74, 0.3); }
+.feat-icon { font-size: 28px; margin-bottom: 12px; }
+.feat-title { font-size: 16px; letter-spacing: 0.15em; color: #dac890; margin-bottom: 10px; }
+.feat-desc { font-size: 13px; color: #6a6058; line-height: 1.7; }
 
 /* ─── CTA Section ─── */
 .cta-section {
@@ -735,30 +842,19 @@ const features = [
   text-align: center;
   overflow: hidden;
 }
-
 .cta-bg-pattern {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse 70% 70% at 50% 50%, rgba(100, 50, 10, 0.3), transparent);
+  background: radial-gradient(ellipse 70% 70% at 50% 50%, rgba(100, 50, 10, 0.3), transparent);
   z-index: -1;
 }
-
 .cta-inner {
   position: relative;
   display: inline-block;
   padding: 60px 80px;
   max-width: 600px;
 }
-
-.cta-ornament {
-  font-size: 32px;
-  color: #c8a04a;
-  margin-bottom: 20px;
-  display: block;
-  text-shadow: 0 0 20px rgba(200, 160, 74, 0.6);
-}
-
+.cta-ornament { font-size: 32px; color: #c8a04a; margin-bottom: 20px; display: block; text-shadow: 0 0 20px rgba(200, 160, 74, 0.6); }
 .cta-title {
   font-size: clamp(28px, 5vw, 48px);
   font-weight: 400;
@@ -769,16 +865,8 @@ const features = [
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+.cta-desc { font-size: 14px; color: #8a7860; letter-spacing: 0.08em; line-height: 1.8; margin: 0; }
 
-.cta-desc {
-  font-size: 14px;
-  color: #8a7860;
-  letter-spacing: 0.08em;
-  line-height: 1.8;
-  margin: 0;
-}
-
-/* ─── Discord Button ─── */
 .dc-btn {
   display: inline-flex;
   align-items: center;
@@ -792,10 +880,8 @@ const features = [
   letter-spacing: 0.1em;
   text-decoration: none;
   border-radius: 2px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow:
-    0 0 24px rgba(88, 101, 242, 0.55),
-    0 4px 16px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 0 24px rgba(88,101,242,0.55), 0 4px 16px rgba(0,0,0,0.4);
   transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
   position: relative;
   overflow: hidden;
@@ -807,36 +893,198 @@ const features = [
   background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%);
   pointer-events: none;
 }
-.dc-btn:hover {
-  background: #4752C4;
-  transform: translateY(-3px);
-  box-shadow:
-    0 0 36px rgba(88, 101, 242, 0.75),
-    0 8px 24px rgba(0, 0, 0, 0.5);
-}
-.dc-btn:active {
-  transform: translateY(0);
-}
-.dc-btn-icon {
+.dc-btn:hover { background: #4752C4; transform: translateY(-3px); box-shadow: 0 0 36px rgba(88,101,242,0.75), 0 8px 24px rgba(0,0,0,0.5); }
+.dc-btn:active { transform: translateY(0); }
+.dc-btn-icon { display: flex; align-items: center; flex-shrink: 0; }
+
+.footer-copy { margin-top: 60px; font-size: 11px; letter-spacing: 4px; color: rgba(200, 160, 74, 0.3); }
+
+/* ─── Modal ─── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(4, 2, 10, 0.85);
+  backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.modal-panel {
+  position: relative;
+  background: linear-gradient(160deg, #0e0a1e 0%, #08050f 100%);
+  border: 1px solid color-mix(in srgb, var(--mc) 50%, transparent);
+  border-radius: 2px;
+  padding: 48px 40px 40px;
+  max-width: 520px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--mc) 15%, transparent),
+    0 30px 80px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 color-mix(in srgb, var(--mc) 20%, transparent);
+}
+
+.modal-panel::-webkit-scrollbar { width: 4px; }
+.modal-panel::-webkit-scrollbar-track { background: transparent; }
+.modal-panel::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--mc) 40%, transparent); border-radius: 2px; }
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: #c8a04a;
+  font-size: 18px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  line-height: 1;
+}
+.modal-close:hover { opacity: 1; }
+
+.modal-corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: color-mix(in srgb, var(--mc) 60%, transparent);
+  border-style: solid;
+}
+.modal-corner.tl { top: 8px; left: 8px; border-width: 1px 0 0 1px; }
+.modal-corner.tr { top: 8px; right: 8px; border-width: 1px 1px 0 0; }
+.modal-corner.bl { bottom: 8px; left: 8px; border-width: 0 0 1px 1px; }
+.modal-corner.br { bottom: 8px; right: 8px; border-width: 0 1px 1px 0; }
+
+.modal-head {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.modal-emoji {
+  font-size: 48px;
+  filter: drop-shadow(0 0 12px var(--mc));
   flex-shrink: 0;
 }
 
-.footer-copy {
-  margin-top: 60px;
-  font-size: 11px;
-  letter-spacing: 4px;
-  color: rgba(200, 160, 74, 0.3);
+.modal-attr-key {
+  font-size: 40px;
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  color: var(--mc);
+  text-shadow: 0 0 20px var(--mc);
+  flex-shrink: 0;
+  letter-spacing: 2px;
 }
+
+.modal-badge-text {
+  font-size: 10px;
+  letter-spacing: 5px;
+  color: var(--mc);
+  opacity: 0.7;
+  font-family: 'Courier New', monospace;
+  margin-bottom: 4px;
+}
+
+.modal-title {
+  font-size: 28px;
+  letter-spacing: 0.2em;
+  color: #f0e8d8;
+  font-weight: 400;
+}
+
+.modal-deco-line {
+  height: 1px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--mc) 80%, transparent), transparent);
+  margin-bottom: 24px;
+}
+
+.modal-section-label {
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--mc);
+  opacity: 0.8;
+  margin: 20px 0 8px;
+  font-family: 'Courier New', monospace;
+}
+
+.modal-intro {
+  font-size: 14px;
+  color: #a09080;
+  line-height: 1.8;
+  margin: 0;
+}
+
+.modal-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.modal-tag {
+  font-size: 12px;
+  padding: 4px 12px;
+  border: 1px solid color-mix(in srgb, var(--mc) 40%, transparent);
+  color: #c0b090;
+  background: color-mix(in srgb, var(--mc) 8%, transparent);
+  border-radius: 2px;
+  letter-spacing: 1px;
+}
+
+.modal-tag-stat {
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--mc);
+  letter-spacing: 3px;
+}
+
+.modal-drops {
+  font-size: 13px;
+  color: #c0a870;
+  letter-spacing: 0.05em;
+  padding: 8px 14px;
+  border-left: 2px solid color-mix(in srgb, var(--mc) 50%, transparent);
+  background: color-mix(in srgb, var(--mc) 5%, transparent);
+}
+
+.modal-tips {
+  font-size: 13px;
+  color: #7a7060;
+  line-height: 1.8;
+  margin: 0;
+}
+
+.modal-recommend {
+  margin-top: 20px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--mc);
+  opacity: 0.7;
+  text-align: center;
+  padding: 10px;
+  border: 1px solid color-mix(in srgb, var(--mc) 20%, transparent);
+}
+
+/* ─── Modal Transition ─── */
+.modal-enter-active { transition: all 0.25s ease; }
+.modal-leave-active { transition: all 0.2s ease; }
+.modal-enter-from { opacity: 0; }
+.modal-leave-to { opacity: 0; }
+.modal-enter-from .modal-panel { transform: scale(0.93) translateY(12px); }
+.modal-leave-to .modal-panel { transform: scale(0.95); }
+.modal-panel { transition: transform 0.25s ease; }
 
 /* ─── Responsive ─── */
 @media (max-width: 600px) {
-  .cta-inner {
-    padding: 40px 30px;
-  }
-  .section {
-    padding: 60px 16px;
-  }
+  .cta-inner { padding: 40px 30px; }
+  .section { padding: 60px 16px; }
+  .modal-panel { padding: 40px 24px 32px; }
+  .modal-title { font-size: 22px; }
 }
 </style>
