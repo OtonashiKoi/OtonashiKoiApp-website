@@ -95,14 +95,14 @@ const zones = [
     },
   },
   {
-    key: 'normal', emoji: '⚔️', name: '一般區', lv: 'Lv.1–10', color: '#facc15', monsters: 8,
+    key: 'normal', emoji: '⚔️', name: '一般區', lv: 'Lv.1+', color: '#facc15', monsters: 8,
     desc: '鍛煉身手，挑戰更強的敵人',
     detail: {
       intro: '小史、哥布、小狼、石頭四大常駐怪，外加青草地精、綠野狼兩種精英怪。稀有的小金(稀) 出現時必搶。',
       monsterList: ['小史', '哥布', '小狼', '石頭', '青草地精', '綠野狼', '★ 大史(B)', '★ 小金(稀)'],
       drops: '布系裝備・皮系裝備・木製武器・鐵製武器・銅戒指・鐵戒指',
       tips: '小金(稀) 是稀有怪，掉落銅戒指機率高，出現時優先攻擊。',
-      recommend: 'Lv.1+ / 無裝備限制',
+      recommend: 'Lv.1+ / 無上限限制，高等玩家也可回頭刷低等區',
     },
   },
   {
@@ -145,6 +145,9 @@ const jobs = [
     icon: '⚔️', name: '劍士', sub: 'SWORDSMAN', color: '#e8a04a', desc: '格擋後反擊，以一敵萬',
     detail: {
       mainStats: ['STR', 'DEX'],
+      weapon: '主要武器：單手劍 / 雙手劍',
+      quest: '職業任務出現：Lv.10 與對應屬性達標；任務進度仍需使用指定武器出戰。',
+      badge: '劍士徽章：強化劍系格擋與反擊節奏。',
       mechanic: '受到攻擊時有機率觸發「格擋」，成功格擋後立即進行一次反擊，反擊傷害享有額外加成。格擋率隨 VIT 提升而增加。',
       style: '防禦反擊型',
       tips: 'STR 提升劍傷害，DEX 確保命中率穩定。格擋反擊的傷害同樣吃 STR，命中落空就沒機會反擊。',
@@ -154,6 +157,9 @@ const jobs = [
     icon: '🪓', name: '戰士', sub: 'WARRIOR', color: '#e05252', desc: '瀕死爆發，絕境翻盤',
     detail: {
       mainStats: ['STR', 'VIT'],
+      weapon: '主要武器：斧類，雙手斧可獲得更高爆發。',
+      quest: '職業任務出現：Lv.10 與對應屬性達標；任務進度仍需使用指定武器出戰。',
+      badge: '戰士徽章：強化低血量爆發與斧系輸出。',
       mechanic: 'HP 低於 30% 時進入「憤怒」狀態，攻擊力大幅提升。越接近死亡，爆發力越驚人，是真正的絕境翻盤機。',
       style: '爆發輸出型',
       tips: 'STR 決定斧頭基礎傷害，VIT 讓你在危險血量邊緣撐住不被秒殺，精準控制血量才能發揮最大爆發。',
@@ -163,6 +169,9 @@ const jobs = [
     icon: '🏹', name: '弓箭手', sub: 'ARCHER', color: '#52b86e', desc: '命中要害，必殺一擊',
     detail: {
       mainStats: ['DEX', 'AGI'],
+      weapon: '主要武器：弓。',
+      quest: '職業任務出現：Lv.10 與對應屬性達標；任務進度仍需使用弓出戰。',
+      badge: '弓箭手徽章：強化弓系要害與遠程爆發。',
       mechanic: '每次攻擊有機率觸發「命中要害」，造成額外傷害，且可與普通暴擊效果疊加，實現超高單發傷害。DEX 越高觸發率越高。',
       style: '高爆發遠程型',
       tips: '優先堆疊 DEX 提升要害觸發率，搭配 AGI 提高攻速，實現高頻率的驚人輸出爆發。',
@@ -172,6 +181,9 @@ const jobs = [
     icon: '🗡️', name: '盜賊', sub: 'ROGUE', color: '#a78bfa', desc: '連擊加速，如影隨形',
     detail: {
       mainStats: ['AGI', 'DEX'],
+      weapon: '主要武器：匕首。',
+      quest: '職業任務出現：Lv.10 與對應屬性達標；任務進度仍需使用匕首出戰。',
+      badge: '盜賊徽章：強化匕首連擊與高速節奏。',
       mechanic: '攻擊時有機率觸發「連擊」，連續打出多段傷害。AGI 同時大幅提升閃避率，讓盜賊如幽靈般難以捕捉。',
       style: '連擊閃避型',
       tips: 'AGI 驅動連擊與閃避，DEX 確保每段連擊都能命中目標。命中率不足時連擊白打，兩者缺一不可。',
@@ -181,6 +193,9 @@ const jobs = [
     icon: '🔮', name: '法師', sub: 'MAGE', color: '#60a5fa', desc: '魔法穿防，智慧碾壓',
     detail: {
       mainStats: ['INT', 'AGI'],
+      weapon: '主要武器：單手法杖 / 雙手法杖。',
+      quest: '職業任務出現：Lv.10 與對應屬性達標；任務進度仍需使用法杖出戰。',
+      badge: '法師徽章：強化法杖傷害與穿防能力。',
       mechanic: '魔法傷害可無視部分物理防禦，純 INT 配置可達最大魔法輸出。雙手法杖讓怪物攻擊次數翻倍，AGI 的閃避率能有效減少受到傷害的次數。',
       style: '高傷害魔法型',
       tips: 'INT 全力堆疊衝傷害，AGI 提升閃避抵消怪物加倍攻擊的壓力，是法師在高級區存活的關鍵。',
@@ -190,18 +205,60 @@ const jobs = [
     icon: '🏥', name: '治療師', sub: 'HEALER', color: '#f0e040', desc: '在場光環，守護全隊',
     detail: {
       mainStats: ['INT', 'VIT'],
+      weapon: '主要武器：法杖。',
+      quest: '職業任務出現：Lv.10 與對應屬性達標；任務進度仍需使用法杖出戰。',
+      badge: '治療師徽章：提供隊伍治療與支援光環。',
       mechanic: '「在場光環」效果：治療師在場時，同區所有玩家獲得持續回血效果。光環效果會持久化，你的存在即是隊伍最大資產。',
       style: '支援輔助型',
       tips: '在熱門討伐區頻繁現身，INT 提升治療量，VIT 確保自身存活。光環效果對精英區團隊至關重要。',
     },
   },
   {
-    icon: '🥊', name: '矮人', sub: 'DWARF', color: '#fb923c', desc: '高血防守，如銅牆鐵壁',
+    icon: '🔨', name: '矮人戰士', sub: 'DWARF', color: '#fb923c', desc: '重槌控場，如銅牆鐵壁',
     detail: {
       mainStats: ['VIT', 'STR'],
-      mechanic: '全職業最高的 HP 和防禦成長，受到攻擊時傷害減免效果更為顯著。天生的肉盾擔當，讓隊友安心輸出。',
-      style: '坦克防守型',
-      tips: '主力堆疊 VIT 提升防禦和 HP 上限。在精英區長時間鏖戰也不用擔心被秒，是最穩定的存在。',
+      weapon: '主要武器：單手槌 / 雙手槌。',
+      quest: '職業任務出現：Lv.10 與對應屬性達標；任務進度仍需使用槌類出戰。',
+      badge: '矮人戰士徽章：強化槌系擊暈與對暈眩目標傷害。',
+      mechanic: '以槌類武器打出擊暈控場，高血量時能讓擊暈更穩定，面對暈眩目標時傷害也會提高。',
+      style: '控場坦克型',
+      tips: 'VIT 讓你撐住前線，STR 提升槌類傷害。適合在組隊與高難度戰鬥中創造安全輸出窗口。',
+    },
+  },
+  {
+    icon: '♟️', name: '軍師', sub: 'TACTICIAN', color: '#38bdf8', desc: '戰線指揮，破防討王',
+    detail: {
+      mainStats: ['AGI', 'INT', 'DEX'],
+      weapon: '鎖定武器：單手劍。',
+      quest: '軍師試煉：Lv.10，基礎 AGI > 10。任務進度需使用單手劍出戰 10 次。',
+      badge: '軍師徽章：AGI +4 / INT +2 / DEX +2。',
+      mechanic: '裝備單手劍時啟動共鬥光環：隊伍對 Boss 傷害 +5%，並讓隊伍攻擊視為怪物防禦降低 5%。',
+      style: 'Boss 共鬥光環型',
+      tips: '軍師不是單純拼個人輸出，而是讓整隊在 Boss 戰更快破防。想推世界 Boss 或爬塔高層時很有價值。',
+    },
+  },
+  {
+    icon: '🎼', name: '詩人', sub: 'BARD', color: '#f472b6', desc: '戰歌鼓舞，收益支援',
+    detail: {
+      mainStats: ['DEX', 'AGI', 'LUK'],
+      weapon: '鎖定武器：弓。',
+      quest: '詩人試煉：Lv.10，基礎 DEX > 10。任務進度需使用弓出戰 10 次。',
+      badge: '詩人徽章：DEX +4 / AGI +2 / LUK +2。',
+      mechanic: '裝備弓時啟動共鬥光環：隊伍 EXP +5%，隊伍金幣 +5%，適合長時間農怪與帶隊成長。',
+      style: '資源成長光環型',
+      tips: '詩人能讓整隊刷怪更有效率，適合每日農裝、練等、刷金幣，也能兼顧弓系命中與輸出。',
+    },
+  },
+  {
+    icon: '🛡️', name: '結界師', sub: 'BARRIER', color: '#2dd4bf', desc: '防護結界，穩住全隊',
+    detail: {
+      mainStats: ['INT', 'VIT', 'DEX'],
+      weapon: '鎖定武器：單手法杖 / 雙手法杖。',
+      quest: '結界師試煉：Lv.10，基礎 INT > 10。任務進度需使用法杖出戰 10 次。',
+      badge: '結界師徽章：INT +3 / VIT +3 / DEX +2。',
+      mechanic: '裝備法杖時啟動防護光環：自身 DEF +5，隊伍受到傷害 -5%，隊伍被暴擊傷害 -10%。',
+      style: '團隊減傷光環型',
+      tips: '結界師適合高壓戰鬥，尤其是怪物爆擊痛、隊伍容易倒人的場合。和治療師一起出現時，隊伍穩定度會明顯提高。',
     },
   },
 ]
@@ -267,9 +324,34 @@ const features = [
   { icon: '🗡️', title: '裝備強化', desc: '使用強化寶石提升裝備能力，四個等階、無上限突破，打造你的最強裝備。' },
   { icon: '🃏', title: '怪物卡片', desc: '40+1 張稀有卡片，戰鬥中觸發 Buff/Debuff，掌握技能就能左右戰局。' },
   { icon: '🌐', title: '世界 Boss', desc: '定時出現的強力 Boss，全服玩家聯合挑戰，搶奪限定稀有戰利品。' },
+  { icon: '🗼', title: '組隊爬塔', desc: '最多 6 人組隊挑戰 41 層，累積樓層 Buff、突破里程碑，爭奪最高層排行。' },
   { icon: '🏆', title: '拍賣行', desc: '自由交易市場，玩家之間競標稀有裝備，累積財富成為商會大亨。' },
   { icon: '📜', title: '每日任務', desc: '每日、每週、新手任務三大系統，完成任務獲取豐厚獎勵與特殊道具。' },
   { icon: '⚡', title: '即時戰鬥', desc: 'Discord 頻道內直接開打，自動回合戰鬥，完整戰報即時呈現。' },
+]
+
+const towerStages = [
+  { floor: '1–10F', name: '初啟之境', color: '#4ade80', bonus: '隊伍 ATK +5% / HP +10%', monster: '一般區怪物，HP 100% / ATK 100%' },
+  { floor: '11–20F', name: '試煉深淵', color: '#fb923c', bonus: '隊伍 ATK +10% / HP +20%', monster: '中級區怪物，HP 180% / ATK 150%' },
+  { floor: '21–30F', name: '混沌邊境', color: '#a78bfa', bonus: '隊伍 ATK +20% / HP +40%', monster: '高級區怪物，HP 320% / ATK 250%' },
+  { floor: '31–40F', name: '滅世熔爐', color: '#f87171', bonus: '隊伍 ATK +35% / HP +70%', monster: '精英區怪物，HP 600% / ATK 450%' },
+  { floor: '41F', name: '終焉魔王', color: '#fbbf24', bonus: '隊伍 ATK +50% / HP +100%', monster: '精英 Boss，HP 1200% / ATK 800%' },
+]
+
+const towerRules = [
+  '最多 6 人組隊，由隊長開房、開始後鎖定成員。',
+  '進入條件 Lv.30，每人每小時最多挑戰 3 次。',
+  '每層隊員依加入順序輪流出手，怪物死亡即通關下一層。',
+  '隊員 HP 會在整場攻塔中持續消耗，層與層之間不自動回血。',
+  '通過 15 / 20 / 25 / 30 / 35 / 40 / 41 層會取得攻塔祝福，可帶回怪物區使用。',
+]
+
+const towerRewards = [
+  { floor: '10F', reward: '突破初境：基礎獎勵 ×1' },
+  { floor: '20F', reward: '深淵征服：基礎獎勵 ×2.5' },
+  { floor: '30F', reward: '混沌突破：基礎獎勵 ×5' },
+  { floor: '40F', reward: '熔爐超越：基礎獎勵 ×10' },
+  { floor: '41F', reward: '終焉魔王討伐：基礎獎勵 ×20' },
 ]
 
 const tierSets = [
@@ -361,8 +443,8 @@ const tierSets = [
     <section class="section section-dark reveal">
       <div class="section-header">
         <div class="sect-ornament">⟨ 職業系統 ⟩</div>
-        <h2 class="sect-title">七大基礎職業自由替換</h2>
-        <p class="sect-sub">每個職業擁有獨特的戰鬥機制，選擇最適合你的風格</p>
+        <h2 class="sect-title">十大職業自由替換</h2>
+        <p class="sect-sub">輸出、控場、治療與共鬥光環並存，下一季組隊定位更加清楚</p>
       </div>
       <div class="jobs-grid">
         <div
@@ -443,6 +525,66 @@ const tierSets = [
             </div>
           </div>
         </article>
+      </div>
+    </section>
+
+    <!-- ===== TEAM TOWER ===== -->
+    <section class="section tower-section reveal">
+      <div class="section-header">
+        <div class="sect-ornament">⟨ 組隊爬塔 ⟩</div>
+        <h2 class="sect-title">六人攻塔・四十一層終焉挑戰</h2>
+        <p class="sect-sub">隊長開房、成員集結、輪流攻略樓層，挑戰個人與隊伍最高紀錄</p>
+      </div>
+
+      <div class="tower-overview">
+        <div class="tower-stat">
+          <div class="tower-stat-num">6</div>
+          <div class="tower-stat-label">最多隊員</div>
+        </div>
+        <div class="tower-stat">
+          <div class="tower-stat-num">41</div>
+          <div class="tower-stat-label">總樓層</div>
+        </div>
+        <div class="tower-stat">
+          <div class="tower-stat-num">Lv.30</div>
+          <div class="tower-stat-label">入場門檻</div>
+        </div>
+        <div class="tower-stat">
+          <div class="tower-stat-num">3/hr</div>
+          <div class="tower-stat-label">每小時次數</div>
+        </div>
+      </div>
+
+      <div class="tower-layout">
+        <div class="tower-stage-list">
+          <article
+            v-for="stage in towerStages"
+            :key="stage.floor"
+            class="tower-stage"
+            :style="{ '--twc': stage.color }"
+          >
+            <div class="tower-floor">{{ stage.floor }}</div>
+            <div class="tower-stage-body">
+              <div class="tower-stage-name">{{ stage.name }}</div>
+              <div class="tower-stage-bonus">{{ stage.bonus }}</div>
+              <div class="tower-stage-monster">{{ stage.monster }}</div>
+            </div>
+          </article>
+        </div>
+
+        <div class="tower-side">
+          <div class="tower-panel">
+            <div class="tower-panel-title">攻略規則</div>
+            <div v-for="rule in towerRules" :key="rule" class="tower-rule">{{ rule }}</div>
+          </div>
+          <div class="tower-panel">
+            <div class="tower-panel-title">里程碑獎勵</div>
+            <div v-for="reward in towerRewards" :key="reward.floor" class="tower-reward">
+              <span>{{ reward.floor }}</span>
+              <strong>{{ reward.reward }}</strong>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -529,6 +671,18 @@ const tierSets = [
             <div class="modal-tags">
               <span v-for="s in activeModal.data.detail.mainStats" :key="s" class="modal-tag modal-tag-stat">{{ s }}</span>
             </div>
+            <template v-if="activeModal.data.detail.weapon">
+              <div class="modal-section-label">🗡 武器定位</div>
+              <div class="modal-drops">{{ activeModal.data.detail.weapon }}</div>
+            </template>
+            <template v-if="activeModal.data.detail.quest">
+              <div class="modal-section-label">📜 職業任務</div>
+              <p class="modal-tips">{{ activeModal.data.detail.quest }}</p>
+            </template>
+            <template v-if="activeModal.data.detail.badge">
+              <div class="modal-section-label">🏅 徽章效果</div>
+              <div class="modal-drops">{{ activeModal.data.detail.badge }}</div>
+            </template>
             <div class="modal-section-label">⚙ 核心機制</div>
             <p class="modal-intro">{{ activeModal.data.detail.mechanic }}</p>
             <div class="modal-section-label">🎯 戰鬥風格</div>
@@ -1006,6 +1160,175 @@ const tierSets = [
   letter-spacing: 0.04em;
 }
 
+/* ─── Team Tower ─── */
+.tower-section {
+  background:
+    radial-gradient(circle at 20% 10%, rgba(45, 212, 191, 0.12), transparent 28%),
+    radial-gradient(circle at 80% 35%, rgba(251, 191, 36, 0.12), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(6, 4, 15, 0.9));
+}
+
+.tower-overview {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  max-width: 980px;
+  margin: -20px auto 28px;
+}
+
+.tower-stat {
+  position: relative;
+  padding: 20px 16px;
+  text-align: center;
+  border: 1px solid rgba(45, 212, 191, 0.22);
+  background: linear-gradient(160deg, rgba(45, 212, 191, 0.08), rgba(255, 255, 255, 0.015));
+  overflow: hidden;
+}
+
+.tower-stat::after {
+  content: '';
+  position: absolute;
+  inset: auto 20px 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #2dd4bf, transparent);
+}
+
+.tower-stat-num {
+  color: #e8dcc8;
+  font-family: 'Courier New', monospace;
+  font-size: 30px;
+  font-weight: 700;
+  text-shadow: 0 0 22px rgba(45, 212, 191, 0.45);
+}
+
+.tower-stat-label {
+  margin-top: 6px;
+  color: #7ccfc1;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+}
+
+.tower-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+  gap: 22px;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.tower-stage-list {
+  display: grid;
+  gap: 12px;
+}
+
+.tower-stage {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+  padding: 16px;
+  border: 1px solid color-mix(in srgb, var(--twc) 32%, transparent);
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--twc) 10%, #08050f), rgba(8, 5, 15, 0.9)),
+    radial-gradient(circle at 0% 50%, color-mix(in srgb, var(--twc) 18%, transparent), transparent 35%);
+  transition: transform 0.3s, border-color 0.3s;
+}
+
+.tower-stage:hover {
+  transform: translateX(6px);
+  border-color: color-mix(in srgb, var(--twc) 62%, transparent);
+}
+
+.tower-floor {
+  display: grid;
+  place-items: center;
+  min-width: 78px;
+  color: var(--twc);
+  border: 1px solid color-mix(in srgb, var(--twc) 50%, transparent);
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.tower-stage-name {
+  color: #f0e8d8;
+  font-size: 17px;
+  letter-spacing: 0.16em;
+  margin-bottom: 8px;
+}
+
+.tower-stage-bonus {
+  color: color-mix(in srgb, var(--twc) 78%, #c0b090);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.tower-stage-monster {
+  color: #7a7060;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.tower-side {
+  display: grid;
+  gap: 16px;
+}
+
+.tower-panel {
+  padding: 22px;
+  border: 1px solid rgba(200, 160, 74, 0.16);
+  background: rgba(6, 4, 15, 0.62);
+}
+
+.tower-panel-title {
+  color: #dac890;
+  font-size: 16px;
+  letter-spacing: 0.18em;
+  margin-bottom: 14px;
+}
+
+.tower-rule {
+  position: relative;
+  padding: 10px 0 10px 18px;
+  color: #9f927c;
+  border-bottom: 1px solid rgba(200, 160, 74, 0.08);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.tower-rule::before {
+  content: '';
+  position: absolute;
+  top: 19px;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  background: #2dd4bf;
+  box-shadow: 0 0 12px rgba(45, 212, 191, 0.65);
+  transform: rotate(45deg);
+}
+
+.tower-reward {
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(200, 160, 74, 0.08);
+}
+
+.tower-reward span {
+  color: #2dd4bf;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+}
+
+.tower-reward strong {
+  color: #c0b090;
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
 /* ─── Features Grid ─── */
 .features-grid {
   display: flex;
@@ -1282,12 +1605,18 @@ const tierSets = [
   .modal-panel { padding: 40px 24px 32px; }
   .modal-title { font-size: 22px; }
   .tier-rules,
-  .tier-grid { grid-template-columns: 1fr; }
+  .tier-grid,
+  .tower-overview,
+  .tower-layout { grid-template-columns: 1fr; }
   .tier-card { min-height: auto; }
+  .tower-stage { flex-direction: column; }
+  .tower-floor { min-height: 42px; }
 }
 
 @media (min-width: 601px) and (max-width: 980px) {
   .tier-rules { grid-template-columns: 1fr; }
   .tier-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tower-overview { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tower-layout { grid-template-columns: 1fr; }
 }
 </style>
