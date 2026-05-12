@@ -271,6 +271,37 @@ const features = [
   { icon: '📜', title: '每日任務', desc: '每日、每週、新手任務三大系統，完成任務獲取豐厚獎勵與特殊道具。' },
   { icon: '⚡', title: '即時戰鬥', desc: 'Discord 頻道內直接開打，自動回合戰鬥，完整戰報即時呈現。' },
 ]
+
+const tierSets = [
+  {
+    tier: 'D',
+    name: '入門鍛造',
+    color: '#94a3b8',
+    identity: '新手成長與資源累積',
+    effects: ['3 件：STR / INT / DEX +3', '5 件：金幣獲得 +10%', '7 件：EXP +10%'],
+  },
+  {
+    tier: 'C',
+    name: '穩定戰裝',
+    color: '#34d399',
+    identity: '中期主力，閃避與命中補強',
+    effects: ['3 件：迴避 +10%', '5 件：傷害 +5%', '7 件：命中 +15%'],
+  },
+  {
+    tier: 'B',
+    name: '進階爆發',
+    color: '#60a5fa',
+    identity: '中後期輸出與暴擊爆發',
+    effects: ['3 件：傷害 +10%', '5 件：暴擊率 +5%', '7 件：暴擊傷害 +10%'],
+  },
+  {
+    tier: 'A',
+    name: '終局傳說',
+    color: '#fbbf24',
+    identity: 'Boss 戰與後期掉落追求',
+    effects: ['3 件：最終傷害 +5%', '5 件：Boss 傷害 +10%', '7 件：掉落率 +10%'],
+  },
+]
 </script>
 
 <template>
@@ -368,6 +399,50 @@ const features = [
           <div class="card-hint">點擊查看詳情 ▸</div>
           <div class="attr-border" />
         </div>
+      </div>
+    </section>
+
+    <!-- ===== EQUIPMENT TIER SETS ===== -->
+    <section class="section tier-section reveal">
+      <div class="section-header">
+        <div class="sect-ornament">⟨ 階級套裝 ⟩</div>
+        <h2 class="sect-title">3 / 5 / 7 件混搭加成</h2>
+        <p class="sect-sub">一般裝備依 D / C / B / A 階分開計算，卡片、稱號與職業徽章不納入件數</p>
+      </div>
+      <div class="tier-rules">
+        <div class="tier-rule">
+          <span class="tier-rule-mark">01</span>
+          <span>同階級穿滿 3、5、7 件時依序啟動效果</span>
+        </div>
+        <div class="tier-rule">
+          <span class="tier-rule-mark">02</span>
+          <span>不同階級可以混搭，各階件數各自計算</span>
+        </div>
+        <div class="tier-rule">
+          <span class="tier-rule-mark">03</span>
+          <span>計算武器、防具、頭飾、披肩、鞋子、雙飾品與副手</span>
+        </div>
+      </div>
+      <div class="tier-grid">
+        <article
+          v-for="set in tierSets"
+          :key="set.tier"
+          class="tier-card"
+          :style="{ '--tc': set.color }"
+        >
+          <div class="tier-card-head">
+            <div class="tier-letter">{{ set.tier }}</div>
+            <div>
+              <div class="tier-label">{{ set.name }}</div>
+              <div class="tier-identity">{{ set.identity }}</div>
+            </div>
+          </div>
+          <div class="tier-effect-list">
+            <div v-for="effect in set.effects" :key="effect" class="tier-effect">
+              {{ effect }}
+            </div>
+          </div>
+        </article>
       </div>
     </section>
 
@@ -811,6 +886,126 @@ const features = [
 .attr-name { font-size: 14px; letter-spacing: 0.3em; color: #c0a870; margin-bottom: 8px; }
 .attr-desc { font-size: 11px; color: #5a5048; line-height: 1.5; }
 
+/* ─── Equipment Tier Sets ─── */
+.tier-section {
+  background:
+    linear-gradient(180deg, rgba(200, 160, 74, 0.035), rgba(255, 255, 255, 0.01)),
+    repeating-linear-gradient(90deg, rgba(200, 160, 74, 0.04) 0 1px, transparent 1px 72px);
+  border-top: 1px solid rgba(200, 160, 74, 0.08);
+  border-bottom: 1px solid rgba(200, 160, 74, 0.08);
+}
+
+.tier-rules {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  max-width: 980px;
+  margin: -20px auto 28px;
+}
+
+.tier-rule {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid rgba(200, 160, 74, 0.14);
+  background: rgba(6, 4, 15, 0.5);
+  color: #9f927c;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.tier-rule-mark {
+  color: #c8a04a;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+.tier-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.tier-card {
+  position: relative;
+  min-height: 260px;
+  padding: 22px 18px;
+  border: 1px solid color-mix(in srgb, var(--tc) 35%, transparent);
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--tc) 12%, #08050f) 0%, #08050f 72%),
+    radial-gradient(circle at 30% 10%, color-mix(in srgb, var(--tc) 18%, transparent), transparent 34%);
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+}
+
+.tier-card::after {
+  content: '';
+  position: absolute;
+  inset: auto 18px 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--tc), transparent);
+  opacity: 0.75;
+}
+
+.tier-card:hover {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--tc) 65%, transparent);
+  box-shadow: 0 18px 42px color-mix(in srgb, var(--tc) 20%, transparent);
+}
+
+.tier-card-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.tier-letter {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border: 1px solid color-mix(in srgb, var(--tc) 60%, transparent);
+  color: var(--tc);
+  font-family: 'Courier New', monospace;
+  font-size: 30px;
+  font-weight: 700;
+  text-shadow: 0 0 18px color-mix(in srgb, var(--tc) 70%, transparent);
+  background: color-mix(in srgb, var(--tc) 8%, transparent);
+}
+
+.tier-label {
+  color: #f0e8d8;
+  font-size: 16px;
+  letter-spacing: 0.16em;
+  margin-bottom: 5px;
+}
+
+.tier-identity {
+  color: color-mix(in srgb, var(--tc) 70%, #8a7860);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.tier-effect-list {
+  display: grid;
+  gap: 10px;
+}
+
+.tier-effect {
+  padding: 10px 12px;
+  border-left: 2px solid color-mix(in srgb, var(--tc) 65%, transparent);
+  background: color-mix(in srgb, var(--tc) 7%, transparent);
+  color: #c8bda8;
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+}
+
 /* ─── Features Grid ─── */
 .features-grid {
   display: flex;
@@ -1086,5 +1281,13 @@ const features = [
   .section { padding: 60px 16px; }
   .modal-panel { padding: 40px 24px 32px; }
   .modal-title { font-size: 22px; }
+  .tier-rules,
+  .tier-grid { grid-template-columns: 1fr; }
+  .tier-card { min-height: auto; }
+}
+
+@media (min-width: 601px) and (max-width: 980px) {
+  .tier-rules { grid-template-columns: 1fr; }
+  .tier-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 </style>
