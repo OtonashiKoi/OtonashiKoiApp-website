@@ -128,14 +128,14 @@ const zones = [
     },
   },
   {
-    key: 'elite', emoji: '💀', name: '精英區', lv: 'Lv.30+', color: '#c084fc', monsters: 1,
+    key: 'elite', emoji: '💀', name: '精英區', lv: 'Lv.20+', color: '#c084fc', monsters: 1,
     desc: '傳說級別的凶猛敵人',
     detail: {
       intro: '目前精英區僅有大史王坐鎮，掉落包含鋼鐵與秘銀系列裝備，金戒指也是此區的重要產出。',
       monsterList: ['★ 大史王'],
       drops: '鐵系→鋼鐵系裝備・秘銀盾・鋼製弓・鋼製雙手槌・金戒指',
-      tips: '大史王為精英 Boss，建議備齊高級裝備再挑戰。更多精英怪物正在規劃中。',
-      recommend: 'Lv.30+ / 建議裝備鋼製系列強化',
+      tips: '大史王為精英 Boss，建議備齊高級裝備再挑戰。精英區高等玩家也能持續回刷。',
+      recommend: 'Lv.20+ / 無上限限制，建議裝備鋼製系列強化',
     },
   },
 ]
@@ -276,10 +276,10 @@ const attrs = [
   {
     key: 'AGI', name: '敏捷', color: '#22d3ee', desc: '攻速、閃避、連擊',
     detail: {
-      effect: '提升攻擊速度（最快達 0.5秒/回合）、閃避率，以及盜賊連擊觸發率',
-      threshold: '⚡ AGI 40 = 最快攻速 0.5s/回合（重要閾值）',
+      effect: '提升攻擊速度、閃避率與部分連擊能力；在組隊爬塔中會直接影響速度條行動軸。',
+      threshold: '一般戰鬥影響出手節奏；組隊爬塔依 AGI 即時計算行動順序。',
       bestFor: ['🗡️ 盜賊', '🏹 弓箭手'],
-      tips: 'AGI 40 是攻速的最大閾值，超過後僅提升閃避。盜賊建議優先衝到 40 點再分配其他屬性。',
+      tips: '高 AGI 角色在爬塔更容易提早出手；若卡片、光環或 Buff 改變 AGI，行動軸也會跟著變動。',
     },
   },
   {
@@ -321,13 +321,24 @@ const attrs = [
 ]
 
 const features = [
-  { icon: '🗡️', title: '裝備強化', desc: '使用強化寶石提升裝備能力，四個等階、無上限突破，打造你的最強裝備。' },
-  { icon: '🃏', title: '怪物卡片', desc: '40+1 張稀有卡片，戰鬥中觸發 Buff/Debuff，掌握技能就能左右戰局。' },
+  { icon: '🗡️', title: '裝備強化', desc: '使用強化素材提升裝備能力，D / C / B / A 階都能培養，打造自己的核心配裝。' },
+  { icon: '🃏', title: '怪物卡片', desc: '多種怪物卡可裝備在特殊槽位，戰鬥中觸發 Buff、Debuff、控場與特殊效果。' },
   { icon: '🌐', title: '世界 Boss', desc: '定時出現的強力 Boss，全服玩家聯合挑戰，搶奪限定稀有戰利品。' },
-  { icon: '🗼', title: '組隊爬塔', desc: '最多 6 人組隊挑戰 41 層，累積樓層 Buff、突破里程碑，爭奪最高層排行。' },
+  { icon: '🗼', title: '組隊爬塔', desc: '最多 6 人組隊挑戰 41 層，依 AGI 速度條排軸，怪物與玩家都會進入行動序。' },
   { icon: '🏆', title: '拍賣行', desc: '自由交易市場，玩家之間競標稀有裝備，累積財富成為商會大亨。' },
-  { icon: '📜', title: '每日任務', desc: '每日、每週、新手任務三大系統，完成任務獲取豐厚獎勵與特殊道具。' },
+  { icon: '📜', title: '任務中心', desc: '新手、每日、每週與職業任務並行，引導戰鬥、強化、打卡與職業養成。' },
   { icon: '⚡', title: '即時戰鬥', desc: 'Discord 頻道內直接開打，自動回合戰鬥，完整戰報即時呈現。' },
+  { icon: '⚔️', title: 'PK 擂台', desc: 'Lv.40 玩家可進入擂台對決，Elo Rating 會影響排行榜與 Boss 傷害加成。' },
+  { icon: '🌙', title: '放置成長', desc: '新手放置區提供低壓力收益，離線也能慢慢累積金幣與 EXP。' },
+  { icon: '📅', title: '直播打卡', desc: '完成直播綁定後即可打卡領獎，並能搭配打卡任務與加倍道具推進成長。' },
+  { icon: '🎒', title: '玩家面板', desc: 'Discord 內查看個人資料、裝備欄、職業技能、怪物卡、套裝效果與交易紀錄。' },
+]
+
+const gameStats = [
+  { num: '41', label: '怪物與 Boss' },
+  { num: '10', label: '職業徽章' },
+  { num: '37', label: '任務內容' },
+  { num: '244', label: '道具與裝備' },
 ]
 
 const towerStages = [
@@ -341,8 +352,10 @@ const towerStages = [
 const towerRules = [
   '最多 6 人組隊，由隊長開房、開始後鎖定成員。',
   '進入條件 Lv.30，每人每小時最多挑戰 3 次。',
-  '每層隊員依加入順序輪流出手，怪物死亡即通關下一層。',
-  '隊員 HP 會在整場攻塔中持續消耗，層與層之間不自動回血。',
+  '玩家與怪物都依 AGI 速度條排軸，卡片、Buff、光環改變 AGI 時會即時影響順序。',
+  '怪物行動會攻擊全隊；怪物身上的降防、暈眩、Debuff 由全隊共享。',
+  '光環與治療支援全隊，同職業同效果不疊加，只取最高值；陣亡者光環失效。',
+  '打輸會依目前通關層結算獎勵並解散隊伍，下次重新挑戰。',
   '通過 15 / 20 / 25 / 30 / 35 / 40 / 41 層會取得攻塔祝福，可帶回怪物區使用。',
 ]
 
@@ -407,6 +420,12 @@ const tierSets = [
           在 Discord 伺服器中，踏上你的 RPG 旅程<br />
           選擇職業、收集裝備、挑戰怪物、稱霸排行
         </p>
+        <div class="hero-stats">
+          <div v-for="stat in gameStats" :key="stat.label" class="hero-stat">
+            <strong>{{ stat.num }}</strong>
+            <span>{{ stat.label }}</span>
+          </div>
+        </div>
         <div class="hero-corner tl" />
         <div class="hero-corner tr" />
         <div class="hero-corner bl" />
@@ -533,7 +552,7 @@ const tierSets = [
       <div class="section-header">
         <div class="sect-ornament">⟨ 組隊爬塔 ⟩</div>
         <h2 class="sect-title">六人攻塔・四十一層終焉挑戰</h2>
-        <p class="sect-sub">隊長開房、成員集結、輪流攻略樓層，挑戰個人與隊伍最高紀錄</p>
+        <p class="sect-sub">隊長開房、成員集結，依 AGI 速度條與怪物正面交鋒</p>
       </div>
 
       <div class="tower-overview">
@@ -828,8 +847,41 @@ const tierSets = [
   line-height: 1.9;
   color: #c0b090;
   letter-spacing: 0.05em;
-  margin: 0 auto 40px;
+  margin: 0 auto 28px;
   max-width: 520px;
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  max-width: 620px;
+  margin: 0 auto 40px;
+}
+
+.hero-stat {
+  padding: 12px 10px;
+  border: 1px solid rgba(200, 160, 74, 0.18);
+  background:
+    linear-gradient(180deg, rgba(200, 160, 74, 0.08), rgba(255, 255, 255, 0.015)),
+    rgba(6, 4, 15, 0.52);
+}
+
+.hero-stat strong {
+  display: block;
+  color: #ffd770;
+  font-family: 'Courier New', monospace;
+  font-size: 26px;
+  line-height: 1;
+  text-shadow: 0 0 20px rgba(200, 160, 74, 0.35);
+}
+
+.hero-stat span {
+  display: block;
+  margin-top: 6px;
+  color: #8a7860;
+  font-size: 10px;
+  letter-spacing: 0.18em;
 }
 
 .hero-corner, .cta-corner {
@@ -1604,6 +1656,7 @@ const tierSets = [
   .section { padding: 60px 16px; }
   .modal-panel { padding: 40px 24px 32px; }
   .modal-title { font-size: 22px; }
+  .hero-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .tier-rules,
   .tier-grid,
   .tower-overview,

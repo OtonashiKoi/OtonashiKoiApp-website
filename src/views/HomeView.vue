@@ -37,10 +37,10 @@ const rewardModalItems = ref([])
 
 const ZONE_META = {
   beginner: { label: '🌱 新手區', recLv: 'Lv.1-3', minLv: 1, maxLv: 3 },
-  normal: { label: '⚔️ 一般區', recLv: 'Lv.1-10', minLv: 1, maxLv: 10 },
-  mid: { label: '✦ 中級區', recLv: 'Lv.10-20', minLv: 10, maxLv: 20 },
+  normal: { label: '⚔️ 一般區', recLv: 'Lv.1+ 無上限', minLv: 1, maxLv: null },
+  mid: { label: '✦ 中級區', recLv: 'Lv.10+ 無上限', minLv: 10, maxLv: null },
   hard: { label: '🔥 高級區', recLv: 'Lv.20+', minLv: 20, maxLv: null },
-  elite: { label: '💀 精英區', recLv: '暫無推薦', minLv: null, maxLv: null },
+  elite: { label: '💀 精英區', recLv: 'Lv.20+ 無上限', minLv: 20, maxLv: null },
 }
 
 const MISSION_TABS = [
@@ -232,7 +232,7 @@ function parseBattleRounds(rawLogs) {
   return rounds.slice(0, 15)
 }
 
-// 後台 AGI 攻速設計：AGI 1 -> 1500ms、AGI 40 -> 500ms（封頂）
+// 一般戰鬥播放速度依 AGI 推估；組隊爬塔另由後端速度條行動軸計算。
 function calculateAgiTickDelay(agi = 1) {
   const baseDelay = 1500
   const minDelay = 500

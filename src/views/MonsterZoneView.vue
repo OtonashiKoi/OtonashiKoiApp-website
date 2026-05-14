@@ -4,10 +4,10 @@ import { combatApi } from '@/api'
 
 const ZONES = [
   { key: 'beginner', label: '🌱 新手區', desc: 'Lv.1–3', color: '#22c55e' },
-  { key: 'normal',   label: '⚔️ 一般區', desc: 'Lv.1–10', color: '#3b82f6' },
-  { key: 'mid',      label: '✦ 中級區',  desc: 'Lv.10+',  color: '#a855f7' },
+  { key: 'normal',   label: '⚔️ 一般區', desc: 'Lv.1+ 無上限', color: '#3b82f6' },
+  { key: 'mid',      label: '✦ 中級區',  desc: 'Lv.10+ 無上限', color: '#a855f7' },
   { key: 'hard',     label: '🔥 高級區',  desc: 'Lv.20+',  color: '#f97316' },
-  { key: 'elite',    label: '💀 精英區',  desc: 'Lv.30+',  color: '#ef4444' },
+  { key: 'elite',    label: '💀 精英區',  desc: 'Lv.20+ 無上限', color: '#ef4444' },
 ]
 
 const selectedZone = ref(null)
