@@ -146,7 +146,7 @@ const jobs = [
     detail: {
       mainStats: ['STR', 'DEX'],
       weapon: '主要武器：單手劍 / 雙手劍',
-      quest: '劍士試煉：Lv.10，基礎 STR > 10。使用單手劍或雙手劍出戰 10 次，獎勵 500 金幣與劍士徽章。',
+      quest: '劍士試煉：Lv.10，基礎 STR + DEX > 10。使用單手劍或雙手劍出戰 10 次，獎勵 500 金幣與劍士徽章。',
       badge: '劍士徽章：STR +2 / VIT +3 / DEX +2。',
       skills: [
         '被動：單手劍或雙手劍強化；單手劍 + 盾牌時格擋 +20%。',
@@ -164,7 +164,7 @@ const jobs = [
     detail: {
       mainStats: ['STR', 'VIT'],
       weapon: '主要武器：斧類，雙手斧可獲得更高爆發。',
-      quest: '戰士試煉：Lv.10，基礎 STR > 10。使用單手斧或雙手斧出戰 10 次，獎勵 500 金幣與戰士徽章。',
+      quest: '戰士試煉：Lv.10，基礎 STR + VIT > 10。使用單手斧或雙手斧出戰 10 次，獎勵 500 金幣與戰士徽章。',
       badge: '戰士徽章：STR +4 / VIT +1 / LUK +2。',
       skills: [
         '被動：雙手斧低血量時最終傷害 +35%。',
@@ -181,7 +181,7 @@ const jobs = [
     detail: {
       mainStats: ['DEX', 'AGI'],
       weapon: '主要武器：弓。',
-      quest: '弓箭手試煉：Lv.10，基礎 DEX > 10。使用弓出戰 10 次，獎勵 500 金幣與弓箭手徽章。',
+      quest: '弓箭手試煉：Lv.10，基礎 DEX + AGI > 10。使用弓出戰 10 次，獎勵 500 金幣與弓箭手徽章。',
       badge: '弓箭手徽章：AGI +1 / DEX +5 / LUK +2。',
       skills: [
         '被動：弓系強化，提升遠程輸出與要害節奏。',
@@ -198,7 +198,7 @@ const jobs = [
     detail: {
       mainStats: ['AGI', 'DEX'],
       weapon: '主要武器：匕首。',
-      quest: '盜賊試煉：Lv.10，基礎 AGI > 10。使用匕首出戰 10 次，獎勵 500 金幣與盜賊徽章。',
+      quest: '盜賊試煉：Lv.10，基礎 AGI + DEX > 10。使用匕首出戰 10 次，獎勵 500 金幣與盜賊徽章。',
       badge: '盜賊徽章：STR +2 / AGI +4 / LUK +2。',
       skills: [
         '被動：主手匕首時武器強化；主匕首 + 副手匕首時連擊率 +10%。',
@@ -216,7 +216,7 @@ const jobs = [
     detail: {
       mainStats: ['INT', 'AGI'],
       weapon: '主要武器：單手法杖 / 雙手法杖。',
-      quest: '法師試煉：Lv.10，基礎 INT > 10。使用雙手法杖出戰 10 次，獎勵 500 金幣與法師徽章。',
+      quest: '法師試煉：Lv.10，基礎 INT + AGI > 10。使用雙手法杖出戰 10 次，獎勵 500 金幣與法師徽章。',
       badge: '法師徽章：VIT +1 / INT +5 / LUK +2。',
       skills: [
         '被動：法杖系強化，偏向高魔法輸出與穿防。',
@@ -233,7 +233,7 @@ const jobs = [
     detail: {
       mainStats: ['INT', 'VIT'],
       weapon: '主要武器：法杖。',
-      quest: '治療師試煉：Lv.10，基礎 INT > 10。使用單手法杖出戰 10 次，獎勵 500 金幣與治療師徽章。',
+      quest: '治療師試煉：Lv.10，基礎 INT + VIT > 10。使用單手法杖出戰 10 次，獎勵 500 金幣與治療師徽章。',
       badge: '治療師徽章：VIT +2 / INT +4 / DEX +2。',
       skills: [
         '光環：在場時提供隊伍治療支援；組隊爬塔中會改為全隊一起受益。',
@@ -250,7 +250,7 @@ const jobs = [
     detail: {
       mainStats: ['VIT', 'STR'],
       weapon: '主要武器：單手槌 / 雙手槌。',
-      quest: '矮人戰士試煉：Lv.10，基礎 VIT > 10。使用單手槌或雙手槌出戰 10 次，獎勵 500 金幣與矮人戰士徽章。',
+      quest: '矮人戰士試煉：Lv.10，基礎 VIT + STR > 10。使用單手槌或雙手槌出戰 10 次，獎勵 500 金幣與矮人戰士徽章。',
       badge: '矮人戰士徽章：STR +1 / VIT +5 / DEX +2。',
       skills: [
         '被動：單手槌 / 雙手槌強化；單手槌 + 盾牌時格擋 +20%。',
@@ -268,7 +268,7 @@ const jobs = [
     detail: {
       mainStats: ['AGI', 'INT', 'DEX'],
       weapon: '鎖定武器：單手劍。',
-      quest: '軍師試煉：Lv.10，基礎 AGI > 10。任務進度需使用單手劍出戰 10 次。',
+      quest: '軍師試煉：Lv.10，基礎 AGI + INT + DEX > 10。任務進度需使用單手劍出戰 10 次。',
       badge: '軍師徽章：AGI +4 / INT +2 / DEX +2。',
       skills: [
         '被動：單手劍 ATK 強化。',
@@ -286,7 +286,7 @@ const jobs = [
     detail: {
       mainStats: ['DEX', 'AGI', 'LUK'],
       weapon: '鎖定武器：弓。',
-      quest: '詩人試煉：Lv.10，基礎 DEX > 10。任務進度需使用弓出戰 10 次。',
+      quest: '詩人試煉：Lv.10，基礎 DEX + AGI + LUK > 10。任務進度需使用弓出戰 10 次。',
       badge: '詩人徽章：DEX +4 / AGI +2 / LUK +2。',
       skills: [
         '被動：弓 ATK 強化。',
@@ -304,7 +304,7 @@ const jobs = [
     detail: {
       mainStats: ['INT', 'VIT', 'DEX'],
       weapon: '鎖定武器：單手法杖 / 雙手法杖。',
-      quest: '結界師試煉：Lv.10，基礎 INT > 10。任務進度需使用法杖出戰 10 次。',
+      quest: '結界師試煉：Lv.10，基礎 INT + VIT + DEX > 10。任務進度需使用法杖出戰 10 次。',
       badge: '結界師徽章：INT +3 / VIT +3 / DEX +2。',
       skills: [
         '被動：裝備法杖時自身 DEF +5%。',
