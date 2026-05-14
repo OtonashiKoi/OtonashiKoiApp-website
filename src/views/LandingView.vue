@@ -146,8 +146,14 @@ const jobs = [
     detail: {
       mainStats: ['STR', 'DEX'],
       weapon: '主要武器：單手劍 / 雙手劍',
-      quest: '職業任務出現：Lv.10 與對應屬性達標；任務進度仍需使用指定武器出戰。',
-      badge: '劍士徽章：強化劍系格擋與反擊節奏。',
+      quest: '劍士試煉：Lv.10，基礎 STR > 10。使用單手劍或雙手劍出戰 10 次，獎勵 500 金幣與劍士徽章。',
+      badge: '劍士徽章：STR +2 / VIT +3 / DEX +2。',
+      skills: [
+        '被動：單手劍或雙手劍強化；單手劍 + 盾牌時格擋 +20%。',
+        '被動：單手劍 + 副手時連擊傷害提升；雙手劍額外獲得少量格擋。',
+        '主動：舉步若堅，格擋率 +25%、DEF +12，持續 2 回合。',
+        '主動：碎甲斬，使敵方 DEF -10，持續 3 回合，可疊至 -30。',
+      ],
       mechanic: '受到攻擊時有機率觸發「格擋」，成功格擋後立即進行一次反擊，反擊傷害享有額外加成。格擋率隨 VIT 提升而增加。',
       style: '防禦反擊型',
       tips: 'STR 提升劍傷害，DEX 確保命中率穩定。格擋反擊的傷害同樣吃 STR，命中落空就沒機會反擊。',
@@ -158,8 +164,13 @@ const jobs = [
     detail: {
       mainStats: ['STR', 'VIT'],
       weapon: '主要武器：斧類，雙手斧可獲得更高爆發。',
-      quest: '職業任務出現：Lv.10 與對應屬性達標；任務進度仍需使用指定武器出戰。',
-      badge: '戰士徽章：強化低血量爆發與斧系輸出。',
+      quest: '戰士試煉：Lv.10，基礎 STR > 10。使用單手斧或雙手斧出戰 10 次，獎勵 500 金幣與戰士徽章。',
+      badge: '戰士徽章：STR +4 / VIT +1 / LUK +2。',
+      skills: [
+        '被動：雙手斧低血量時最終傷害 +35%。',
+        '主動：踢到桌腳很生氣，自身 ATK +25%，持續 2 回合。',
+        '主動：死亡意志，HP 低於 35% 時免疫傷害 1 回合並 ATK +50%。',
+      ],
       mechanic: 'HP 低於 30% 時進入「憤怒」狀態，攻擊力大幅提升。越接近死亡，爆發力越驚人，是真正的絕境翻盤機。',
       style: '爆發輸出型',
       tips: 'STR 決定斧頭基礎傷害，VIT 讓你在危險血量邊緣撐住不被秒殺，精準控制血量才能發揮最大爆發。',
@@ -170,8 +181,13 @@ const jobs = [
     detail: {
       mainStats: ['DEX', 'AGI'],
       weapon: '主要武器：弓。',
-      quest: '職業任務出現：Lv.10 與對應屬性達標；任務進度仍需使用弓出戰。',
-      badge: '弓箭手徽章：強化弓系要害與遠程爆發。',
+      quest: '弓箭手試煉：Lv.10，基礎 DEX > 10。使用弓出戰 10 次，獎勵 500 金幣與弓箭手徽章。',
+      badge: '弓箭手徽章：AGI +1 / DEX +5 / LUK +2。',
+      skills: [
+        '被動：弓系強化，提升遠程輸出與要害節奏。',
+        '主動：瞄準，命中 +20、爆擊率 +15%，持續 2 回合。',
+        '主動：穿刺箭，ATK +20%、敵方 DEF -15、自身爆擊率 +20%，持續 2 回合。',
+      ],
       mechanic: '每次攻擊有機率觸發「命中要害」，造成額外傷害，且可與普通暴擊效果疊加，實現超高單發傷害。DEX 越高觸發率越高。',
       style: '高爆發遠程型',
       tips: '優先堆疊 DEX 提升要害觸發率，搭配 AGI 提高攻速，實現高頻率的驚人輸出爆發。',
@@ -182,8 +198,14 @@ const jobs = [
     detail: {
       mainStats: ['AGI', 'DEX'],
       weapon: '主要武器：匕首。',
-      quest: '職業任務出現：Lv.10 與對應屬性達標；任務進度仍需使用匕首出戰。',
-      badge: '盜賊徽章：強化匕首連擊與高速節奏。',
+      quest: '盜賊試煉：Lv.10，基礎 AGI > 10。使用匕首出戰 10 次，獎勵 500 金幣與盜賊徽章。',
+      badge: '盜賊徽章：STR +2 / AGI +4 / LUK +2。',
+      skills: [
+        '被動：主手匕首時武器強化；主匕首 + 副手匕首時連擊率 +10%。',
+        '被動：主匕首 + 副手且 HP >50% 時爆擊率 +15%。',
+        '主動：背刺，爆擊率 +20%、爆擊傷害 +30%，持續 2 回合。',
+        '主動：煙霧彈，敵方命中 -20、自身迴避 +12，持續 2 回合。',
+      ],
       mechanic: '攻擊時有機率觸發「連擊」，連續打出多段傷害。AGI 同時大幅提升閃避率，讓盜賊如幽靈般難以捕捉。',
       style: '連擊閃避型',
       tips: 'AGI 驅動連擊與閃避，DEX 確保每段連擊都能命中目標。命中率不足時連擊白打，兩者缺一不可。',
@@ -194,8 +216,13 @@ const jobs = [
     detail: {
       mainStats: ['INT', 'AGI'],
       weapon: '主要武器：單手法杖 / 雙手法杖。',
-      quest: '職業任務出現：Lv.10 與對應屬性達標；任務進度仍需使用法杖出戰。',
-      badge: '法師徽章：強化法杖傷害與穿防能力。',
+      quest: '法師試煉：Lv.10，基礎 INT > 10。使用雙手法杖出戰 10 次，獎勵 500 金幣與法師徽章。',
+      badge: '法師徽章：VIT +1 / INT +5 / LUK +2。',
+      skills: [
+        '被動：法杖系強化，偏向高魔法輸出與穿防。',
+        '主動：魔力爆炎，自身 ATK +40% 並無視防禦 +50%，持續 1 回合。',
+        '主動：魔力衰減，敵方最終傷害 -25%、DEF -10，持續 3 回合。',
+      ],
       mechanic: '魔法傷害可無視部分物理防禦，純 INT 配置可達最大魔法輸出。雙手法杖讓怪物攻擊次數翻倍，AGI 的閃避率能有效減少受到傷害的次數。',
       style: '高傷害魔法型',
       tips: 'INT 全力堆疊衝傷害，AGI 提升閃避抵消怪物加倍攻擊的壓力，是法師在高級區存活的關鍵。',
@@ -206,8 +233,13 @@ const jobs = [
     detail: {
       mainStats: ['INT', 'VIT'],
       weapon: '主要武器：法杖。',
-      quest: '職業任務出現：Lv.10 與對應屬性達標；任務進度仍需使用法杖出戰。',
-      badge: '治療師徽章：提供隊伍治療與支援光環。',
+      quest: '治療師試煉：Lv.10，基礎 INT > 10。使用單手法杖出戰 10 次，獎勵 500 金幣與治療師徽章。',
+      badge: '治療師徽章：VIT +2 / INT +4 / DEX +2。',
+      skills: [
+        '光環：在場時提供隊伍治療支援；組隊爬塔中會改為全隊一起受益。',
+        '主動：聖光術，立即回復最大 HP 的 12%。',
+        '主動：神聖護盾，HP 低於 60% 時受傷降低 35%，持續 2 回合。',
+      ],
       mechanic: '「在場光環」效果：治療師在場時，同區所有玩家獲得持續回血效果。光環效果會持久化，你的存在即是隊伍最大資產。',
       style: '支援輔助型',
       tips: '在熱門討伐區頻繁現身，INT 提升治療量，VIT 確保自身存活。光環效果對精英區團隊至關重要。',
@@ -218,8 +250,14 @@ const jobs = [
     detail: {
       mainStats: ['VIT', 'STR'],
       weapon: '主要武器：單手槌 / 雙手槌。',
-      quest: '職業任務出現：Lv.10 與對應屬性達標；任務進度仍需使用槌類出戰。',
-      badge: '矮人戰士徽章：強化槌系擊暈與對暈眩目標傷害。',
+      quest: '矮人戰士試煉：Lv.10，基礎 VIT > 10。使用單手槌或雙手槌出戰 10 次，獎勵 500 金幣與矮人戰士徽章。',
+      badge: '矮人戰士徽章：STR +1 / VIT +5 / DEX +2。',
+      skills: [
+        '被動：單手槌 / 雙手槌強化；單手槌 + 盾牌時格擋 +20%。',
+        '被動：雙手槌命中後有機率擊暈，對暈眩目標傷害提高。',
+        '主動：鐵壁，受傷降低 25%、DEF +15，持續 2 回合。',
+        '主動：震地重擊，使敵方暈眩 1 回合並 ATK -10%，持續 2 回合。',
+      ],
       mechanic: '以槌類武器打出擊暈控場，高血量時能讓擊暈更穩定，面對暈眩目標時傷害也會提高。',
       style: '控場坦克型',
       tips: 'VIT 讓你撐住前線，STR 提升槌類傷害。適合在組隊與高難度戰鬥中創造安全輸出窗口。',
@@ -232,6 +270,12 @@ const jobs = [
       weapon: '鎖定武器：單手劍。',
       quest: '軍師試煉：Lv.10，基礎 AGI > 10。任務進度需使用單手劍出戰 10 次。',
       badge: '軍師徽章：AGI +4 / INT +2 / DEX +2。',
+      skills: [
+        '被動：單手劍 ATK 強化。',
+        '光環：隊伍對 Boss 傷害 +5%，隊伍攻擊視為怪物防禦降低 5%。',
+        '主動：戰術分析，敵方 DEF -15、ATK -10，持續 3 回合。',
+        '主動：兵法破陣，無視敵方防禦 +35%、自身 ATK +10%，持續 2 回合。',
+      ],
       mechanic: '裝備單手劍時啟動共鬥光環：隊伍對 Boss 傷害 +5%，並讓隊伍攻擊視為怪物防禦降低 5%。',
       style: 'Boss 共鬥光環型',
       tips: '軍師不是單純拼個人輸出，而是讓整隊在 Boss 戰更快破防。想推世界 Boss 或爬塔高層時很有價值。',
@@ -244,9 +288,15 @@ const jobs = [
       weapon: '鎖定武器：弓。',
       quest: '詩人試煉：Lv.10，基礎 DEX > 10。任務進度需使用弓出戰 10 次。',
       badge: '詩人徽章：DEX +4 / AGI +2 / LUK +2。',
-      mechanic: '裝備弓時啟動共鬥光環：隊伍 EXP +5%，隊伍金幣 +5%，適合長時間農怪與帶隊成長。',
-      style: '資源成長光環型',
-      tips: '詩人能讓整隊刷怪更有效率，適合每日農裝、練等、刷金幣，也能兼顧弓系命中與輸出。',
+      skills: [
+        '被動：弓 ATK 強化。',
+        '光環：隊伍 EXP +5%，隊伍 AGI +8%。',
+        '主動：激昂旋律，自身 ATK +18%、AGI +8，持續 2 回合。',
+        '主動：沉靜之歌，敵方 ATK -15%、AGI -6，持續 3 回合。',
+      ],
+      mechanic: '裝備弓時啟動共鬥光環：隊伍 EXP +5%，並提升隊伍 AGI，適合長時間農怪、練等與爬塔排軸。',
+      style: '資源成長與速度光環型',
+      tips: '詩人能讓整隊刷怪更有效率，也能在組隊爬塔中影響行動軸。適合每日農裝、練等與支援高 AGI 節奏。',
     },
   },
   {
@@ -256,7 +306,13 @@ const jobs = [
       weapon: '鎖定武器：單手法杖 / 雙手法杖。',
       quest: '結界師試煉：Lv.10，基礎 INT > 10。任務進度需使用法杖出戰 10 次。',
       badge: '結界師徽章：INT +3 / VIT +3 / DEX +2。',
-      mechanic: '裝備法杖時啟動防護光環：自身 DEF +5，隊伍受到傷害 -5%，隊伍被暴擊傷害 -10%。',
+      skills: [
+        '被動：裝備法杖時自身 DEF +5%。',
+        '光環：隊伍受到傷害 -15%，隊伍被暴擊傷害 -10%。',
+        '主動：八門盾甲，使敵方受到傷害增加 20%，持續 2 回合。',
+        '主動：束縛之陣，敵方迴避 -50%、命中 -30%，持續 3 回合。',
+      ],
+      mechanic: '裝備法杖時啟動防護光環：自身 DEF +5%，隊伍受到傷害 -15%，隊伍被暴擊傷害 -10%。',
       style: '團隊減傷光環型',
       tips: '結界師適合高壓戰鬥，尤其是怪物爆擊痛、隊伍容易倒人的場合。和治療師一起出現時，隊伍穩定度會明顯提高。',
     },
@@ -701,6 +757,12 @@ const tierSets = [
             <template v-if="activeModal.data.detail.badge">
               <div class="modal-section-label">🏅 徽章效果</div>
               <div class="modal-drops">{{ activeModal.data.detail.badge }}</div>
+            </template>
+            <template v-if="activeModal.data.detail.skills?.length">
+              <div class="modal-section-label">✨ 職業技能</div>
+              <div class="modal-skill-list">
+                <div v-for="skill in activeModal.data.detail.skills" :key="skill" class="modal-skill">{{ skill }}</div>
+              </div>
             </template>
             <div class="modal-section-label">⚙ 核心機制</div>
             <p class="modal-intro">{{ activeModal.data.detail.mechanic }}</p>
@@ -1621,6 +1683,35 @@ const tierSets = [
   padding: 8px 14px;
   border-left: 2px solid color-mix(in srgb, var(--mc) 50%, transparent);
   background: color-mix(in srgb, var(--mc) 5%, transparent);
+}
+
+.modal-skill-list {
+  display: grid;
+  gap: 8px;
+}
+
+.modal-skill {
+  position: relative;
+  padding: 9px 12px 9px 26px;
+  border: 1px solid color-mix(in srgb, var(--mc) 24%, transparent);
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--mc) 8%, transparent), transparent),
+    rgba(255, 255, 255, 0.015);
+  color: #c8bda8;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.modal-skill::before {
+  content: '';
+  position: absolute;
+  top: 17px;
+  left: 12px;
+  width: 6px;
+  height: 6px;
+  background: var(--mc);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--mc) 70%, transparent);
+  transform: rotate(45deg);
 }
 
 .modal-tips {
