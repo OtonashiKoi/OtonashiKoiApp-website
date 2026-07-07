@@ -155,20 +155,45 @@ const zones = [
     detail: {
       intro: 'Lv.40 三條 A 路線之一；烈焰生物橫行，焚獄套裝與火焰特攻武器的產地，菁英煉獄烈焰狼王坐鎮。',
       monsterList: ['焰爪幼狼', '灰燼豺', '熔岩犬', '硫火蝙蝠', '焦炎蜥', '火髓魔蟲', '餘燼骷髏', '炙炎鴉', '岩漿巨蟲', '烈焰狼', '★ 煉獄烈焰狼王(菁英)'],
-      drops: '焚獄套裝（火焰 A／S 武器・傷害向）・火焰系怪物卡',
-      tips: '走高傷害流派優先農焚獄套；煉獄烈焰狼王掉落附魔重骰藥水。',
+      drops: '焚獄套裝（共 29 件）：A 階武器 10 型（涵蓋各武器家族）、S 階武器 10 型（帶「焚獄特攻」火焰區增傷）、A 階防具 9 件（甲／盔／靴／盾／披風／護目／口罩／雙戒）・火焰系怪物卡',
+      tips: '想集滿焚獄套從這裡農起；S 武器另可從地獄狼牙王寶箱取得，煉獄烈焰狼王掉落附魔重骰藥水。',
       recommend: 'Lv.40 開放 / 傷害流派與火焰特攻裝',
     },
   },
+]
+
+const worldBosses = [
   {
-    key: 'hellfire_depths', emoji: '🌋', name: '焰獄深處', lv: 'Lv.60+', color: '#a855f7', monsters: 1,
-    desc: '終局世界王・地獄狼牙王巢穴',
+    key: 'daishi', emoji: '👑', name: '大史王', lair: '精英區', lv: '進場 Lv.40', color: '#c084fc',
+    tagline: '首位世界王・精英試煉',
     detail: {
-      intro: '需先討伐當週古龍王才能進入的獨立區；終局世界王「地獄狼牙王」的巢穴。',
-      monsterList: ['★ 地獄狼牙王（世界王）'],
-      drops: '世界王寶箱：S 裝備・S 強化石・地獄狼牙王卡',
-      tips: '世界王級戰鬥，寶箱只給傷害／貢獻前段玩家，建議組隊挑戰。',
-      recommend: 'Lv.60+ / 需先討伐當週古龍王解鎖',
+      intro: '坐鎮精英區的首位世界王，是玩家踏入世界王討伐的第一道門檻。血量與攻擊遠超一般 Boss，需要備齊裝備與隊友才推得動。',
+      mechanics: ['多部位結構，需逐一擊破部位', '超高血量的長期戰，考驗續戰與減傷', '全服玩家可共同累積傷害討伐'],
+      unlock: '進場 Lv.40',
+      rewards: '世界王寶箱：依傷害／貢獻排名發放，含高階裝備與強化石',
+      recommend: '建議組隊、備齊 A 階裝備再挑戰',
+    },
+  },
+  {
+    key: 'dragon_king', emoji: '🐉', name: '古龍王(B)', lair: '龍王巢穴', lv: '進場 Lv.50', color: '#38bdf8',
+    tagline: '龍族頂點・逆鱗焚天',
+    detail: {
+      intro: '龍族之領盡頭的古龍王，是龍系最強的存在。以龍焰與破鱗攻勢壓迫全場，血量極為龐大，討伐後才會開啟當週的焰獄深處。',
+      mechanics: ['破鱗機制：破壞部位後龍防下降', '龍焰 AOE：對全隊造成雷焰傷害', '討伐後解鎖當週焰獄深處'],
+      unlock: '進場 Lv.50',
+      rewards: '世界王寶箱：龍系高階裝備、S 強化石、古龍王卡',
+      recommend: '連擊／穿防流派效率高，建議滿編組隊',
+    },
+  },
+  {
+    key: 'hellfang', emoji: '🐺', name: '地獄狼牙王', lair: '焰獄深處', lv: '進場 Lv.50', color: '#fb7185',
+    tagline: '終局世界王・煉獄咬噬',
+    detail: {
+      intro: '棲身焰獄深處的終局世界王，也是目前最強的討伐目標。分為三個階段，隨戰鬥推進不斷強化，煉獄咬噬與破防攻勢會愈打愈狂。',
+      mechanics: ['三階段強化：血量下降時攻勢升級', '煉獄咬噬：高倍火焰傷害並附帶破防', '需先討伐當週古龍王才能進入焰獄深處'],
+      unlock: '進場 Lv.50（需先討伐當週古龍王，解鎖焰獄深處）',
+      rewards: '世界王寶箱：S 裝備、S 強化石、地獄狼牙王卡、附魔重骰藥水',
+      recommend: '終局挑戰，需滿編＋高輸出＋減傷支援',
     },
   },
 ]
@@ -528,8 +553,8 @@ const tierSets = [
     <section class="section reveal">
       <div class="section-header">
         <div class="sect-ornament">⟨ 冒險地帶 ⟩</div>
-        <h2 class="sect-title">八大討伐區域</h2>
-        <p class="sect-sub">從新手草叢到焰獄深處；Lv.40 後更有古城深處・龍族・地獄火焰三條平行 A 路線</p>
+        <h2 class="sect-title">七大討伐區域</h2>
+        <p class="sect-sub">從新手草叢到地獄火焰；Lv.40 後有古城深處・龍族之領・地獄火焰三條平行 A 路線</p>
       </div>
       <div class="zones-grid">
         <div
@@ -542,6 +567,30 @@ const tierSets = [
           <div class="zone-name">{{ z.name }}</div>
           <div class="zone-desc">{{ z.desc }}</div>
           <div class="zone-monsters">怪物數：{{ z.monsters }}</div>
+          <div class="card-hint">點擊查看詳情 ▸</div>
+          <div class="zone-glow" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== WORLD BOSSES ===== -->
+    <section class="section section-dark reveal">
+      <div class="section-header">
+        <div class="sect-ornament">⟨ 世界王 ⟩</div>
+        <h2 class="sect-title">三大世界王討伐</h2>
+        <p class="sect-sub">全服聯合挑戰的頂級 Boss，點擊查看討伐資料</p>
+      </div>
+      <div class="zones-grid">
+        <div
+          v-for="b in worldBosses" :key="b.key"
+          class="zone-card" :style="{ '--zc': b.color }"
+          @click="openModal('boss', b)"
+        >
+          <div class="zone-emoji">{{ b.emoji }}</div>
+          <div class="zone-lv">{{ b.lv }}</div>
+          <div class="zone-name">{{ b.name }}</div>
+          <div class="zone-desc">{{ b.tagline }}</div>
+          <div class="zone-monsters">巢穴：{{ b.lair }}</div>
           <div class="card-hint">點擊查看詳情 ▸</div>
           <div class="zone-glow" />
         </div>
@@ -826,6 +875,29 @@ const tierSets = [
             </div>
             <div class="modal-section-label">📌 配點建議</div>
             <p class="modal-tips">{{ activeModal.data.detail.tips }}</p>
+          </template>
+
+          <!-- World boss modal -->
+          <template v-else-if="activeModal.type === 'boss'">
+            <div class="modal-head">
+              <span class="modal-emoji">{{ activeModal.data.emoji }}</span>
+              <div>
+                <div class="modal-badge-text">{{ activeModal.data.lv }} ・ {{ activeModal.data.lair }}</div>
+                <div class="modal-title">{{ activeModal.data.name }}</div>
+              </div>
+            </div>
+            <div class="modal-deco-line" />
+            <p class="modal-intro">{{ activeModal.data.detail.intro }}</p>
+            <div class="modal-section-label">⚙ 討伐機制</div>
+            <div class="modal-skill-list">
+              <div v-for="m in activeModal.data.detail.mechanics" :key="m" class="modal-skill">{{ m }}</div>
+            </div>
+            <div class="modal-section-label">🔓 進場條件</div>
+            <div class="modal-drops">{{ activeModal.data.detail.unlock }}</div>
+            <div class="modal-section-label">🎁 討伐獎勵</div>
+            <div class="modal-drops">{{ activeModal.data.detail.rewards }}</div>
+            <div class="modal-section-label">📌 挑戰建議</div>
+            <p class="modal-tips">{{ activeModal.data.detail.recommend }}</p>
           </template>
         </div>
       </div>
