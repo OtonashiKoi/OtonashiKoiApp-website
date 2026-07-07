@@ -84,58 +84,91 @@ onMounted(() => {
 // ─── Data ───
 const zones = [
   {
-    key: 'beginner', emoji: '🌱', name: '新手區', lv: 'Lv.1–3', color: '#4ade80', monsters: 5,
+    key: 'beginner', emoji: '🌱', name: '新手村外的草叢', lv: 'Lv.1–3', color: '#4ade80', monsters: 5,
     desc: '踏上旅途，學習基礎戰鬥',
     detail: {
-      intro: '音無樂園的起點，怪物溫和適合新手熟悉戰鬥系統。',
+      intro: '音無樂園的起點，怪物溫和，適合熟悉戰鬥系統與基礎操作。',
       monsterList: ['小史(小)', '野兔', '蘑菇怪', '小史(中)', '★ 大野兔(B)'],
-      drops: '木製單手劍・木製弓・木製單/雙手法杖・布衣・布披風・布靴・銅戒指系列・新手護目鏡',
-      tips: '刷到 Lv.3 後前往一般區，此區掉落布系與木製裝備，適合建立初期配備。',
+      drops: '木製武器・布衣系防具・新手套裝・銅戒指系列',
+      tips: '刷到 Lv.3 後前往一般區；此區建立最初期配備。',
       recommend: '任何職業皆可 / 無裝備需求',
     },
   },
   {
-    key: 'normal', emoji: '⚔️', name: '一般區', lv: 'Lv.1+', color: '#facc15', monsters: 8,
+    key: 'normal', emoji: '⚔️', name: '起始的草原', lv: 'Lv.1+', color: '#facc15', monsters: 8,
     desc: '鍛煉身手，挑戰更強的敵人',
     detail: {
-      intro: '小史、哥布、小狼、石頭四大常駐怪，外加青草地精、綠野狼兩種精英怪。稀有的小金(稀) 出現時必搶。',
+      intro: '小史、哥布、小狼、石頭四大常駐怪，外加青草地精、綠野狼精英怪；稀有的小金(稀)出現必搶。',
       monsterList: ['小史', '哥布', '小狼', '石頭', '青草地精', '綠野狼', '★ 大史(B)', '★ 小金(稀)'],
-      drops: '布系裝備・皮系裝備・木製武器・鐵製武器・銅戒指・鐵戒指',
-      tips: '小金(稀) 是稀有怪，掉落銅戒指機率高，出現時優先攻擊。',
-      recommend: 'Lv.1+ / 無上限限制，高等玩家也可回頭刷低等區',
+      drops: '皮革／鐵製裝備・皮鐵套裝・鐵戒指',
+      tips: '小金(稀) 稀有必搶；大史(B) 掉落最多。',
+      recommend: 'Lv.1+ / 無上限，高等玩家也可回刷',
     },
   },
   {
-    key: 'mid', emoji: '✦', name: '中級區', lv: 'Lv.10+', color: '#fb923c', monsters: 12,
+    key: 'mid', emoji: '✦', name: '陽光草原', lv: 'Lv.10–25', color: '#fb923c', monsters: 12,
     desc: '中階冒險者的試煉場地',
     detail: {
-      intro: '甲蟹、牙牙狼、巨巨、黑暗弓手等六種常駐怪，加上林地妖靈(樹樹)等森林系精英怪。Boss 米拉桑(B) 有機率掉落鋼製裝備。',
+      intro: '甲蟹、牙牙狼、巨巨、黑暗弓手等常駐怪，加上森林系精英怪；Boss 米拉桑(B) 掉落豐富。',
       monsterList: ['甲蟹', '牙牙狼', '巨巨', '黑暗弓手', '林地妖靈(樹樹)', '森林古樹', '暗夜獵豹', '森林巫師', '森林盜賊', '森林之獸', '★ 米拉桑(B)', '★ 中金(稀)'],
-      drops: '皮系裝備・鐵製武器・鋼製武器・鋼盾・銀戒指',
-      tips: '米拉桑(B) 掉落最豐富，中金(稀) 機率低但掉落銀戒指穩定。',
-      recommend: 'Lv.10+ / 建議裝備木製系列強化',
+      drops: '鐵／鋼製武器・鋼製套裝・銀戒指',
+      tips: '米拉桑(B) 掉落最豐富，中金(稀) 穩定掉銀戒指。',
+      recommend: 'Lv.10–25 / 建議木製→鐵製強化',
     },
   },
   {
-    key: 'hard', emoji: '🔥', name: '高級區', lv: 'Lv.20+', color: '#f87171', monsters: 15,
-    desc: '古城遺蹟中的強大怪物',
+    key: 'ancient_city', emoji: '🏛️', name: '古城', lv: 'Lv.25–40', color: '#f87171', monsters: 8,
+    desc: '古城遺蹟中的強大守衛',
     detail: {
-      intro: '城牆衛兵、石像鬼、古城法師等 12 種古城怪物盤踞，三位 Boss 掌管豐厚寶藏。鋼鐵與秘銀裝備的主要來源。',
-      monsterList: ['城牆衛兵', '古城弓手', '石像鬼', '古城法師', '廢墟蠍兵', '冰封騎士', '詛咒祭司', '鐵甲衛將', '古城刺客', '毒霧蜘蛛', '古城狂戰士', '黑焰巫師', '★ 城堡魔像(B)', '★ 古城將軍(B)', '★ 廢都魔王(B)'],
-      drops: '鐵系→鋼鐵系裝備・鋼製武器・秘銀武器・秘銀盾・金戒指・銀戒指',
-      tips: '三位 Boss 輪流刷。廢都魔王(B) 掉落含秘銀裝備，是高級區最值得農的目標。',
-      recommend: 'Lv.20+ / 建議裝備鐵製系列',
+      intro: '古城的衛兵、石像鬼、法師盤踞，城堡魔像(B) 坐鎮，是鋼鐵邁向秘銀的過渡帶。',
+      monsterList: ['古城弓手', '石像鬼', '古城法師', '廢墟蠍兵', '詛咒祭司', '古城刺客', '毒霧蜘蛛', '★ 城堡魔像(B)'],
+      drops: '鋼鐵→秘銀過渡裝備・金戒指・強化石',
+      tips: '城堡魔像(B) 是古城主要 Boss；此區銜接秘銀裝備。',
+      recommend: 'Lv.25–40 / 建議鐵製→鋼製系列',
     },
   },
   {
-    key: 'elite', emoji: '💀', name: '精英區', lv: 'Lv.20+', color: '#c084fc', monsters: 1,
-    desc: '傳說級別的凶猛敵人',
+    key: 'ancient_city_deep', emoji: '🕳️', name: '古城深處', lv: 'Lv.40+', color: '#c084fc', monsters: 7,
+    desc: '三條 A 路線之一・秘銀產地',
     detail: {
-      intro: '目前精英區僅有大史王坐鎮，掉落包含鋼鐵與秘銀系列裝備，金戒指也是此區的重要產出。',
-      monsterList: ['★ 大史王'],
-      drops: '鐵系→鋼鐵系裝備・秘銀盾・鋼製弓・鋼製雙手槌・金戒指',
-      tips: '大史王為精英 Boss，建議備齊高級裝備再挑戰。精英區高等玩家也能持續回刷。',
-      recommend: 'Lv.20+ / 無上限限制，建議裝備鋼製系列強化',
+      intro: 'Lv.40 後開放的三條平行 A 路線之一；秘銀套裝的主要產地，也是踏入 A 階最平緩的入口。',
+      monsterList: ['城牆衛兵', '冰封騎士', '鐵甲衛將', '古城狂戰士', '黑焰巫師', '★ 古城將軍(B)', '★ 廢都魔王(B)'],
+      drops: '秘銀套裝（A 階防具）・秘銀武器・A 階強化石・附魔重骰藥水',
+      tips: '想入手秘銀套從這裡開始；廢都魔王(B)、古城將軍(B) 掉落最豐。',
+      recommend: 'Lv.40 開放 / 三條 A 路線最易入門',
+    },
+  },
+  {
+    key: 'dragon_realm', emoji: '🐲', name: '龍族之領', lv: 'Lv.40+', color: '#38bdf8', monsters: 10,
+    desc: '三條 A 路線之一・連擊流派',
+    detail: {
+      intro: 'Lv.40 三條 A 路線之一；龍族群棲，龍鱗套裝與連擊流派裝備的來源，龍王(B) 鎮守。',
+      monsterList: ['飛龍幼崽', '龍蜥武士', '火翼龍人', '冰鱗龍人', '雷霆飛龍', '黑曜龍騎', '暗影龍將', '龍翼魔法師', '★ 黃金幼龍(稀)', '★ 龍王(B)'],
+      drops: '龍鱗套裝（連擊向 A 防具）・龍系武器・龍族怪物卡',
+      tips: '走連擊流派（盜賊／雙匕首）的玩家優先農龍鱗套。',
+      recommend: 'Lv.40 開放 / 連擊流派裝備來源',
+    },
+  },
+  {
+    key: 'hellfire', emoji: '🔥', name: '地獄火焰', lv: 'Lv.40+', color: '#fb7185', monsters: 11,
+    desc: '三條 A 路線之一・傷害流派',
+    detail: {
+      intro: 'Lv.40 三條 A 路線之一；烈焰生物橫行，焚獄套裝與火焰特攻武器的產地，菁英煉獄烈焰狼王坐鎮。',
+      monsterList: ['焰爪幼狼', '灰燼豺', '熔岩犬', '硫火蝙蝠', '焦炎蜥', '火髓魔蟲', '餘燼骷髏', '炙炎鴉', '岩漿巨蟲', '烈焰狼', '★ 煉獄烈焰狼王(菁英)'],
+      drops: '焚獄套裝（火焰 A／S 武器・傷害向）・火焰系怪物卡',
+      tips: '走高傷害流派優先農焚獄套；煉獄烈焰狼王掉落附魔重骰藥水。',
+      recommend: 'Lv.40 開放 / 傷害流派與火焰特攻裝',
+    },
+  },
+  {
+    key: 'hellfire_depths', emoji: '🌋', name: '焰獄深處', lv: 'Lv.60+', color: '#a855f7', monsters: 1,
+    desc: '終局世界王・地獄狼牙王巢穴',
+    detail: {
+      intro: '需先討伐當週古龍王才能進入的獨立區；終局世界王「地獄狼牙王」的巢穴。',
+      monsterList: ['★ 地獄狼牙王（世界王）'],
+      drops: '世界王寶箱：S 裝備・S 強化石・地獄狼牙王卡',
+      tips: '世界王級戰鬥，寶箱只給傷害／貢獻前段玩家，建議組隊挑戰。',
+      recommend: 'Lv.60+ / 需先討伐當週古龍王解鎖',
     },
   },
 ]
@@ -377,32 +410,35 @@ const attrs = [
 ]
 
 const features = [
-  { icon: '🗡️', title: '裝備強化', desc: '使用強化素材提升裝備能力，D / C / B / A 階都能培養，打造自己的核心配裝。' },
-  { icon: '🃏', title: '怪物卡片', desc: '多種怪物卡可裝備在特殊槽位，戰鬥中觸發 Buff、Debuff、控場與特殊效果。' },
-  { icon: '🌐', title: '世界 Boss', desc: '定時出現的強力 Boss，全服玩家聯合挑戰，搶奪限定稀有戰利品。' },
-  { icon: '🗼', title: '組隊爬塔', desc: '最多 6 人組隊挑戰 41 層，依 AGI 速度條排軸，怪物與玩家都會進入行動序。' },
-  { icon: '🏆', title: '拍賣行', desc: '自由交易市場，玩家之間競標稀有裝備，累積財富成為商會大亨。' },
+  { icon: '🗡️', title: '裝備強化 & 附魔', desc: '強化提升裝備能力，並可為裝備骰出附魔詞條（爆擊／連擊／攻擊／減傷等），打造專屬核心配裝。' },
+  { icon: '🎽', title: '具名套裝', desc: '秘銀・焚獄・龍鱗・三紋・特效戒等多套具名套裝，穿滿指定件數解鎖階梯加成，一件可同時屬於多套。' },
+  { icon: '⚓', title: '錨點傳說裝', desc: '傳說級「錨點」專屬槽位，戴上就改寫你的戰鬥法則——每一件都是一種極端取捨。（內容待你親自發掘）' },
+  { icon: '🃏', title: '怪物卡片', desc: '多種怪物卡裝在特殊槽位，戰鬥中觸發 Buff、Debuff、控場與武器流派追加效果。' },
+  { icon: '🐉', title: '世界 Boss', desc: '三大世界王——大史王、古龍王、地獄狼牙王，全服玩家聯合討伐，搶奪限定寶箱。' },
+  { icon: '🗼', title: '組隊爬塔', desc: '最多 6 人組隊挑戰 52 層，依 AGI 速度條排軸，51／52 層由大史王與古龍王坐鎮。' },
+  { icon: '📖', title: '主線劇情', desc: '文字冒險式主線，跟著音無恋踏上音無樂園的故事，隨進度逐步解鎖新區域。' },
+  { icon: '🏆', title: '拍賣行', desc: '自由交易市場，玩家之間競標稀有裝備（部分靈魂綁定道具不可交易）。' },
   { icon: '📜', title: '任務中心', desc: '新手、每日、每週與職業任務並行，引導戰鬥、強化、打卡與職業養成。' },
   { icon: '⚡', title: '即時戰鬥', desc: 'Discord 頻道內直接開打，自動回合戰鬥，完整戰報即時呈現。' },
-  { icon: '⚔️', title: 'PK 擂台', desc: 'Lv.40 玩家可進入擂台對決，Elo Rating 會影響排行榜與 Boss 傷害加成。' },
-  { icon: '🌙', title: '放置成長', desc: '新手放置區提供低壓力收益，離線也能慢慢累積金幣與 EXP。' },
-  { icon: '📅', title: '直播打卡', desc: '完成直播綁定後即可打卡領獎，並能搭配打卡任務與加倍道具推進成長。' },
-  { icon: '🎒', title: '玩家面板', desc: 'Discord 內查看個人資料、裝備欄、職業技能、怪物卡、套裝效果與交易紀錄。' },
+  { icon: '🥊', title: 'PK 擂台', desc: 'Lv.40 玩家可進入擂台對決，Elo Rating 影響排行榜與 Boss 傷害加成。' },
+  { icon: '🎒', title: '背包 & 面板', desc: '背包容量依會員等級提升；Discord 面板查看資料、裝備、技能、卡片與套裝效果。' },
+  { icon: '📅', title: '直播連動', desc: '直播打卡領獎、斗內累積解鎖全服 Buff，另有儲值頁與 SC 進度條。' },
 ]
 
 const gameStats = [
-  { num: '41', label: '怪物與 Boss' },
+  { num: '64', label: '怪物與 Boss' },
   { num: '10', label: '職業徽章' },
-  { num: '37', label: '任務內容' },
-  { num: '244', label: '道具與裝備' },
+  { num: '38', label: '任務內容' },
+  { num: '400+', label: '道具與裝備' },
 ]
 
 const towerStages = [
-  { floor: '1–10F', name: '初啟之境', color: '#4ade80', bonus: '隊伍 ATK +5% / HP +10%', monster: '一般區怪物，HP 100% / ATK 100%' },
-  { floor: '11–20F', name: '試煉深淵', color: '#fb923c', bonus: '隊伍 ATK +10% / HP +20%', monster: '中級區怪物，HP 180% / ATK 150%' },
-  { floor: '21–30F', name: '混沌邊境', color: '#a78bfa', bonus: '隊伍 ATK +20% / HP +40%', monster: '高級區怪物，HP 320% / ATK 250%' },
-  { floor: '31–40F', name: '滅世熔爐', color: '#f87171', bonus: '隊伍 ATK +35% / HP +70%', monster: '精英區怪物，HP 600% / ATK 450%' },
-  { floor: '41F', name: '終焉魔王', color: '#fbbf24', bonus: '隊伍 ATK +50% / HP +100%', monster: '精英 Boss，HP 1200% / ATK 800%' },
+  { floor: '1–10F', name: '初啟之境', color: '#4ade80', bonus: '隊伍小幅強化', monster: '前期草原怪物' },
+  { floor: '11–25F', name: '試煉之路', color: '#facc15', bonus: '隊伍中階強化', monster: '陽光草原怪物' },
+  { floor: '26–40F', name: '古城深淵', color: '#c084fc', bonus: '隊伍高階強化', monster: '古城～古城深處怪物' },
+  { floor: '41–50F', name: '龍炎邊境', color: '#f87171', bonus: '隊伍強力強化', monster: '龍族之領／地獄火焰怪物' },
+  { floor: '51F', name: '精英魔王・大史王', color: '#fbbf24', bonus: '世界王級試煉', monster: '世界王 大史王' },
+  { floor: '52F', name: '終焉・古龍王', color: '#fb7185', bonus: '終局挑戰', monster: '終局世界王 古龍王(B)' },
 ]
 
 const towerRules = [
@@ -412,45 +448,43 @@ const towerRules = [
   '怪物行動會攻擊全隊；怪物身上的降防、暈眩、Debuff 由全隊共享。',
   '光環與治療支援全隊，同職業同效果不疊加，只取最高值；陣亡者光環失效。',
   '打輸會依目前通關層結算獎勵並解散隊伍，下次重新挑戰。',
-  '通過 15 / 20 / 25 / 30 / 35 / 40 / 41 層會取得攻塔祝福，可帶回怪物區使用。',
+  '通過 10 / 20 / 30 / 40 / 50 / 51 / 52 層可取得攻塔祝福，帶回怪物區使用。',
 ]
 
 const towerRewards = [
   { floor: '10F', reward: '突破初境：基礎獎勵 ×1' },
   { floor: '20F', reward: '深淵征服：基礎獎勵 ×2.5' },
-  { floor: '30F', reward: '混沌突破：基礎獎勵 ×5' },
-  { floor: '40F', reward: '熔爐超越：基礎獎勵 ×10' },
-  { floor: '41F', reward: '終焉魔王討伐：基礎獎勵 ×20' },
+  { floor: '30F', reward: '古城突破：基礎獎勵 ×5' },
+  { floor: '40F', reward: '邊境超越：基礎獎勵 ×10' },
+  { floor: '51F', reward: '大史王討伐：基礎獎勵 ×20' },
+  { floor: '52F', reward: '古龍王討伐：基礎獎勵 ×45' },
 ]
 
 const tierSets = [
   {
-    tier: 'D',
-    name: '入門鍛造',
-    color: '#94a3b8',
-    identity: '新手成長與資源累積',
-    effects: ['3 件：STR / INT / DEX +3', '5 件：金幣獲得 +10%', '7 件：EXP +10%'],
+    tier: '秘', name: '秘銀套', color: '#cbd5e1',
+    identity: 'A 階主力・全能輸出',
+    effects: ['3 件：最終傷害提升', '5 件：對 BOSS 傷害提升', '7 件：掉落率提升'],
   },
   {
-    tier: 'C',
-    name: '穩定戰裝',
-    color: '#34d399',
-    identity: '中期主力，閃避與命中補強',
-    effects: ['3 件：迴避 +10%', '5 件：傷害 +5%', '7 件：命中 +15%'],
+    tier: '焚', name: '焚獄套', color: '#fb7185',
+    identity: '火焰流派・高傷爆發',
+    effects: ['傷害與爆擊傷害提升', '地獄火焰／焰獄深處受傷遞減', '火焰 A／S 武器專屬特攻'],
   },
   {
-    tier: 'B',
-    name: '進階爆發',
-    color: '#60a5fa',
-    identity: '中後期輸出與暴擊爆發',
-    effects: ['3 件：傷害 +10%', '5 件：暴擊率 +5%', '7 件：暴擊傷害 +10%'],
+    tier: '龍', name: '龍鱗套', color: '#38bdf8',
+    identity: '連擊流派・龍族專精',
+    effects: ['連擊率與連擊傷害提升', '龍族之領受傷遞減', '適合盜賊等連擊型'],
   },
   {
-    tier: 'A',
-    name: '終局傳說',
-    color: '#fbbf24',
-    identity: 'Boss 戰與後期掉落追求',
-    effects: ['3 件：最終傷害 +5%', '5 件：Boss 傷害 +10%', '7 件：掉落率 +10%'],
+    tier: '紋', name: '三紋套', color: '#a78bfa',
+    identity: '跨階通算・迅／鬥／智',
+    effects: ['迅紋：迴避・連擊・速度', '鬥紋：傷害・爆擊', '智紋：終傷・命中・穿防'],
+  },
+  {
+    tier: '戒', name: '特效戒套', color: '#fbbf24',
+    identity: '左右雙戒・九大主題',
+    effects: ['疾風／獵手／狂血／吸血…等 9 套', '左右 2 件成套即啟動', '可與基礎套複合疊加'],
   },
 ]
 </script>
@@ -494,8 +528,8 @@ const tierSets = [
     <section class="section reveal">
       <div class="section-header">
         <div class="sect-ornament">⟨ 冒險地帶 ⟩</div>
-        <h2 class="sect-title">五大討伐區域</h2>
-        <p class="sect-sub">由新手到精英，每個區域都有獨特的怪物與挑戰</p>
+        <h2 class="sect-title">八大討伐區域</h2>
+        <p class="sect-sub">從新手草叢到焰獄深處；Lv.40 後更有古城深處・龍族・地獄火焰三條平行 A 路線</p>
       </div>
       <div class="zones-grid">
         <div
@@ -562,22 +596,22 @@ const tierSets = [
     <!-- ===== EQUIPMENT TIER SETS ===== -->
     <section class="section tier-section reveal">
       <div class="section-header">
-        <div class="sect-ornament">⟨ 階級套裝 ⟩</div>
+        <div class="sect-ornament">⟨ 具名套裝 ⟩</div>
         <h2 class="sect-title">3 / 5 / 7 件混搭加成</h2>
-        <p class="sect-sub">一般裝備依 D / C / B / A 階分開計算，卡片、稱號與職業徽章不納入件數</p>
+        <p class="sect-sub">不再依裝備階級計算，改由秘銀・焚獄・龍鱗・三紋・特效戒等具名套裝提供加成</p>
       </div>
       <div class="tier-rules">
         <div class="tier-rule">
           <span class="tier-rule-mark">01</span>
-          <span>同階級穿滿 3、5、7 件時依序啟動效果</span>
+          <span>具名套裝穿滿指定件數（3/5/7，部分套 3/6/9 或左右 2 件）依序啟動</span>
         </div>
         <div class="tier-rule">
           <span class="tier-rule-mark">02</span>
-          <span>不同階級可以混搭，各階件數各自計算</span>
+          <span>一件裝備可同時屬於多套，戒指常複合疊加</span>
         </div>
         <div class="tier-rule">
           <span class="tier-rule-mark">03</span>
-          <span>計算武器、防具、頭飾、披肩、鞋子、雙飾品與副手</span>
+          <span>D／C／B／A 階級只作品階顯示，加成一律走具名套裝</span>
         </div>
       </div>
       <div class="tier-grid">
@@ -607,7 +641,7 @@ const tierSets = [
     <section class="section tower-section reveal">
       <div class="section-header">
         <div class="sect-ornament">⟨ 組隊爬塔 ⟩</div>
-        <h2 class="sect-title">六人攻塔・四十一層終焉挑戰</h2>
+        <h2 class="sect-title">六人攻塔・五十二層終焉挑戰</h2>
         <p class="sect-sub">隊長開房、成員集結，依 AGI 速度條與怪物正面交鋒</p>
       </div>
 
@@ -617,7 +651,7 @@ const tierSets = [
           <div class="tower-stat-label">最多隊員</div>
         </div>
         <div class="tower-stat">
-          <div class="tower-stat-num">41</div>
+          <div class="tower-stat-num">52</div>
           <div class="tower-stat-label">總樓層</div>
         </div>
         <div class="tower-stat">
