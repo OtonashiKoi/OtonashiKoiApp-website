@@ -84,6 +84,17 @@ onMounted(() => {
 // ─── Data ───
 const zones = [
   {
+    key: 'event_1', emoji: '🏖️', name: '夏日活動區', lv: 'Lv.40+', color: '#22d3ee', monsters: 7,
+    desc: 'V0.5 限定・海會記得',
+    detail: {
+      intro: '夏日限定的海灘戰場，七隻海洋怪物在此出沒。此區怪物攻擊帶水屬性，也是屬性石的重要來源。',
+      monsterList: ['貝貝寄居蟹', '溜溜沙蟹', '蝦蝦劍士', '墨墨章魚', '椰椰大蟹', '鼓鼓河豚', '龜龜大將'],
+      drops: '夏日海灘系列限定裝備（20 件）・帶屬性裝備（可分解出屬性石）',
+      tips: '活動區裝備掉落時會附屬性，分解可得屬性石——鑲進防具就是抗性。',
+      recommend: 'Lv.40+ / 建議帶火屬性武器走相剋',
+    },
+  },
+  {
     key: 'beginner', emoji: '🌱', name: '新手村外的草叢', lv: 'Lv.1–3', color: '#4ade80', monsters: 5,
     desc: '踏上旅途，學習基礎戰鬥',
     detail: {
@@ -164,6 +175,17 @@ const zones = [
 
 const worldBosses = [
   {
+    key: 'turtle_king', emoji: '🐢', name: '島島龜王', lair: '夏日活動區', lv: '進場 Lv.40', color: '#34d399',
+    tagline: 'V0.5 活動王・60 分鐘重生',
+    detail: {
+      intro: '夏日活動的頂級活動王，馱著小島的巨龜。水屬性、血量高達 400 萬，擊破後 60 分鐘重生，整個賽季都能反覆挑戰。',
+      mechanics: ['水屬性攻擊：帶火抗性裝備可期待減傷', '60 分鐘重生：擊破後定時重新出現', '全服玩家共同累積傷害討伐'],
+      unlock: '進場 Lv.40（夏日活動期間限定）',
+      rewards: '世界王寶箱與夏日海灘系列裝備',
+      recommend: '鑲水屬性石走相剋、或堆抗性硬吃，兩條路都能打',
+    },
+  },
+  {
     key: 'daishi', emoji: '👑', name: '大史王', lair: '精英區', lv: '進場 Lv.40', color: '#c084fc',
     tagline: '首位世界王・精英試煉',
     detail: {
@@ -199,6 +221,24 @@ const worldBosses = [
 ]
 
 const jobs = [
+  {
+    icon: '🎲', name: '賭徒', sub: 'GAMBLER', color: '#fbbf24', desc: '以命運為武器，LUK 決定一切',
+    detail: {
+      mainStats: ['LUK', 'AGI'],
+      weapon: '主要武器：骰子（全遊戲唯一以 LUK 為攻擊屬性的武器，雙手）',
+      quest: '賭徒試煉：Lv.10，基礎 LUK + AGI > 10。使用骰子出戰 10 次，獎勵 500 金幣與賭徒徽章。',
+      badge: '賭徒徽章：AGI +2 / DEX +1 / LUK +5。',
+      skills: [
+        '被動：爆擊率 +10、爆擊傷害 +20%。',
+        '被動：金幣獲得 +15%、稀有掉落率 +5%——賭徒連掉寶都在賭。',
+        '主動：將大局逆轉吧——骰出【1】時重骰該顆，並 LUK +15 持續 1 回合。',
+        '主動：千術——50% 機率使敵方本回合攻擊必定大失敗（自傷並無法攻擊）。',
+      ],
+      mechanic: '骰子每回合固定擲兩段，每段各自擲爆擊與攻擊階級；骰面決定傷害浮動（全 6 = 250%、全 1 = 50%）。LUK 同時影響傷害、爆擊率與攻防擲骰階級。',
+      style: '高方差爆發型',
+      tips: 'LUK 是一切；AGI 補閃避與連擊。輸出忽高忽低是天性，適應它、或享受它。二轉「賭神」開放中。',
+    },
+  },
   {
     icon: '⚔️', name: '劍士', sub: 'SWORDSMAN', color: '#e8a04a', desc: '格擋後反擊，以一敵萬',
     detail: {
@@ -451,10 +491,10 @@ const features = [
 ]
 
 const gameStats = [
-  { num: '64', label: '怪物與 Boss' },
-  { num: '10', label: '職業徽章' },
-  { num: '38', label: '任務內容' },
-  { num: '400+', label: '道具與裝備' },
+  { num: '76', label: '怪物與 Boss' },
+  { num: '11+11', label: '職業與二轉' },
+  { num: '66', label: '任務內容' },
+  { num: '500+', label: '道具與裝備' },
 ]
 
 const towerStages = [
@@ -523,6 +563,12 @@ const tierSets = [
       <div class="hero-bg-pattern" />
       <div class="hero-inner">
         <div class="hero-badge">✦ Discord RPG ✦</div>
+        <div class="season-banner">
+          <span class="season-tag">V0.5 新賽季</span>
+          <span class="season-name">🏖️ 夏日時光・屬性上場</span>
+          <span class="season-date">8/9 20:00 開放｜至 9/9</span>
+          <div class="season-highlights">七屬性抗性 ・ 新職業賭徒 ・ 11 種二轉 ・ 屬性配點 2+1 ・ 全新貢獻榜</div>
+        </div>
         <div class="hero-title-wrap">
           <div class="hero-deco-line" />
           <h1 class="hero-title">
@@ -553,7 +599,7 @@ const tierSets = [
     <section class="section reveal">
       <div class="section-header">
         <div class="sect-ornament">⟨ 冒險地帶 ⟩</div>
-        <h2 class="sect-title">七大討伐區域</h2>
+        <h2 class="sect-title">八大討伐區域</h2>
         <p class="sect-sub">從新手草叢到地獄火焰；Lv.40 後有古城深處・龍族之領・地獄火焰三條平行 A 路線</p>
       </div>
       <div class="zones-grid">
@@ -577,7 +623,7 @@ const tierSets = [
     <section class="section section-dark reveal">
       <div class="section-header">
         <div class="sect-ornament">⟨ 世界王 ⟩</div>
-        <h2 class="sect-title">三大世界王討伐</h2>
+        <h2 class="sect-title">四大世界王討伐</h2>
         <p class="sect-sub">全服聯合挑戰的頂級 Boss，點擊查看討伐資料</p>
       </div>
       <div class="zones-grid">
@@ -963,6 +1009,41 @@ const tierSets = [
   margin-bottom: 40px;
   background: rgba(200, 160, 74, 0.06);
   animation: pulse-border 3s ease-in-out infinite;
+}
+
+.season-banner {
+  margin: 14px auto 4px;
+  padding: 10px 22px;
+  max-width: 560px;
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(14, 116, 144, 0.25), rgba(30, 58, 138, 0.3));
+  backdrop-filter: blur(4px);
+}
+.season-tag {
+  display: inline-block;
+  padding: 2px 10px;
+  margin-right: 8px;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: #0c1222;
+  background: linear-gradient(90deg, #7dd3fc, #38bdf8);
+  border-radius: 999px;
+}
+.season-name { font-weight: 900; font-size: 1.02rem; color: #bae6fd; }
+.season-date {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.8rem;
+  color: #fcd34d;
+  font-weight: 700;
+}
+.season-highlights {
+  margin-top: 6px;
+  font-size: 0.78rem;
+  color: #cbd5e1;
+  letter-spacing: 0.02em;
 }
 
 @keyframes pulse-border {
