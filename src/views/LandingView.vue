@@ -1,1953 +1,880 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, ref } from "vue";
+import hero from "../assets/autumn/season-character.webp";
+import battle from "../assets/autumn/battle.webp";
+import party from "../assets/autumn/party.webp";
+import alchemy from "../assets/autumn/alchemy.webp";
+import titleMaple from "../assets/autumn/title-maple.webp";
+import titleTraveler from "../assets/autumn/title-traveler.webp";
+import titleVeteran from "../assets/autumn/title-veteran.webp";
+import titleAttendance from "../assets/autumn/title-attendance.webp";
+import titleForge from "../assets/autumn/title-forge.webp";
+import titleCompanions from "../assets/autumn/title-companions.webp";
+import titleSummit from "../assets/autumn/title-summit.webp";
 
-const canvasRef = ref(null)
-let animFrame = null
-
-// Particle system
-onMounted(() => {
-  const canvas = canvasRef.value
-  const ctx = canvas.getContext('2d')
-  let W = (canvas.width = window.innerWidth)
-  let H = (canvas.height = window.innerHeight)
-
-  const particles = Array.from({ length: 80 }, () => createParticle(W, H))
-
-  function createParticle(w, h, fromBottom = false) {
-    return {
-      x: Math.random() * w,
-      y: fromBottom ? h + 10 : Math.random() * h,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: -(0.3 + Math.random() * 0.6),
-      r: 1 + Math.random() * 2,
-      alpha: 0.3 + Math.random() * 0.6,
-      flicker: Math.random() * Math.PI * 2,
-      color: Math.random() < 0.6 ? '#ffd770' : Math.random() < 0.5 ? '#a78bfa' : '#f87171',
-    }
+const gameUrl = "https://otonashikoi.org/";
+const discordUrl = "https://discord.gg/EfpECVDJF6";
+const nav = [
+  { id: "season", name: "本季更新" },
+  { id: "guide", name: "開始冒險" },
+  { id: "world", name: "世界與養成" },
+  { id: "tower", name: "組隊爬塔" },
+  { id: "craft", name: "鍊金工房" },
+  { id: "titles", name: "賽季稱號" },
+];
+const menuOpen = ref(false);
+const gallery = [
+  {
+    image: battle,
+    title: "日常共鬥",
+    tag: "一起打怪，各自骰寶",
+    text: "同區冒險者共同推進戰鬥，享受光環支援；擊敗怪物後，每位符合資格的玩家都有自己的掉落機會。",
+  },
+  {
+    image: party,
+    title: "組隊爬塔",
+    tag: "坦克・輸出・輔助",
+    text: "同一個戰鬥場景裡連續向上挑戰。看行動條掌握出手節奏，點自己的頭像調整策略，詩人仍能手動演奏。",
+  },
+  {
+    image: alchemy,
+    title: "鍊金工房",
+    tag: "把素材放入爐中",
+    text: "翻開配方書、放入寶石、攪拌製作。已有的低階素材，也能成為下一次裝備提升的準備。",
+  },
+];
+const lightbox = ref(null);
+const dialog = ref(null);
+let returnFocus = null;
+let previousOverflow = "";
+async function openImage(item) {
+  returnFocus = document.activeElement;
+  previousOverflow = document.body.style.overflow;
+  lightbox.value = item;
+  document.body.style.overflow = "hidden";
+  await nextTick();
+  dialog.value?.focus();
+}
+function closeImage() {
+  if (!lightbox.value) return;
+  lightbox.value = null;
+  document.body.style.overflow = previousOverflow;
+  returnFocus?.focus();
+}
+function dialogKeys(event) {
+  if (event.key === "Escape") {
+    event.preventDefault();
+    closeImage();
   }
-
-  function draw() {
-    ctx.clearRect(0, 0, W, H)
-    particles.forEach((p, i) => {
-      p.x += p.vx + Math.sin(p.flicker) * 0.15
-      p.y += p.vy
-      p.flicker += 0.03
-      p.alpha += Math.sin(p.flicker * 2) * 0.015
-      if (p.y < -10 || p.alpha <= 0) {
-        particles[i] = createParticle(W, H, true)
-        return
-      }
-      ctx.save()
-      ctx.globalAlpha = Math.max(0, Math.min(1, p.alpha))
-      ctx.shadowBlur = 8
-      ctx.shadowColor = p.color
-      ctx.fillStyle = p.color
-      ctx.beginPath()
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
-      ctx.fill()
-      ctx.restore()
-    })
-    animFrame = requestAnimationFrame(draw)
+  if (event.key === "Tab") {
+    event.preventDefault();
+    dialog.value?.querySelector("button")?.focus();
   }
-
-  draw()
-
-  const resize = () => {
-    W = canvas.width = window.innerWidth
-    H = canvas.height = window.innerHeight
-  }
-  window.addEventListener('resize', resize)
-  onUnmounted(() => {
-    cancelAnimationFrame(animFrame)
-    window.removeEventListener('resize', resize)
-  })
-})
-
-// Scroll reveals
-onMounted(() => {
-  const els = document.querySelectorAll('.reveal')
-  const obs = new IntersectionObserver(
-    (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('visible')),
-    { threshold: 0.12 },
-  )
-  els.forEach((el) => obs.observe(el))
-})
-
-// ─── Modal ───
-const activeModal = ref(null)
-function openModal(type, data) { activeModal.value = { type, data } }
-function closeModal() { activeModal.value = null }
-onMounted(() => {
-  window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal() })
-})
-
-// ─── Data ───
-const zones = [
-  {
-    key: 'event_1', emoji: '🏖️', name: '夏日活動區', lv: 'Lv.40+', color: '#22d3ee', monsters: 7,
-    desc: 'V0.5 限定・海會記得',
-    detail: {
-      intro: '夏日限定的海灘戰場，七隻海洋怪物在此出沒。此區怪物攻擊帶水屬性，也是屬性石的重要來源。',
-      monsterList: ['貝貝寄居蟹', '溜溜沙蟹', '蝦蝦劍士', '墨墨章魚', '椰椰大蟹', '鼓鼓河豚', '龜龜大將'],
-      drops: '夏日海灘系列限定裝備（20 件）・帶屬性裝備（可分解出屬性石）',
-      tips: '活動區裝備掉落時會附屬性，分解可得屬性石——鑲進防具就是抗性。',
-      recommend: 'Lv.40+ / 建議帶火屬性武器走相剋',
-    },
-  },
-  {
-    key: 'beginner', emoji: '🌱', name: '新手村外的草叢', lv: 'Lv.1–3', color: '#4ade80', monsters: 5,
-    desc: '踏上旅途，學習基礎戰鬥',
-    detail: {
-      intro: '音無樂園的起點，怪物溫和，適合熟悉戰鬥系統與基礎操作。',
-      monsterList: ['小史(小)', '野兔', '蘑菇怪', '小史(中)', '★ 大野兔(B)'],
-      drops: '木製武器・布衣系防具・新手套裝・銅戒指系列',
-      tips: '刷到 Lv.3 後前往一般區；此區建立最初期配備。',
-      recommend: '任何職業皆可 / 無裝備需求',
-    },
-  },
-  {
-    key: 'normal', emoji: '⚔️', name: '起始的草原', lv: 'Lv.1+', color: '#facc15', monsters: 8,
-    desc: '鍛煉身手，挑戰更強的敵人',
-    detail: {
-      intro: '小史、哥布、小狼、石頭四大常駐怪，外加青草地精、綠野狼精英怪；稀有的小金(稀)出現必搶。',
-      monsterList: ['小史', '哥布', '小狼', '石頭', '青草地精', '綠野狼', '★ 大史(B)', '★ 小金(稀)'],
-      drops: '皮革／鐵製裝備・皮鐵套裝・鐵戒指',
-      tips: '小金(稀) 稀有必搶；大史(B) 掉落最多。',
-      recommend: 'Lv.1+ / 無上限，高等玩家也可回刷',
-    },
-  },
-  {
-    key: 'mid', emoji: '✦', name: '陽光草原', lv: 'Lv.10–25', color: '#fb923c', monsters: 12,
-    desc: '中階冒險者的試煉場地',
-    detail: {
-      intro: '甲蟹、牙牙狼、巨巨、黑暗弓手等常駐怪，加上森林系精英怪；Boss 米拉桑(B) 掉落豐富。',
-      monsterList: ['甲蟹', '牙牙狼', '巨巨', '黑暗弓手', '林地妖靈(樹樹)', '森林古樹', '暗夜獵豹', '森林巫師', '森林盜賊', '森林之獸', '★ 米拉桑(B)', '★ 中金(稀)'],
-      drops: '鐵／鋼製武器・鋼製套裝・銀戒指',
-      tips: '米拉桑(B) 掉落最豐富，中金(稀) 穩定掉銀戒指。',
-      recommend: 'Lv.10–25 / 建議木製→鐵製強化',
-    },
-  },
-  {
-    key: 'ancient_city', emoji: '🏛️', name: '古城', lv: 'Lv.25–40', color: '#f87171', monsters: 8,
-    desc: '古城遺蹟中的強大守衛',
-    detail: {
-      intro: '古城的衛兵、石像鬼、法師盤踞，城堡魔像(B) 坐鎮，是鋼鐵邁向秘銀的過渡帶。',
-      monsterList: ['古城弓手', '石像鬼', '古城法師', '廢墟蠍兵', '詛咒祭司', '古城刺客', '毒霧蜘蛛', '★ 城堡魔像(B)'],
-      drops: '鋼鐵→秘銀過渡裝備・金戒指・強化石',
-      tips: '城堡魔像(B) 是古城主要 Boss；此區銜接秘銀裝備。',
-      recommend: 'Lv.25–40 / 建議鐵製→鋼製系列',
-    },
-  },
-  {
-    key: 'ancient_city_deep', emoji: '🕳️', name: '古城深處', lv: 'Lv.40+', color: '#c084fc', monsters: 7,
-    desc: '三條 A 路線之一・秘銀產地',
-    detail: {
-      intro: 'Lv.40 後開放的三條平行 A 路線之一；秘銀套裝的主要產地，也是踏入 A 階最平緩的入口。',
-      monsterList: ['城牆衛兵', '冰封騎士', '鐵甲衛將', '古城狂戰士', '黑焰巫師', '★ 古城將軍(B)', '★ 廢都魔王(B)'],
-      drops: '秘銀套裝（A 階防具）・秘銀武器・A 階強化石・附魔重骰藥水',
-      tips: '想入手秘銀套從這裡開始；廢都魔王(B)、古城將軍(B) 掉落最豐。',
-      recommend: 'Lv.40 開放 / 三條 A 路線最易入門',
-    },
-  },
-  {
-    key: 'dragon_realm', emoji: '🐲', name: '龍族之領', lv: 'Lv.40+', color: '#38bdf8', monsters: 10,
-    desc: '三條 A 路線之一・連擊流派',
-    detail: {
-      intro: 'Lv.40 三條 A 路線之一；龍族群棲，龍鱗套裝與連擊流派裝備的來源，龍王(B) 鎮守。',
-      monsterList: ['飛龍幼崽', '龍蜥武士', '火翼龍人', '冰鱗龍人', '雷霆飛龍', '黑曜龍騎', '暗影龍將', '龍翼魔法師', '★ 黃金幼龍(稀)', '★ 龍王(B)'],
-      drops: '龍鱗套裝（連擊向 A 防具）・龍系武器・龍族怪物卡',
-      tips: '走連擊流派（盜賊／雙匕首）的玩家優先農龍鱗套。',
-      recommend: 'Lv.40 開放 / 連擊流派裝備來源',
-    },
-  },
-  {
-    key: 'hellfire', emoji: '🔥', name: '地獄火焰', lv: 'Lv.40+', color: '#fb7185', monsters: 11,
-    desc: '三條 A 路線之一・傷害流派',
-    detail: {
-      intro: 'Lv.40 三條 A 路線之一；烈焰生物橫行，焚獄套裝與火焰特攻武器的產地，菁英煉獄烈焰狼王坐鎮。',
-      monsterList: ['焰爪幼狼', '灰燼豺', '熔岩犬', '硫火蝙蝠', '焦炎蜥', '火髓魔蟲', '餘燼骷髏', '炙炎鴉', '岩漿巨蟲', '烈焰狼', '★ 煉獄烈焰狼王(菁英)'],
-      drops: '焚獄套裝（共 29 件）：A 階武器 10 型（涵蓋各武器家族）、S 階武器 10 型（帶「焚獄特攻」火焰區增傷）、A 階防具 9 件（甲／盔／靴／盾／披風／護目／口罩／雙戒）・火焰系怪物卡',
-      tips: '想集滿焚獄套從這裡農起；S 武器另可從地獄狼牙王寶箱取得，煉獄烈焰狼王掉落附魔重骰藥水。',
-      recommend: 'Lv.40 開放 / 傷害流派與火焰特攻裝',
-    },
-  },
-]
-
-const worldBosses = [
-  {
-    key: 'turtle_king', emoji: '🐢', name: '島島龜王', lair: '夏日活動區', lv: '進場 Lv.40', color: '#34d399',
-    tagline: 'V0.5 活動王・60 分鐘重生',
-    detail: {
-      intro: '夏日活動的頂級活動王，馱著小島的巨龜。水屬性、血量高達 400 萬，擊破後 60 分鐘重生，整個賽季都能反覆挑戰。',
-      mechanics: ['水屬性攻擊：帶火抗性裝備可期待減傷', '60 分鐘重生：擊破後定時重新出現', '全服玩家共同累積傷害討伐'],
-      unlock: '進場 Lv.40（夏日活動期間限定）',
-      rewards: '世界王寶箱與夏日海灘系列裝備',
-      recommend: '鑲水屬性石走相剋、或堆抗性硬吃，兩條路都能打',
-    },
-  },
-  {
-    key: 'daishi', emoji: '👑', name: '大史王', lair: '精英區', lv: '進場 Lv.40', color: '#c084fc',
-    tagline: '首位世界王・精英試煉',
-    detail: {
-      intro: '坐鎮精英區的首位世界王，是玩家踏入世界王討伐的第一道門檻。血量與攻擊遠超一般 Boss，需要備齊裝備與隊友才推得動。',
-      mechanics: ['多部位結構，需逐一擊破部位', '超高血量的長期戰，考驗續戰與減傷', '全服玩家可共同累積傷害討伐'],
-      unlock: '進場 Lv.40',
-      rewards: '世界王寶箱：依傷害／貢獻排名發放，含高階裝備與強化石',
-      recommend: '建議組隊、備齊 A 階裝備再挑戰',
-    },
-  },
-  {
-    key: 'dragon_king', emoji: '🐉', name: '古龍王(B)', lair: '龍王巢穴', lv: '進場 Lv.50', color: '#38bdf8',
-    tagline: '龍族頂點・逆鱗焚天',
-    detail: {
-      intro: '龍族之領盡頭的古龍王，是龍系最強的存在。以龍焰與破鱗攻勢壓迫全場，血量極為龐大，討伐後才會開啟當週的焰獄深處。',
-      mechanics: ['破鱗機制：破壞部位後龍防下降', '龍焰 AOE：對全隊造成雷焰傷害', '討伐後解鎖當週焰獄深處'],
-      unlock: '進場 Lv.50',
-      rewards: '世界王寶箱：龍系高階裝備、S 強化石、古龍王卡',
-      recommend: '連擊／穿防流派效率高，建議滿編組隊',
-    },
-  },
-  {
-    key: 'hellfang', emoji: '🐺', name: '地獄狼牙王', lair: '焰獄深處', lv: '進場 Lv.50', color: '#fb7185',
-    tagline: '終局世界王・煉獄咬噬',
-    detail: {
-      intro: '棲身焰獄深處的終局世界王，也是目前最強的討伐目標。分為三個階段，隨戰鬥推進不斷強化，煉獄咬噬與破防攻勢會愈打愈狂。',
-      mechanics: ['三階段強化：血量下降時攻勢升級', '煉獄咬噬：高倍火焰傷害並附帶破防', '需先討伐當週古龍王才能進入焰獄深處'],
-      unlock: '進場 Lv.50（需先討伐當週古龍王，解鎖焰獄深處）',
-      rewards: '世界王寶箱：S 裝備、S 強化石、地獄狼牙王卡、附魔重骰藥水',
-      recommend: '終局挑戰，需滿編＋高輸出＋減傷支援',
-    },
-  },
-]
-
+}
+onBeforeUnmount(closeImage);
 const jobs = [
+  { name: "劍士", group: "近戰", text: "以劍作戰，建立近戰攻守的基礎。" },
+  { name: "戰士", group: "近戰", text: "偏重力量，追求正面交鋒的打擊力。" },
   {
-    icon: '🎲', name: '賭徒', sub: 'GAMBLER', color: '#fbbf24', desc: '以命運為武器，LUK 決定一切',
-    detail: {
-      mainStats: ['LUK', 'AGI'],
-      weapon: '主要武器：骰子（全遊戲唯一以 LUK 為攻擊屬性的武器，雙手）',
-      quest: '賭徒試煉：Lv.10，基礎 LUK + AGI > 10。使用骰子出戰 10 次，獎勵 500 金幣與賭徒徽章。',
-      badge: '賭徒徽章：AGI +2 / DEX +1 / LUK +5。',
-      skills: [
-        '被動：爆擊率 +10、爆擊傷害 +20%。',
-        '被動：金幣獲得 +15%、稀有掉落率 +5%——賭徒連掉寶都在賭。',
-        '主動：將大局逆轉吧——骰出【1】時重骰該顆，並 LUK +15 持續 1 回合。',
-        '主動：千術——50% 機率使敵方本回合攻擊必定大失敗（自傷並無法攻擊）。',
-      ],
-      mechanic: '骰子每回合固定擲兩段，每段各自擲爆擊與攻擊階級；骰面決定傷害浮動（全 6 = 250%、全 1 = 50%）。LUK 同時影響傷害、爆擊率與攻防擲骰階級。',
-      style: '高方差爆發型',
-      tips: 'LUK 是一切；AGI 補閃避與連擊。輸出忽高忽低是天性，適應它、或享受它。二轉「賭神」開放中。',
-    },
+    name: "矮人戰士",
+    group: "近戰",
+    text: "重視體魄，適合喜歡厚實角色的冒險者。",
+  },
+  { name: "盜賊", group: "近戰", text: "以敏捷與連續攻擊創造戰鬥節奏。" },
+  { name: "弓箭手", group: "遠程", text: "拉開戰鬥風格，走向精準的弓箭輸出。" },
+  { name: "法師", group: "遠程", text: "以智力與魔法建立自己的輸出路線。" },
+  { name: "賭徒", group: "遠程", text: "使用骰子作戰，享受帶有運氣的變化。" },
+  {
+    name: "治療師",
+    group: "支援",
+    text: "提供治療與支援，幫助隊伍維持續戰能力。",
+  },
+  { name: "軍師", group: "支援", text: "以戰術與光環支援，帶動團隊作戰。" },
+  {
+    name: "詩人",
+    group: "支援",
+    text: "以樂器與演奏加入共鬥，二轉可走向吟遊詩人。",
   },
   {
-    icon: '⚔️', name: '劍士', sub: 'SWORDSMAN', color: '#e8a04a', desc: '格擋後反擊，以一敵萬',
-    detail: {
-      mainStats: ['STR', 'DEX'],
-      weapon: '主要武器：單手劍 / 雙手劍',
-      quest: '劍士試煉：Lv.10，基礎 STR + DEX > 10。使用單手劍或雙手劍出戰 10 次，獎勵 500 金幣與劍士徽章。',
-      badge: '劍士徽章：STR +2 / VIT +3 / DEX +2。',
-      skills: [
-        '被動：單手劍或雙手劍強化；單手劍 + 盾牌時格擋 +20%。',
-        '被動：單手劍 + 副手時連擊傷害提升；雙手劍額外獲得少量格擋。',
-        '主動：舉步若堅，格擋率 +25%、DEF +12，持續 2 回合。',
-        '主動：碎甲斬，使敵方 DEF -10，持續 3 回合，可疊至 -30。',
-      ],
-      mechanic: '受到攻擊時有機率觸發「格擋」，成功格擋後立即進行一次反擊，反擊傷害享有額外加成。格擋率隨 VIT 提升而增加。',
-      style: '防禦反擊型',
-      tips: 'STR 提升劍傷害，DEX 確保命中率穩定。格擋反擊的傷害同樣吃 STR，命中落空就沒機會反擊。',
-    },
+    name: "結界師",
+    group: "支援",
+    text: "以防護與結界支援，補上團隊的生存空間。",
+  },
+];
+const jobFilter = ref("全部");
+const shownJobs = computed(() =>
+  jobs.filter((j) => jobFilter.value === "全部" || j.group === jobFilter.value),
+);
+const mapStages = [
+  {
+    lv: "01—09",
+    name: "草叢與起始草原",
+    gear: "D 階裝備",
+    text: "先在新手村外的草叢熟悉戰鬥，取得基礎裝備後再挑戰起始的草原。防具同樣重要。",
   },
   {
-    icon: '🪓', name: '戰士', sub: 'WARRIOR', color: '#e05252', desc: '瀕死爆發，絕境翻盤',
-    detail: {
-      mainStats: ['STR', 'VIT'],
-      weapon: '主要武器：斧類，雙手斧可獲得更高爆發。',
-      quest: '戰士試煉：Lv.10，基礎 STR + VIT > 10。使用單手斧或雙手斧出戰 10 次，獎勵 500 金幣與戰士徽章。',
-      badge: '戰士徽章：STR +4 / VIT +1 / LUK +2。',
-      skills: [
-        '被動：雙手斧低血量時最終傷害 +35%。',
-        '主動：踢到桌腳很生氣，自身 ATK +25%，持續 2 回合。',
-        '主動：死亡意志，HP 低於 35% 時免疫傷害 1 回合並 ATK +50%。',
-      ],
-      mechanic: 'HP 低於 30% 時進入「憤怒」狀態，攻擊力大幅提升。越接近死亡，爆發力越驚人，是真正的絕境翻盤機。',
-      style: '爆發輸出型',
-      tips: 'STR 決定斧頭基礎傷害，VIT 讓你在危險血量邊緣撐住不被秒殺，精準控制血量才能發揮最大爆發。',
-    },
+    lv: "10—19",
+    name: "陽光草原",
+    gear: "C 階裝備",
+    text: "準備第一個職業，將武器與防具逐步換成 C 階，開始建立自己的養成方向。",
   },
   {
-    icon: '🏹', name: '弓箭手', sub: 'ARCHER', color: '#52b86e', desc: '命中要害，必殺一擊',
-    detail: {
-      mainStats: ['DEX', 'AGI'],
-      weapon: '主要武器：弓。',
-      quest: '弓箭手試煉：Lv.10，基礎 DEX + AGI > 10。使用弓出戰 10 次，獎勵 500 金幣與弓箭手徽章。',
-      badge: '弓箭手徽章：AGI +1 / DEX +5 / LUK +2。',
-      skills: [
-        '被動：弓系強化，提升遠程輸出與要害節奏。',
-        '主動：瞄準，命中 +20、爆擊率 +15%，持續 2 回合。',
-        '主動：穿刺箭，ATK +20%、敵方 DEF -15、自身爆擊率 +20%，持續 2 回合。',
-      ],
-      mechanic: '每次攻擊有機率觸發「命中要害」，造成額外傷害，且可與普通暴擊效果疊加，實現超高單發傷害。DEX 越高觸發率越高。',
-      style: '高爆發遠程型',
-      tips: '優先堆疊 DEX 提升要害觸發率，搭配 AGI 提高攻速，實現高頻率的驚人輸出爆發。',
-    },
+    lv: "20—29",
+    name: "古城",
+    gear: "B 階裝備",
+    text: "探索古城、收集區域裝備與怪物卡。不要只提升武器，也要留意承傷與生命值。",
   },
   {
-    icon: '🗡️', name: '盜賊', sub: 'ROGUE', color: '#a78bfa', desc: '連擊加速，如影隨形',
-    detail: {
-      mainStats: ['AGI', 'DEX'],
-      weapon: '主要武器：匕首。',
-      quest: '盜賊試煉：Lv.10，基礎 AGI + DEX > 10。使用匕首出戰 10 次，獎勵 500 金幣與盜賊徽章。',
-      badge: '盜賊徽章：STR +2 / AGI +4 / LUK +2。',
-      skills: [
-        '被動：主手匕首時武器強化；主匕首 + 副手匕首時連擊率 +10%。',
-        '被動：主匕首 + 副手且 HP >50% 時爆擊率 +15%。',
-        '主動：背刺，爆擊率 +20%、爆擊傷害 +30%，持續 2 回合。',
-        '主動：煙霧彈，敵方命中 -20、自身迴避 +12，持續 2 回合。',
-      ],
-      mechanic: '攻擊時有機率觸發「連擊」，連續打出多段傷害。AGI 同時大幅提升閃避率，讓盜賊如幽靈般難以捕捉。',
-      style: '連擊閃避型',
-      tips: 'AGI 驅動連擊與閃避，DEX 確保每段連擊都能命中目標。命中率不足時連擊白打，兩者缺一不可。',
-    },
+    lv: "30—39",
+    name: "霧隱林地",
+    gear: "B 階裝備・一般塔",
+    text: "探索霧林的怪物與專屬卡片；30 等起能組隊挑戰一般塔，35 等起可準備二轉試煉。",
   },
   {
-    icon: '🔮', name: '法師', sub: 'MAGE', color: '#60a5fa', desc: '魔法穿防，智慧碾壓',
-    detail: {
-      mainStats: ['INT', 'AGI'],
-      weapon: '主要武器：單手法杖 / 雙手法杖。',
-      quest: '法師試煉：Lv.10，基礎 INT + AGI > 10。使用雙手法杖出戰 10 次，獎勵 500 金幣與法師徽章。',
-      badge: '法師徽章：VIT +1 / INT +5 / LUK +2。',
-      skills: [
-        '被動：法杖系強化，偏向高魔法輸出與穿防。',
-        '主動：魔力爆炎，自身 ATK +40% 並無視防禦 +50%，持續 1 回合。',
-        '主動：魔力衰減，敵方最終傷害 -25%、DEF -10，持續 3 回合。',
-      ],
-      mechanic: '魔法傷害可無視部分物理防禦，純 INT 配置可達最大魔法輸出。雙手法杖讓怪物攻擊次數翻倍，AGI 的閃避率能有效減少受到傷害的次數。',
-      style: '高傷害魔法型',
-      tips: 'INT 全力堆疊衝傷害，AGI 提升閃避抵消怪物加倍攻擊的壓力，是法師在高級區存活的關鍵。',
-    },
+    lv: "40—50",
+    name: "更深處的冒險",
+    gear: "A 階裝備・挑戰塔",
+    text: "古城深處、龍族之領、地獄火焰與鐵鳴礦城都在這裡。朝完整裝備、50 樓與世界王邁進。",
+  },
+];
+const roleDetails = [
+  {
+    name: "坦克",
+    icon: "◇",
+    text: "站在隊伍最前線",
+    effects: ["最大生命 +20%", "物理與魔法防禦 +20%", "最終傷害 −30%"],
+    note: "怪物優先攻擊存活坦克。防具、生命值與隊友的治療，是持續扛傷的關鍵。",
   },
   {
-    icon: '🏥', name: '治療師', sub: 'HEALER', color: '#f0e040', desc: '在場光環，守護全隊',
-    detail: {
-      mainStats: ['INT', 'VIT'],
-      weapon: '主要武器：法杖。',
-      quest: '治療師試煉：Lv.10，基礎 INT + VIT > 10。使用單手法杖出戰 10 次，獎勵 500 金幣與治療師徽章。',
-      badge: '治療師徽章：VIT +2 / INT +4 / DEX +2。',
-      skills: [
-        '光環：在場時提供隊伍治療支援；組隊爬塔中會改為全隊一起受益。',
-        '主動：聖光術，立即回復最大 HP 的 12%。',
-        '主動：神聖護盾，HP 低於 60% 時受傷降低 35%，持續 2 回合。',
-      ],
-      mechanic: '「在場光環」效果：治療師在場時，同區所有玩家獲得持續回血效果。光環效果會持久化，你的存在即是隊伍最大資產。',
-      style: '支援輔助型',
-      tips: '在熱門討伐區頻繁現身，INT 提升治療量，VIT 確保自身存活。光環效果對精英區團隊至關重要。',
-    },
+    name: "輸出",
+    icon: "✧",
+    text: "把握每一次出手",
+    effects: ["最終傷害 +20%", "最大生命 −15%", "防禦與迴避各降低 20%"],
+    note: "坦克倒下後，怪物會優先找本場累積傷害最高的存活輸出。",
   },
   {
-    icon: '🔨', name: '矮人戰士', sub: 'DWARF', color: '#fb923c', desc: '重槌控場，如銅牆鐵壁',
-    detail: {
-      mainStats: ['VIT', 'STR'],
-      weapon: '主要武器：單手槌 / 雙手槌。',
-      quest: '矮人戰士試煉：Lv.10，基礎 VIT + STR > 10。使用單手槌或雙手槌出戰 10 次，獎勵 500 金幣與矮人戰士徽章。',
-      badge: '矮人戰士徽章：STR +1 / VIT +5 / DEX +2。',
-      skills: [
-        '被動：單手槌 / 雙手槌強化；單手槌 + 盾牌時格擋 +20%。',
-        '被動：雙手槌命中後有機率擊暈，對暈眩目標傷害提高。',
-        '主動：鐵壁，受傷降低 25%、DEF +15，持續 2 回合。',
-        '主動：震地重擊，使敵方暈眩 1 回合並 ATK -10%，持續 2 回合。',
-      ],
-      mechanic: '以槌類武器打出擊暈控場，高血量時能讓擊暈更穩定，面對暈眩目標時傷害也會提高。',
-      style: '控場坦克型',
-      tips: 'VIT 讓你撐住前線，STR 提升槌類傷害。適合在組隊與高難度戰鬥中創造安全輸出窗口。',
-    },
+    name: "輔助",
+    icon: "❋",
+    text: "放大既有的支援",
+    effects: ["光環效果 +25%", "防禦降低 20%", "生命值與治療能力不額外加成"],
+    note: "站位不會直接送你補血技能；治療、護盾與演奏仍由原本的職業和裝備決定。",
+  },
+];
+const titles = [
+  {
+    name: "初楓旅人",
+    image: titleTraveler,
+    target: "累積獲勝 100 場",
+    note: "從第一場勝利，開始收藏這個秋天。",
   },
   {
-    icon: '♟️', name: '軍師', sub: 'TACTICIAN', color: '#38bdf8', desc: '戰線指揮，破防討王',
-    detail: {
-      mainStats: ['AGI', 'INT', 'DEX'],
-      weapon: '鎖定武器：單手劍。',
-      quest: '軍師試煉：Lv.10，基礎 AGI + INT + DEX > 10。任務進度需使用單手劍出戰 10 次。',
-      badge: '軍師徽章：AGI +4 / INT +2 / DEX +2。',
-      skills: [
-        '被動：單手劍 ATK 強化。',
-        '光環：隊伍對 Boss 傷害 +5%，隊伍攻擊視為怪物防禦降低 5%。',
-        '主動：戰術分析，敵方 DEF -15、ATK -10，持續 3 回合。',
-        '主動：兵法破陣，無視敵方防禦 +35%、自身 ATK +10%，持續 2 回合。',
-      ],
-      mechanic: '裝備單手劍時啟動共鬥光環：隊伍對 Boss 傷害 +5%，並讓隊伍攻擊視為怪物防禦降低 5%。',
-      style: 'Boss 共鬥光環型',
-      tips: '軍師不是單純拼個人輸出，而是讓整隊在 Boss 戰更快破防。想推世界 Boss 或爬塔高層時很有價值。',
-    },
+    name: "楓紅百戰",
+    image: titleVeteran,
+    target: "累積獲勝 3,000 場",
+    note: "把日常出戰累積成自己的戰績。",
   },
   {
-    icon: '🎼', name: '詩人', sub: 'BARD', color: '#f472b6', desc: '戰歌鼓舞，收益支援',
-    detail: {
-      mainStats: ['DEX', 'AGI', 'LUK'],
-      weapon: '鎖定武器：弓。',
-      quest: '詩人試煉：Lv.10，基礎 DEX + AGI + LUK > 10。任務進度需使用弓出戰 10 次。',
-      badge: '詩人徽章：DEX +4 / AGI +2 / LUK +2。',
-      skills: [
-        '被動：弓 ATK 強化。',
-        '光環：隊伍 EXP +5%，隊伍 AGI +8%。',
-        '主動：激昂旋律，自身 ATK +18%、AGI +8，持續 2 回合。',
-        '主動：沉靜之歌，敵方 ATK -15%、AGI -6，持續 3 回合。',
-      ],
-      mechanic: '裝備弓時啟動共鬥光環：隊伍 EXP +5%，並提升隊伍 AGI，適合長時間農怪、練等與爬塔排軸。',
-      style: '資源成長與速度光環型',
-      tips: '詩人能讓整隊刷怪更有效率，也能在組隊爬塔中影響行動軸。適合每日農裝、練等與支援高 AGI 節奏。',
-    },
+    name: "秋日常在",
+    image: titleAttendance,
+    target: "於 15 個不同日期完成簽到",
+    note: "不要求連續 15 天；同一天只計一次。",
   },
   {
-    icon: '🛡️', name: '結界師', sub: 'BARRIER', color: '#2dd4bf', desc: '防護結界，穩住全隊',
-    detail: {
-      mainStats: ['INT', 'VIT', 'DEX'],
-      weapon: '鎖定武器：單手法杖 / 雙手法杖。',
-      quest: '結界師試煉：Lv.10，基礎 INT + VIT + DEX > 10。任務進度需使用法杖出戰 10 次。',
-      badge: '結界師徽章：INT +3 / VIT +3 / DEX +2。',
-      skills: [
-        '被動：裝備法杖時自身 DEF +5%。',
-        '光環：隊伍受到傷害 -15%，隊伍被暴擊傷害 -10%。',
-        '主動：八門盾甲，使敵方受到傷害增加 20%，持續 2 回合。',
-        '主動：束縛之陣，敵方迴避 -50%、命中 -30%，持續 3 回合。',
-      ],
-      mechanic: '裝備法杖時啟動防護光環：自身 DEF +5%，隊伍受到傷害 -15%，隊伍被暴擊傷害 -10%。',
-      style: '團隊減傷光環型',
-      tips: '結界師適合高壓戰鬥，尤其是怪物爆擊痛、隊伍容易倒人的場合。和治療師一起出現時，隊伍穩定度會明顯提高。',
-    },
-  },
-]
-
-const attrs = [
-  {
-    key: 'STR', name: '力量', color: '#ef4444', desc: '物理攻擊、砍傷',
-    detail: {
-      effect: '直接提升物理攻擊力，影響劈砍、穿刺等所有物理技能傷害輸出',
-      threshold: '無特殊閾值，線性穩定成長',
-      bestFor: ['⚔️ 劍士', '🪓 戰士', '🥊 矮人'],
-      tips: '近戰物理職業的主屬性。搭配高 STR 武器效果加倍。法師與治療師不需優先投入此屬性。',
-    },
+    name: "紅葉煉成",
+    image: titleForge,
+    target: "親自將 3 件不同的 A 裝強化到 +5",
+    note: "同一件裝備不會重複計數。",
   },
   {
-    key: 'AGI', name: '敏捷', color: '#22d3ee', desc: '攻速、閃避、連擊',
-    detail: {
-      effect: '提升攻擊速度、閃避率與部分連擊能力；在組隊爬塔中會直接影響速度條行動軸。',
-      threshold: '一般戰鬥影響出手節奏；組隊爬塔依 AGI 即時計算行動順序。',
-      bestFor: ['🗡️ 盜賊', '🏹 弓箭手'],
-      tips: '高 AGI 角色在爬塔更容易提早出手；若卡片、光環或 Buff 改變 AGI，行動軸也會跟著變動。',
-    },
+    name: "共登秋塔",
+    image: titleCompanions,
+    target: "累積通過組隊塔 100 樓",
+    note: "一般與挑戰難度都可累積，不必一趟完成。",
   },
   {
-    key: 'VIT', name: '體力', color: '#84cc16', desc: '最大HP、防禦',
-    detail: {
-      effect: '提升最大 HP 上限和物理防禦力，同時影響劍士的格擋率',
-      threshold: '無特殊閾值，但精英區幾乎是生存必需屬性',
-      bestFor: ['🥊 矮人', '⚔️ 劍士', '🏥 治療師'],
-      tips: '所有職業都應投入一定的 VIT，特別是前往高難度區域前。純輸出職業可在後期補點。',
-    },
+    name: "高塔摘楓",
+    image: titleSummit,
+    target: "完整通過一次挑戰塔 50 樓",
+    note: "和隊友一起站上本季的高處。",
+  },
+];
+const faqs = [
+  {
+    q: "怎麼登入？一定要先下載遊戲嗎？",
+    a: "直接打開網頁遊戲，依登入畫面的 Discord 授權流程進入。網頁可在桌面或手機瀏覽器使用；加入社群能查看公告、交流與找隊友。",
   },
   {
-    key: 'INT', name: '智力', color: '#818cf8', desc: '魔法傷害、魔防',
-    detail: {
-      effect: '提升魔法技能傷害、魔法防禦力，以及治療師的治療量',
-      threshold: '無特殊閾值，與魔法裝備加乘效果顯著',
-      bestFor: ['🔮 法師', '🏥 治療師'],
-      tips: '法師應將 INT 投到最高。其他職業若不使用魔法技能，可將此屬性點投入其他更有效的方向。',
-    },
+    q: "一般區是每個人打不同的怪，還是共同戰鬥？",
+    a: "是共同戰鬥。同區玩家一起推進怪物血量，也能吃到同區的既有光環。經驗與金幣由獎勵池分配，道具則由每位符合參戰資格的玩家獨立骰掉落。",
   },
   {
-    key: 'DEX', name: '靈巧', color: '#f59e0b', desc: '命中率、暴擊',
-    detail: {
-      effect: '提升命中率和暴擊率基礎值，弓箭手的「命中要害」觸發率也與 DEX 直接掛鉤',
-      threshold: '命中不足時攻擊大量落空，須確保基本的 DEX 投入',
-      bestFor: ['🏹 弓箭手', '🗡️ 盜賊'],
-      tips: '命中率不足時攻擊頻繁落空，所有職業都需要保持基本的 DEX 值。弓箭手應作為主屬性全力培養。',
-    },
+    q: "爬塔選「輔助」就能補血嗎？",
+    a: "不會。輔助站位提升既有光環效果，不會另外賦予治療或護盾技能。需要補血時，仍要安排有相應能力的職業、裝備，或攜帶藥水。",
   },
   {
-    key: 'LUK', name: '幸運', color: '#ec4899', desc: '暴擊率、稀有掉落',
-    detail: {
-      effect: '提升暴擊率和稀有道具掉落率，是格鬥家（矮人）的核心爆發屬性',
-      threshold: '無特殊閾值，高 LUK 在農稀有裝備時效益顯著',
-      bestFor: ['🥊 矮人（格鬥家）', '🗡️ 盜賊'],
-      tips: '想要提高稀有道具掉落率時非常有用。高 LUK 搭配暴擊裝備，能打出讓對手絕望的瞬間爆發。',
-    },
-  },
-]
-
-const features = [
-  { icon: '🗡️', title: '裝備強化 & 附魔', desc: '強化提升裝備能力，並可為裝備骰出附魔詞條（爆擊／連擊／攻擊／減傷等），打造專屬核心配裝。' },
-  { icon: '🎽', title: '具名套裝', desc: '秘銀・焚獄・龍鱗・三紋・特效戒等多套具名套裝，穿滿指定件數解鎖階梯加成，一件可同時屬於多套。' },
-  { icon: '⚓', title: '錨點傳說裝', desc: '傳說級「錨點」專屬槽位，戴上就改寫你的戰鬥法則——每一件都是一種極端取捨。（內容待你親自發掘）' },
-  { icon: '🃏', title: '怪物卡片', desc: '多種怪物卡裝在特殊槽位，戰鬥中觸發 Buff、Debuff、控場與武器流派追加效果。' },
-  { icon: '🐉', title: '世界 Boss', desc: '三大世界王——大史王、古龍王、地獄狼牙王，全服玩家聯合討伐，搶奪限定寶箱。' },
-  { icon: '🗼', title: '組隊爬塔', desc: '最多 6 人組隊挑戰 52 層，依 AGI 速度條排軸，51／52 層由大史王與古龍王坐鎮。' },
-  { icon: '📖', title: '主線劇情', desc: '文字冒險式主線，跟著音無恋踏上音無樂園的故事，隨進度逐步解鎖新區域。' },
-  { icon: '🏆', title: '拍賣行', desc: '自由交易市場，玩家之間競標稀有裝備（部分靈魂綁定道具不可交易）。' },
-  { icon: '📜', title: '任務中心', desc: '新手、每日、每週與職業任務並行，引導戰鬥、強化、打卡與職業養成。' },
-  { icon: '⚡', title: '即時戰鬥', desc: 'Discord 頻道內直接開打，自動回合戰鬥，完整戰報即時呈現。' },
-  { icon: '🥊', title: 'PK 擂台', desc: 'Lv.40 玩家可進入擂台對決，Elo Rating 影響排行榜與 Boss 傷害加成。' },
-  { icon: '🎒', title: '背包 & 面板', desc: '背包容量依會員等級提升；Discord 面板查看資料、裝備、技能、卡片與套裝效果。' },
-  { icon: '📅', title: '直播連動', desc: '直播打卡領獎、斗內累積解鎖全服 Buff，另有儲值頁與 SC 進度條。' },
-]
-
-const gameStats = [
-  { num: '76', label: '怪物與 Boss' },
-  { num: '11+11', label: '職業與二轉' },
-  { num: '66', label: '任務內容' },
-  { num: '500+', label: '道具與裝備' },
-]
-
-const towerStages = [
-  { floor: '1–10F', name: '初啟之境', color: '#4ade80', bonus: '隊伍小幅強化', monster: '前期草原怪物' },
-  { floor: '11–25F', name: '試煉之路', color: '#facc15', bonus: '隊伍中階強化', monster: '陽光草原怪物' },
-  { floor: '26–40F', name: '古城深淵', color: '#c084fc', bonus: '隊伍高階強化', monster: '古城～古城深處怪物' },
-  { floor: '41–50F', name: '龍炎邊境', color: '#f87171', bonus: '隊伍強力強化', monster: '龍族之領／地獄火焰怪物' },
-  { floor: '51F', name: '精英魔王・大史王', color: '#fbbf24', bonus: '世界王級試煉', monster: '世界王 大史王' },
-  { floor: '52F', name: '終焉・古龍王', color: '#fb7185', bonus: '終局挑戰', monster: '終局世界王 古龍王(B)' },
-]
-
-const towerRules = [
-  '最多 6 人組隊，由隊長開房、開始後鎖定成員。',
-  '進入條件 Lv.30，每人每小時最多挑戰 3 次。',
-  '玩家與怪物都依 AGI 速度條排軸，卡片、Buff、光環改變 AGI 時會即時影響順序。',
-  '怪物行動會攻擊全隊；怪物身上的降防、暈眩、Debuff 由全隊共享。',
-  '光環與治療支援全隊，同職業同效果不疊加，只取最高值；陣亡者光環失效。',
-  '打輸會依目前通關層結算獎勵並解散隊伍，下次重新挑戰。',
-  '通過 10 / 20 / 30 / 40 / 50 / 51 / 52 層可取得攻塔祝福，帶回怪物區使用。',
-]
-
-const towerRewards = [
-  { floor: '10F', reward: '突破初境：基礎獎勵 ×1' },
-  { floor: '20F', reward: '深淵征服：基礎獎勵 ×2.5' },
-  { floor: '30F', reward: '古城突破：基礎獎勵 ×5' },
-  { floor: '40F', reward: '邊境超越：基礎獎勵 ×10' },
-  { floor: '51F', reward: '大史王討伐：基礎獎勵 ×20' },
-  { floor: '52F', reward: '古龍王討伐：基礎獎勵 ×45' },
-]
-
-const tierSets = [
-  {
-    tier: '秘', name: '秘銀套', color: '#cbd5e1',
-    identity: 'A 階主力・全能輸出',
-    effects: ['3 件：最終傷害提升', '5 件：對 BOSS 傷害提升', '7 件：掉落率提升'],
+    q: "組隊藥水哪裡取得？誰能使用？",
+    a: "前往遊戲商店的消耗品分類購買。出發前配置攜帶數量；每人一趟最多 10 瓶，復活藥最多 2 瓶且包含在總量內。戰鬥中由存活玩家使用自己的藥水，可以對自己或隊友用藥。",
   },
   {
-    tier: '焚', name: '焚獄套', color: '#fb7185',
-    identity: '火焰流派・高傷爆發',
-    effects: ['傷害與爆擊傷害提升', '地獄火焰／焰獄深處受傷遞減', '火焰 A／S 武器專屬特攻'],
+    q: "坦克倒下就結束嗎？爬塔會自動回血嗎？",
+    a: "全隊倒下才判定失敗。血量會帶入下一隻怪，不再每十樓自動回血；倒地者無法操作，需由存活隊友使用復活藥。失敗後可查看戰報與原因，重新回到組隊流程。",
   },
   {
-    tier: '龍', name: '龍鱗套', color: '#38bdf8',
-    identity: '連擊流派・龍族專精',
-    effects: ['連擊率與連擊傷害提升', '龍族之領受傷遞減', '適合盜賊等連擊型'],
+    q: "為什麼在舊地圖升級變慢？",
+    a: "各區有自己的推薦等級帶。角色等級超出該區的適合範圍，會受到經驗衰減；把裝備準備好再前往適合的區域，通常更能推進養成。",
   },
   {
-    tier: '紋', name: '三紋套', color: '#a78bfa',
-    identity: '跨階通算・迅／鬥／智',
-    effects: ['迅紋：迴避・連擊・速度', '鬥紋：傷害・爆擊', '智紋：終傷・命中・穿防'],
+    q: "合成會失敗嗎？放入素材就扣掉了嗎？",
+    a: "目前公開的寶石升階與屬性石轉換是必定成功。先放入素材、攪拌並查看確認內容，最後確認才會消耗素材與金幣。取消確認不會扣款；配方書會顯示當前可製作的上限。",
   },
   {
-    tier: '戒', name: '特效戒套', color: '#fbbf24',
-    identity: '左右雙戒・九大主題',
-    effects: ['疾風／獵手／狂血／吸血…等 9 套', '左右 2 件成套即啟動', '可與基礎套複合疊加'],
+    q: "稱號達成後去哪裡領？加成會自動生效嗎？",
+    a: "在任務的賽季分類領取，再到背包穿戴稱號。「楓紅漸漸」的經驗 +3%、金幣 +2% 需要實際穿戴才生效。各角色的稱號進度與領取分別計算。",
   },
-]
+  {
+    q: "戰鬥特效可以關閉嗎？",
+    a: "可以在遊戲設定調整戰鬥特效與音效。戰鬥中也能點擊技能或光環圖示查看說明，詳細數字與結果可在戰報確認。",
+  },
+];
 </script>
 
 <template>
-  <div class="landing">
-    <canvas ref="canvasRef" class="particle-canvas" />
-
-    <!-- ===== HERO ===== -->
-    <section class="hero">
-      <div class="hero-bg-pattern" />
-      <div class="hero-inner">
-        <div class="hero-badge">✦ Discord RPG ✦</div>
-        <div class="season-banner">
-          <span class="season-tag">V0.5 新賽季</span>
-          <span class="season-name">🏖️ 夏日時光・屬性上場</span>
-          <span class="season-date">8/9 20:00 開放｜至 9/9</span>
-          <div class="season-highlights">七屬性抗性 ・ 新職業賭徒 ・ 11 種二轉 ・ 屬性配點 2+1 ・ 全新貢獻榜</div>
-        </div>
-        <div class="hero-title-wrap">
-          <div class="hero-deco-line" />
-          <h1 class="hero-title">
-            <span class="hero-jp">音無樂園</span>
-            <span class="hero-sub-kanji">音無の世界 · 傳說裝備冒險</span>
-          </h1>
-          <div class="hero-deco-line" />
-        </div>
-        <p class="hero-desc">
-          在 Discord 伺服器中，踏上你的 RPG 旅程<br />
-          選擇職業、收集裝備、挑戰怪物、稱霸排行
+  <a class="skip-link" href="#main">跳至主要內容</a>
+  <header class="site-header">
+    <a class="brand" href="#"
+      ><span class="brand-mark" aria-hidden="true">❋</span
+      ><span>音無樂園<small>OTONASHI KOI</small></span></a
+    >
+    <button
+      class="menu-toggle"
+      :aria-expanded="menuOpen"
+      aria-controls="site-nav"
+      @click="menuOpen = !menuOpen"
+    >
+      {{ menuOpen ? "關閉" : "導覽" }}
+      <span aria-hidden="true">{{ menuOpen ? "×" : "☰" }}</span>
+    </button>
+    <nav id="site-nav" :class="{ open: menuOpen }" aria-label="網站導覽">
+      <a
+        v-for="n in nav"
+        :key="n.id"
+        :href="`#${n.id}`"
+        @click="menuOpen = false"
+        >{{ n.name }}</a
+      >
+    </nav>
+    <a
+      class="button header-play"
+      :href="gameUrl"
+      target="_blank"
+      rel="noopener noreferrer"
+      >進入遊戲 <span aria-hidden="true">↗</span></a
+    >
+  </header>
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">音無樂園 · 秋季篇章</p>
+        <h1 id="hero-title">楓紅<span>漸漸</span></h1>
+        <p class="hero-subtitle">
+          一起打怪，各自收藏。<br />把這個秋天，走成我們的冒險。
         </p>
-        <div class="hero-stats">
-          <div v-for="stat in gameStats" :key="stat.label" class="hero-stat">
-            <strong>{{ stat.num }}</strong>
-            <span>{{ stat.label }}</span>
-          </div>
+        <p class="hero-description">
+          以 Discord 帳號踏入網頁
+          RPG。從日常共鬥、裝備養成，到和隊友一起挑戰高塔，找到屬於你的冒險節奏。
+        </p>
+        <div class="hero-actions">
+          <a
+            class="button primary"
+            :href="gameUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            >開始冒險 <span aria-hidden="true">↗</span></a
+          ><a class="button subtle" href="#guide">第一次來？看入門指南</a>
         </div>
-        <div class="hero-corner tl" />
-        <div class="hero-corner tr" />
-        <div class="hero-corner bl" />
-        <div class="hero-corner br" />
+        <p class="season-date">
+          2026.10.04 21:00 — 11.01 23:59 <span>台灣時間</span>
+        </p>
       </div>
-      <div class="hero-scroll-hint">▼ 繼續探索</div>
+      <div class="hero-art">
+        <img
+          :src="hero"
+          alt="楓紅漸漸主視覺：音無恋手持紅葉，坐在秋色與紫色花紋之間"
+          width="836"
+          height="941"
+          fetchpriority="high"
+        /><span class="art-seal">THE AUTUMN CHAPTER<small>2026</small></span>
+      </div>
+      <a class="scroll-cue" href="#season"
+        >翻開本季的冒險 <span aria-hidden="true">↓</span></a
+      >
     </section>
 
-    <!-- ===== ZONES ===== -->
-    <section class="section reveal">
-      <div class="section-header">
-        <div class="sect-ornament">⟨ 冒險地帶 ⟩</div>
-        <h2 class="sect-title">八大討伐區域</h2>
-        <p class="sect-sub">從新手草叢到地獄火焰；Lv.40 後有古城深處・龍族之領・地獄火焰三條平行 A 路線</p>
+    <section id="season" class="section season-section">
+      <div class="section-heading">
+        <p class="eyebrow">WHAT'S NEW</p>
+        <h2>這一次，把共鬥放進日常。</h2>
+        <p>平常自在練功打寶，準備好再一起挑戰。這是「楓紅漸漸」的四個重點。</p>
       </div>
-      <div class="zones-grid">
-        <div
-          v-for="z in zones" :key="z.key"
-          class="zone-card" :style="{ '--zc': z.color }"
-          @click="openModal('zone', z)"
-        >
-          <div class="zone-emoji">{{ z.emoji }}</div>
-          <div class="zone-lv">{{ z.lv }}</div>
-          <div class="zone-name">{{ z.name }}</div>
-          <div class="zone-desc">{{ z.desc }}</div>
-          <div class="zone-monsters">怪物數：{{ z.monsters }}</div>
-          <div class="card-hint">點擊查看詳情 ▸</div>
-          <div class="zone-glow" />
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== WORLD BOSSES ===== -->
-    <section class="section section-dark reveal">
-      <div class="section-header">
-        <div class="sect-ornament">⟨ 世界王 ⟩</div>
-        <h2 class="sect-title">四大世界王討伐</h2>
-        <p class="sect-sub">全服聯合挑戰的頂級 Boss，點擊查看討伐資料</p>
-      </div>
-      <div class="zones-grid">
-        <div
-          v-for="b in worldBosses" :key="b.key"
-          class="zone-card" :style="{ '--zc': b.color }"
-          @click="openModal('boss', b)"
-        >
-          <div class="zone-emoji">{{ b.emoji }}</div>
-          <div class="zone-lv">{{ b.lv }}</div>
-          <div class="zone-name">{{ b.name }}</div>
-          <div class="zone-desc">{{ b.tagline }}</div>
-          <div class="zone-monsters">巢穴：{{ b.lair }}</div>
-          <div class="card-hint">點擊查看詳情 ▸</div>
-          <div class="zone-glow" />
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== JOBS ===== -->
-    <section class="section section-dark reveal">
-      <div class="section-header">
-        <div class="sect-ornament">⟨ 職業系統 ⟩</div>
-        <h2 class="sect-title">十大職業自由替換</h2>
-        <p class="sect-sub">輸出、控場、治療與共鬥光環並存，下一季組隊定位更加清楚</p>
-      </div>
-      <div class="jobs-grid">
-        <div
-          v-for="j in jobs" :key="j.sub"
-          class="job-card" :style="{ '--jc': j.color }"
-          @click="openModal('job', j)"
-        >
-          <div class="job-icon">{{ j.icon }}</div>
-          <div class="job-sub">{{ j.sub }}</div>
-          <div class="job-name">{{ j.name }}</div>
-          <div class="job-desc">{{ j.desc }}</div>
-          <div class="card-hint">點擊查看詳情 ▸</div>
-          <div class="job-shine" />
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== ATTRIBUTES ===== -->
-    <section class="section reveal">
-      <div class="section-header">
-        <div class="sect-ornament">⟨ 屬性成長 ⟩</div>
-        <h2 class="sect-title">六大核心屬性</h2>
-        <p class="sect-sub">隨機分配屬性點，獨一無二的BUILD</p>
-      </div>
-      <div class="attrs-grid">
-        <div
-          v-for="a in attrs" :key="a.key"
-          class="attr-card" :style="{ '--ac': a.color }"
-          @click="openModal('attr', a)"
-        >
-          <div class="attr-key">{{ a.key }}</div>
-          <div class="attr-name">{{ a.name }}</div>
-          <div class="attr-desc">{{ a.desc }}</div>
-          <div class="card-hint">點擊查看詳情 ▸</div>
-          <div class="attr-border" />
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== EQUIPMENT TIER SETS ===== -->
-    <section class="section tier-section reveal">
-      <div class="section-header">
-        <div class="sect-ornament">⟨ 具名套裝 ⟩</div>
-        <h2 class="sect-title">3 / 5 / 7 件混搭加成</h2>
-        <p class="sect-sub">不再依裝備階級計算，改由秘銀・焚獄・龍鱗・三紋・特效戒等具名套裝提供加成</p>
-      </div>
-      <div class="tier-rules">
-        <div class="tier-rule">
-          <span class="tier-rule-mark">01</span>
-          <span>具名套裝穿滿指定件數（3/5/7，部分套 3/6/9 或左右 2 件）依序啟動</span>
-        </div>
-        <div class="tier-rule">
-          <span class="tier-rule-mark">02</span>
-          <span>一件裝備可同時屬於多套，戒指常複合疊加</span>
-        </div>
-        <div class="tier-rule">
-          <span class="tier-rule-mark">03</span>
-          <span>D／C／B／A 階級只作品階顯示，加成一律走具名套裝</span>
-        </div>
-      </div>
-      <div class="tier-grid">
-        <article
-          v-for="set in tierSets"
-          :key="set.tier"
-          class="tier-card"
-          :style="{ '--tc': set.color }"
-        >
-          <div class="tier-card-head">
-            <div class="tier-letter">{{ set.tier }}</div>
-            <div>
-              <div class="tier-label">{{ set.name }}</div>
-              <div class="tier-identity">{{ set.identity }}</div>
-            </div>
-          </div>
-          <div class="tier-effect-list">
-            <div v-for="effect in set.effects" :key="effect" class="tier-effect">
-              {{ effect }}
-            </div>
-          </div>
+      <div class="updates-grid">
+        <article>
+          <span class="chapter-number">01</span>
+          <h3>共同戰鬥，掉落分開</h3>
+          <p>
+            一般區共享戰鬥與同區光環。每人獨立骰自己的寶物，經驗與金幣則維持獎勵池分配。
+          </p>
+          <a href="#combat">了解共鬥分配 →</a>
+        </article>
+        <article>
+          <span class="chapter-number">02</span>
+          <h3>30／50 樓組隊塔</h3>
+          <p>
+            坦克、輸出、輔助各有定位。2～5
+            人集結，一次出發、連續向上，考驗整隊的續戰力。
+          </p>
+          <a href="#tower">查看爬塔規則 →</a>
+        </article>
+        <article>
+          <span class="chapter-number">03</span>
+          <h3>素材的下一個用途</h3>
+          <p>
+            鍊金工房正式公開：五份素材合成一份成品，寶石升階、五行與日月屬性石轉換。
+          </p>
+          <a href="#craft">打開配方書 →</a>
+        </article>
+        <article>
+          <span class="chapter-number">04</span>
+          <h3>收集秋季的稱號</h3>
+          <p>
+            從戰鬥、簽到、強化與爬塔收集七款稱號。「楓紅漸漸」穿戴後提供經驗與金幣加成。
+          </p>
+          <a href="#titles">找到你的目標 →</a>
         </article>
       </div>
     </section>
 
-    <!-- ===== TEAM TOWER ===== -->
-    <section class="section tower-section reveal">
-      <div class="section-header">
-        <div class="sect-ornament">⟨ 組隊爬塔 ⟩</div>
-        <h2 class="sect-title">六人攻塔・五十二層終焉挑戰</h2>
-        <p class="sect-sub">隊長開房、成員集結，依 AGI 速度條與怪物正面交鋒</p>
+    <section id="screens" class="section gallery-section">
+      <div class="section-heading">
+        <p class="eyebrow">INSIDE THE GAME</p>
+        <h2>冒險，長這個樣子。</h2>
+        <p>場景、角色與操作都在同一個畫面裡。點圖可以放大查看。</p>
       </div>
-
-      <div class="tower-overview">
-        <div class="tower-stat">
-          <div class="tower-stat-num">6</div>
-          <div class="tower-stat-label">最多隊員</div>
-        </div>
-        <div class="tower-stat">
-          <div class="tower-stat-num">52</div>
-          <div class="tower-stat-label">總樓層</div>
-        </div>
-        <div class="tower-stat">
-          <div class="tower-stat-num">Lv.30</div>
-          <div class="tower-stat-label">入場門檻</div>
-        </div>
-        <div class="tower-stat">
-          <div class="tower-stat-num">3/hr</div>
-          <div class="tower-stat-label">每小時次數</div>
-        </div>
-      </div>
-
-      <div class="tower-layout">
-        <div class="tower-stage-list">
-          <article
-            v-for="stage in towerStages"
-            :key="stage.floor"
-            class="tower-stage"
-            :style="{ '--twc': stage.color }"
+      <div class="gallery-grid">
+        <figure v-for="item in gallery" :key="item.title">
+          <button
+            class="screenshot"
+            @click="openImage(item)"
+            :aria-label="`放大${item.title}遊戲畫面`"
           >
-            <div class="tower-floor">{{ stage.floor }}</div>
-            <div class="tower-stage-body">
-              <div class="tower-stage-name">{{ stage.name }}</div>
-              <div class="tower-stage-bonus">{{ stage.bonus }}</div>
-              <div class="tower-stage-monster">{{ stage.monster }}</div>
-            </div>
+            <img
+              :src="item.image"
+              :alt="`${item.title}的實際遊戲介面，包含上下導覽列`"
+              width="648"
+              height="1230"
+              loading="lazy"
+            /><span>放大查看 ↗</span>
+          </button>
+          <figcaption>
+            <small>{{ item.tag }}</small>
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.text }}</p>
+          </figcaption>
+        </figure>
+      </div>
+      <p class="caption-note">
+        以目前遊戲元件拍攝；範例角色、等級、背包與隊伍為示範資料。實際內容以遊戲內顯示為準。
+      </p>
+    </section>
+
+    <section id="guide" class="section parchment-section">
+      <div class="section-heading">
+        <p class="eyebrow">YOUR FIRST ADVENTURE</p>
+        <h2>從第一件裝備開始。</h2>
+        <p>不用一次記住所有系統。先完成一場戰鬥，再慢慢認識這個世界。</p>
+      </div>
+      <ol class="steps">
+        <li>
+          <span>01</span>
+          <div>
+            <h3>登入，選擇你的角色</h3>
+            <p>
+              打開網頁，以 Discord
+              授權登入。從角色選擇進入據點，依新手提示確認起步資金與裝備。
+            </p>
+          </div>
+        </li>
+        <li>
+          <span>02</span>
+          <div>
+            <h3>到草叢完成第一場戰鬥</h3>
+            <p>
+              從「出戰」選擇新手村外的草叢。選好可用的攻擊方式後出戰，觀察生命、傷害與戰報。
+            </p>
+          </div>
+        </li>
+        <li>
+          <span>03</span>
+          <div>
+            <h3>把戰利品穿到身上</h3>
+            <p>
+              回到背包，比較武器與防具。不要只堆傷害：生命與防禦會決定你能否安全前往下一區。
+            </p>
+          </div>
+        </li>
+        <li>
+          <span>04</span>
+          <div>
+            <h3>配點、轉職，找到日常目標</h3>
+            <p>
+              每次升等獲得 1 點隨機屬性與 1
+              點自選點數。查看任務、完成每日與試煉，再逐步挑戰適合等級的地圖。
+            </p>
+          </div>
+        </li>
+      </ol>
+      <div class="guide-foot">
+        <p>
+          升級、穿裝、圖鑑收藏、卡片與寵物，會一起構成你的角色。先養成，再挑戰。
+        </p>
+        <a
+          class="button primary"
+          :href="gameUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          >前往遊戲 ↗</a
+        >
+      </div>
+    </section>
+
+    <section id="combat" class="section split-section">
+      <div class="section-heading">
+        <p class="eyebrow">EVERYDAY CO-OP</p>
+        <h2>同一場戰鬥，<br />每個人都有收穫。</h2>
+        <p>不用先開副本房間，平常也能感受到一起打怪的力量。</p>
+      </div>
+      <div class="reading-panel">
+        <h3>共同推進怪物血量</h3>
+        <p>
+          普通戰鬥可能遇到 1～3 隻同種怪物；區域 BOSS
+          為單隻。怪物倒下就停止攻擊，剩下的怪物繼續戰鬥。同區冒險者提供既有光環，幫助彼此出戰。
+        </p>
+        <h3>掉落獨立，經驗與金幣分配</h3>
+        <p>
+          符合參戰資格的人，各自獲得一般道具掉落判定。有人沒骰到，不會影響其他人的機會；單人的基礎掉率不因多一位隊友而被平分。
+        </p>
+        <p>
+          經驗與金幣來自整場獎勵池，再依規則分配。多人加成擴大的是整體經驗池，不代表每人都拿到同樣倍數的完整獎勵。
+        </p>
+        <details>
+          <summary>想看更清楚的多人經驗例子？</summary>
+          <p>
+            3／4／5 人的整體經驗池為單人基準的 1.6／1.9／2.2
+            倍，再平均分配。以基礎 1,000 EXP、3 位合資格玩家為例：整體為
+            1,600，每人約 533 EXP；角色加成、區域衰減與取整會影響最後數字。
+          </p>
+          <p>
+            怪物血量會隨有效參戰人數提高，最多以 5 人計算至 2.8
+            倍；再多人也不繼續追加血量。
+          </p>
+        </details>
+        <h3>看得懂每一次出手</h3>
+        <p>
+          戰鬥有武器與技能演出、傷害數字與死亡淡出。技能和光環圖示可點開說明，詳細結果留在戰報；特效與音效可從設定調整。
+        </p>
+      </div>
+    </section>
+
+    <section id="world" class="section world-section">
+      <div class="section-heading">
+        <p class="eyebrow">A WORLD TO GROW INTO</p>
+        <h2>從草原，到世界的深處。</h2>
+        <p>
+          本季角色上限為 50
+          等。各地圖有自己的裝備、怪物與收藏目標，讓換區成為成長的一部分。
+        </p>
+      </div>
+      <div class="map-road">
+        <article v-for="stage in mapStages" :key="stage.lv">
+          <span class="level-mark">Lv. {{ stage.lv }}</span>
+          <div>
+            <h3>{{ stage.name }}</h3>
+            <span class="gear-label">{{ stage.gear }}</span>
+            <p>{{ stage.text }}</p>
+          </div>
+        </article>
+      </div>
+      <div class="world-notes">
+        <article>
+          <h3>掉落屬於那片土地</h3>
+          <p>
+            區域裝備在該區的一般怪也有取得機會。從 D、C、B 到
+            A，透過刷怪、換裝、強化與鑲嵌累積強度，再追求 BOSS
+            與世界王的高階戰利品。
+          </p>
+        </article>
+        <article>
+          <h3>把收藏變成成長</h3>
+          <p>
+            怪物與卡片圖鑑以書頁分類呈現，寵物可查看效果。主線劇情、任務與收藏，提供戰鬥之外的進展；完成的任務也能一鍵領取。
+          </p>
+        </article>
+      </div>
+      <div class="boss-route">
+        <p class="eyebrow">WORLD BOSS</p>
+        <h3>世界王，是下一個長線目標。</h3>
+        <ol>
+          <li><span>Lv.40</span>大史王</li>
+          <li><span>Lv.50</span>古龍王</li>
+          <li><span>Lv.50</span>地獄狼牙王</li>
+          <li><span>Lv.50</span>赫鋼王</li>
+        </ol>
+        <p>
+          依序完成前置討伐，進度依帳號判定。遊戲內世界王頁面會顯示目前可挑戰的對象、條件與狀態。
+        </p>
+      </div>
+    </section>
+
+    <section id="jobs" class="section jobs-section">
+      <div class="section-heading">
+        <p class="eyebrow">MAKE IT YOUR ADVENTURE</p>
+        <h2>十一種起點，自己的養成路。</h2>
+        <p>
+          10 等起查看一轉試煉，依基礎屬性與指定武器完成條件。35
+          等起可準備二轉；需要對應的一轉徽章等級與試煉資格。
+        </p>
+      </div>
+      <div class="filter-tabs" aria-label="職業分類">
+        <button
+          v-for="group in ['全部', '近戰', '遠程', '支援']"
+          :key="group"
+          :aria-pressed="jobFilter === group"
+          @click="jobFilter = group"
+        >
+          {{ group }}
+        </button>
+      </div>
+      <div class="jobs-grid">
+        <article v-for="job in shownJobs" :key="job.name">
+          <span>{{ job.group }}</span>
+          <h3>{{ job.name }}</h3>
+          <p>{{ job.text }}</p>
+        </article>
+      </div>
+      <p class="caption-note">
+        分類用於入門認識，不是副本站位限制。實際技能、可用二轉分支、徽章與試煉條件，以角色的遊戲內轉職頁面為準。
+      </p>
+      <div class="attribute-note">
+        <h3>配點的第一步，應該有感。</h3>
+        <p>
+          攻擊主屬性採用前期效果明顯、後期逐漸遞減的曲線。AGI
+          影響出手速度；爬塔以行動條累積判定，快的角色能比其他人多出手，怪物也同樣參與。
+        </p>
+      </div>
+    </section>
+
+    <section id="town" class="section town-section">
+      <div class="section-heading">
+        <p class="eyebrow">LIFE BETWEEN ADVENTURES</p>
+        <h2>回到城鎮，整理下一次出發。</h2>
+        <p>
+          冒險手冊連接戰鬥之外的生活：補給、交易、任務與賽季進度。每次回城，都能找到下一個目標。
+        </p>
+      </div>
+      <div class="town-grid">
+        <article>
+          <span class="eyebrow">EQUIPMENT</span>
+          <h3>背包與裝備養成</h3>
+          <p>
+            把新戰利品與身上裝備比較，再選擇穿戴、強化、附魔或鑲嵌。武器、副手、防具、卡片與屬性石一起構成戰鬥能力；重要物品先鎖定，避免整理時誤用。
+          </p>
+        </article>
+        <article>
+          <span class="eyebrow">MARKET</span>
+          <h3>商店與拍賣</h3>
+          <p>
+            日常補給從商店取得，包括組隊需要的治療與復活藥。拍賣則讓冒險者交流可交易的戰利品；上架、購買前先確認道具內容、數量與價格。
+          </p>
+        </article>
+        <article>
+          <span class="eyebrow">DAILY GOALS</span>
+          <h3>任務與收藏</h3>
+          <p>
+            任務依新手、每日、每週與賽季分類，完成後可單筆或一鍵領獎。翻閱主線劇情、怪物與卡片圖鑑，查看寵物效果，讓刷怪同時推進收藏。
+          </p>
+        </article>
+        <article>
+          <span class="eyebrow">SEASON PASS</span>
+          <h3>30 級賽季通行證</h3>
+          <p>
+            打怪與副本推進通行證點數，每 1,000 點提升一級，上限 30
+            級。免費軌可直接累積與領取；高級軌需 5
+            鑽石開通，獎勵包含金幣、寶石與養成補給。
+          </p>
+          <p class="town-detail">
+            本季加入 S
+            階強化寶石獎勵。通行證等級與角色等級分開計算，開通高級軌不會直接增加等級；實際獎勵可在遊戲內逐級預覽。
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="tower" class="section tower-section">
+      <div class="section-heading">
+        <p class="eyebrow">THE PARTY TOWER</p>
+        <h2>隊伍集結。<br />這次，一起走得更高。</h2>
+        <p>
+          爬塔是一段需要安排站位、技能與補給的連續戰鬥。單人不能出發；準備好彼此的角色，比只堆輸出更重要。
+        </p>
+      </div>
+      <div class="difficulty-grid">
+        <article>
+          <span>一般難度</span>
+          <h3>30<span>樓</span></h3>
+          <p>全員 Lv.30 以上<br />從第 1 樓一路挑戰至 30 樓</p>
+        </article>
+        <article>
+          <span>挑戰難度</span>
+          <h3>50<span>樓</span></h3>
+          <p>全員 Lv.40 以上<br />從第 1 樓一路挑戰至 50 樓</p>
+        </article>
+        <div class="tower-reward">
+          <span>副本收益</span><strong>+50%</strong>
+          <p>
+            經驗收益與個人掉落機率提高<br /><small
+              >掉率最多 100%；金幣不追加此倍率</small
+            >
+          </p>
+        </div>
+      </div>
+      <ol class="tower-flow">
+        <li><b>開房或加入</b><span>公開房間／密碼房</span></li>
+        <li><b>選擇站位</b><span>2～5 人・一位坦克</span></li>
+        <li><b>準備技能與藥水</b><span>所有隊員確認準備</span></li>
+        <li><b>隊長統一出發</b><span>勝利後自動換下一隻</span></li>
+      </ol>
+      <div class="roles-grid">
+        <article v-for="r in roleDetails" :key="r.name">
+          <span class="role-symbol" aria-hidden="true">{{ r.icon }}</span>
+          <h3>{{ r.name }}</h3>
+          <small>{{ r.text }}</small>
+          <ul>
+            <li v-for="effect in r.effects" :key="effect">{{ effect }}</li>
+          </ul>
+          <p>{{ r.note }}</p>
+        </article>
+      </div>
+      <div class="tower-rules">
+        <article>
+          <h3>連戰中，也保留你的操作</h3>
+          <p>
+            每 5 樓遇到
+            BOSS，打贏會自動往下一樓。存活時點自己的頭像調整可用技能或策略；吟遊詩人可以照方向列手動演奏，並以線條呈現作答與冷卻進度。
+          </p>
+          <p>
+            攻擊順序由 AGI
+            行動條決定，不保證每人固定輪流一次。隊長可管理隊伍，隊員也可離開；途中離隊會停止本趟挑戰並依已完成樓層處理結算。
+          </p>
+        </article>
+        <article>
+          <h3>血量會留下，補給要先想好</h3>
+          <p>
+            每人最多帶 10 瓶藥，包含最多 2
+            瓶復活藥，途中不能補帶。存活玩家能在戰鬥中使用自己的藥水；使用者與被用藥者各有
+            10 秒冷卻，隊友不能同時對同一人灌藥。
+          </p>
+          <p>
+            沒有每十樓的系統回血。倒地後不能操作，復活需要存活隊友用藥。全隊倒下才結束，已通過的樓層仍會結算，並提供失敗原因與戰報。
+          </p>
+        </article>
+      </div>
+      <details class="tower-detail">
+        <summary>怪物強度、攻擊目標與掉落怎麼算？</summary>
+        <p>
+          副本怪物血量為對應一般區怪物的 5 倍。一般塔攻擊為 1.5
+          倍；挑戰塔普通怪為 2 倍、BOSS 為 2.5
+          倍。高難度使用較後期的區域怪物，不會從新手村怪物開始。
+        </p>
+        <p>
+          存活坦克最先受攻；坦克倒下後，改打本場累積傷害最高的存活輸出，最後才是輔助。同位置傷害相同時隨機選擇。
+        </p>
+        <p>
+          掉落沿用每人獨立骰寶，在各自原本機率上乘
+          1.5。經驗沿用基礎分配規則後提高
+          50%，不是每位隊員都拿一整份全隊經驗。背包滿時，留意遊戲內的待領獎勵。
+        </p>
+      </details>
+    </section>
+
+    <section id="craft" class="section craft-section">
+      <div class="craft-visual">
+        <button
+          class="screenshot"
+          @click="openImage(gallery[2])"
+          aria-label="放大鍊金工房畫面"
+        >
+          <img
+            :src="alchemy"
+            alt="鍊金工房中的鍊金師、配方書與素材爐"
+            width="648"
+            height="1230"
+            loading="lazy"
+          /><span>走進工房 ↗</span>
+        </button>
+      </div>
+      <div class="craft-copy">
+        <p class="eyebrow">THE ALCHEMIST'S WORKSHOP</p>
+        <h2>下一次變強，<br />從爐中的素材開始。</h2>
+        <p class="intro">
+          目前公開 10 種配方，全部是五份材料換一份成品、必定成功。
+        </p>
+        <div class="recipe-list">
+          <article>
+            <h3>寶石升階</h3>
+            <p>
+              D → C：500 金幣／份<br />C → B：2,000 金幣／份<br />B → A：6,000
+              金幣／份
+            </p>
+          </article>
+          <article>
+            <h3>五行相生</h3>
+            <p>木 → 火 → 土 → 金 → 水 → 木<br />每次轉換需 1,000 金幣／份</p>
+          </article>
+          <article>
+            <h3>日月轉換</h3>
+            <p>日 → 月、月 → 日<br />每次轉換需 2,000 金幣／份</p>
           </article>
         </div>
+        <p>
+          從冒險手冊進入「合成」，選配方和份數，把材料點入或拖入鍊金爐，再攪拌並確認。單次最多
+          99 份，可用 ＋10／MAX 快速調整，仍受材料與金幣上限限制。
+        </p>
+        <p class="fine-print">
+          最後確認才消耗材料與金幣。現階段配方不含 S
+          級寶石升階，也不包含裝備直接合成。
+        </p>
+      </div>
+    </section>
 
-        <div class="tower-side">
-          <div class="tower-panel">
-            <div class="tower-panel-title">攻略規則</div>
-            <div v-for="rule in towerRules" :key="rule" class="tower-rule">{{ rule }}</div>
+    <section id="titles" class="section titles-section">
+      <div class="section-heading">
+        <p class="eyebrow">MEMORIES OF AUTUMN</p>
+        <h2>把這個秋天，留在名字旁。</h2>
+        <p>
+          完成賽季任務，收藏七款限定稱號。戰鬥、簽到、強化與爬塔，都有自己的目標。
+        </p>
+      </div>
+      <div class="title-grid">
+        <article v-for="t in titles" :key="t.name">
+          <img
+            :src="t.image"
+            :alt="`${t.name}稱號徽記`"
+            width="90"
+            height="90"
+            loading="lazy"
+          />
+          <div>
+            <h3>{{ t.name }}</h3>
+            <b>{{ t.target }}</b>
+            <p>{{ t.note }}</p>
           </div>
-          <div class="tower-panel">
-            <div class="tower-panel-title">里程碑獎勵</div>
-            <div v-for="reward in towerRewards" :key="reward.floor" class="tower-reward">
-              <span>{{ reward.floor }}</span>
-              <strong>{{ reward.reward }}</strong>
-            </div>
-          </div>
-        </div>
+        </article>
       </div>
+      <article class="maple-title">
+        <img
+          :src="titleMaple"
+          alt="楓紅漸漸限定稱號徽記"
+          width="140"
+          height="140"
+          loading="lazy"
+        />
+        <div>
+          <p class="eyebrow">THE SEASON TITLE</p>
+          <h3>楓紅漸漸</h3>
+          <p>領取上面六款稱號中的任意四款，即可達成。</p>
+          <strong>經驗 +3% <span>／</span> 金幣 +2%</strong
+          ><small
+            >從「任務 →
+            賽季」領取，再到背包穿戴才會生效。其餘六款為收藏稱號。</small
+          >
+        </div>
+      </article>
+      <p class="caption-note">
+        本季任務從 2026／10／4 21:00 開放後開始計數；各角色獨立累積。11／1
+        當天仍可遊玩，請把握季末前完成目標與領取。
+      </p>
     </section>
 
-    <!-- ===== FEATURES ===== -->
-    <section class="section section-dark reveal">
-      <div class="section-header">
-        <div class="sect-ornament">⟨ 遊戲特色 ⟩</div>
-        <h2 class="sect-title">豐富的冒險體驗</h2>
-        <p class="sect-sub">深度系統、多元玩法，讓你在異世界中樂此不疲</p>
+    <section id="faq" class="section faq-section">
+      <div class="section-heading">
+        <p class="eyebrow">ADVENTURER'S NOTES</p>
+        <h2>出發前，還想知道⋯⋯</h2>
       </div>
-      <div class="features-grid">
-        <div v-for="f in features" :key="f.title" class="feat-card">
-          <div class="feat-icon">{{ f.icon }}</div>
-          <div class="feat-title">{{ f.title }}</div>
-          <div class="feat-desc">{{ f.desc }}</div>
-        </div>
+      <div class="faq-list">
+        <details v-for="f in faqs" :key="f.q">
+          <summary>{{ f.q }}</summary>
+          <p>{{ f.a }}</p>
+        </details>
       </div>
     </section>
-
-    <!-- ===== FOOTER CTA ===== -->
-    <section class="cta-section">
-      <div class="cta-bg-pattern" />
-      <div class="cta-inner">
-        <div class="cta-ornament">⚜</div>
-        <h2 class="cta-title">開始你的傳說</h2>
-        <p class="cta-desc">加入 Discord 伺服器，立刻開始你的 RPG 冒險旅程</p>
-        <a class="dc-btn" href="https://discord.gg/EfpECVDJF6" target="_blank" rel="noopener">
-          <span class="dc-btn-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/>
-            </svg>
-          </span>
-          加入 Discord 伺服器
-        </a>
-        <div class="cta-corner tl" />
-        <div class="cta-corner tr" />
-        <div class="cta-corner bl" />
-        <div class="cta-corner br" />
+    <section class="closing">
+      <p class="eyebrow">YOUR NEXT CHAPTER</p>
+      <h2>下一場冒險，等你一起。</h2>
+      <p>進入遊戲，或先到社群找找同行的冒險者。</p>
+      <div class="hero-actions">
+        <a
+          class="button primary"
+          :href="gameUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          >進入音無樂園 ↗</a
+        ><a
+          class="button subtle"
+          :href="discordUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          >加入 Discord 社群 ↗</a
+        >
       </div>
-      <div class="footer-copy">© 2026 音無樂園 ・ Built with ⚔️ &amp; Discord</div>
     </section>
-
-    <!-- ===== MODAL ===== -->
-    <Transition name="modal">
-      <div v-if="activeModal" class="modal-backdrop" @click.self="closeModal">
-        <div class="modal-panel" :style="{ '--mc': activeModal.data.color || '#c8a04a' }">
-          <button class="modal-close" @click="closeModal">✕</button>
-          <div class="modal-corner tl" /><div class="modal-corner tr" />
-          <div class="modal-corner bl" /><div class="modal-corner br" />
-
-          <!-- Zone modal -->
-          <template v-if="activeModal.type === 'zone'">
-            <div class="modal-head">
-              <span class="modal-emoji">{{ activeModal.data.emoji }}</span>
-              <div>
-                <div class="modal-badge-text">{{ activeModal.data.lv }}</div>
-                <div class="modal-title">{{ activeModal.data.name }}</div>
-              </div>
-            </div>
-            <div class="modal-deco-line" />
-            <p class="modal-intro">{{ activeModal.data.detail.intro }}</p>
-            <div class="modal-section-label">⚔ 怪物列表</div>
-            <div class="modal-tags">
-              <span v-for="m in activeModal.data.detail.monsterList" :key="m" class="modal-tag">{{ m }}</span>
-            </div>
-            <div class="modal-section-label">💰 主要掉落</div>
-            <div class="modal-drops">{{ activeModal.data.detail.drops }}</div>
-            <div class="modal-section-label">📌 冒險建議</div>
-            <p class="modal-tips">{{ activeModal.data.detail.tips }}</p>
-            <div class="modal-recommend">推薦條件：{{ activeModal.data.detail.recommend }}</div>
-          </template>
-
-          <!-- Job modal -->
-          <template v-else-if="activeModal.type === 'job'">
-            <div class="modal-head">
-              <span class="modal-emoji">{{ activeModal.data.icon }}</span>
-              <div>
-                <div class="modal-badge-text">{{ activeModal.data.sub }}</div>
-                <div class="modal-title">{{ activeModal.data.name }}</div>
-              </div>
-            </div>
-            <div class="modal-deco-line" />
-            <div class="modal-section-label">📊 主要屬性</div>
-            <div class="modal-tags">
-              <span v-for="s in activeModal.data.detail.mainStats" :key="s" class="modal-tag modal-tag-stat">{{ s }}</span>
-            </div>
-            <template v-if="activeModal.data.detail.weapon">
-              <div class="modal-section-label">🗡 武器定位</div>
-              <div class="modal-drops">{{ activeModal.data.detail.weapon }}</div>
-            </template>
-            <template v-if="activeModal.data.detail.quest">
-              <div class="modal-section-label">📜 職業任務</div>
-              <p class="modal-tips">{{ activeModal.data.detail.quest }}</p>
-            </template>
-            <template v-if="activeModal.data.detail.badge">
-              <div class="modal-section-label">🏅 徽章效果</div>
-              <div class="modal-drops">{{ activeModal.data.detail.badge }}</div>
-            </template>
-            <template v-if="activeModal.data.detail.skills?.length">
-              <div class="modal-section-label">✨ 職業技能</div>
-              <div class="modal-skill-list">
-                <div v-for="skill in activeModal.data.detail.skills" :key="skill" class="modal-skill">{{ skill }}</div>
-              </div>
-            </template>
-            <div class="modal-section-label">⚙ 核心機制</div>
-            <p class="modal-intro">{{ activeModal.data.detail.mechanic }}</p>
-            <div class="modal-section-label">🎯 戰鬥風格</div>
-            <div class="modal-drops">{{ activeModal.data.detail.style }}</div>
-            <div class="modal-section-label">📌 攻略提示</div>
-            <p class="modal-tips">{{ activeModal.data.detail.tips }}</p>
-          </template>
-
-          <!-- Attr modal -->
-          <template v-else-if="activeModal.type === 'attr'">
-            <div class="modal-head">
-              <span class="modal-attr-key">{{ activeModal.data.key }}</span>
-              <div>
-                <div class="modal-badge-text">ATTRIBUTE</div>
-                <div class="modal-title">{{ activeModal.data.name }}</div>
-              </div>
-            </div>
-            <div class="modal-deco-line" />
-            <div class="modal-section-label">📈 效果說明</div>
-            <p class="modal-intro">{{ activeModal.data.detail.effect }}</p>
-            <div class="modal-section-label">⚡ 特殊閾值</div>
-            <div class="modal-drops">{{ activeModal.data.detail.threshold }}</div>
-            <div class="modal-section-label">🏆 最佳職業</div>
-            <div class="modal-tags">
-              <span v-for="b in activeModal.data.detail.bestFor" :key="b" class="modal-tag">{{ b }}</span>
-            </div>
-            <div class="modal-section-label">📌 配點建議</div>
-            <p class="modal-tips">{{ activeModal.data.detail.tips }}</p>
-          </template>
-
-          <!-- World boss modal -->
-          <template v-else-if="activeModal.type === 'boss'">
-            <div class="modal-head">
-              <span class="modal-emoji">{{ activeModal.data.emoji }}</span>
-              <div>
-                <div class="modal-badge-text">{{ activeModal.data.lv }} ・ {{ activeModal.data.lair }}</div>
-                <div class="modal-title">{{ activeModal.data.name }}</div>
-              </div>
-            </div>
-            <div class="modal-deco-line" />
-            <p class="modal-intro">{{ activeModal.data.detail.intro }}</p>
-            <div class="modal-section-label">⚙ 討伐機制</div>
-            <div class="modal-skill-list">
-              <div v-for="m in activeModal.data.detail.mechanics" :key="m" class="modal-skill">{{ m }}</div>
-            </div>
-            <div class="modal-section-label">🔓 進場條件</div>
-            <div class="modal-drops">{{ activeModal.data.detail.unlock }}</div>
-            <div class="modal-section-label">🎁 討伐獎勵</div>
-            <div class="modal-drops">{{ activeModal.data.detail.rewards }}</div>
-            <div class="modal-section-label">📌 挑戰建議</div>
-            <p class="modal-tips">{{ activeModal.data.detail.recommend }}</p>
-          </template>
-        </div>
-      </div>
-    </Transition>
-  </div>
+  </main>
+  <footer class="site-footer">
+    <a class="brand" href="#"
+      ><span class="brand-mark" aria-hidden="true">❋</span
+      ><span>音無樂園<small>OTONASHI KOI</small></span></a
+    >
+    <div>
+      <a :href="gameUrl" target="_blank" rel="noopener noreferrer"
+        >網頁遊戲 ↗</a
+      ><a :href="discordUrl" target="_blank" rel="noopener noreferrer"
+        >Discord 社群 ↗</a
+      ><a href="#faq">常見問題</a>
+    </div>
+    <p>
+      本頁核對更新：2026.10.05<br />數值、開放狀態與調整公告以遊戲內及官方社群最新內容為準。
+    </p>
+    <small>© 2026 音無樂園 Otonashi Koi</small>
+  </footer>
+  <Teleport to="body"
+    ><div v-if="lightbox" class="lightbox-backdrop" @click.self="closeImage">
+      <section
+        ref="dialog"
+        class="lightbox"
+        role="dialog"
+        aria-modal="true"
+        :aria-label="`${lightbox.title}畫面`"
+        tabindex="-1"
+        @keydown="dialogKeys"
+      >
+        <header>
+          <h2>{{ lightbox.title }}</h2>
+          <button @click="closeImage" aria-label="關閉放大畫面">×</button>
+        </header>
+        <img
+          :src="lightbox.image"
+          :alt="`${lightbox.title}實際遊戲介面放大圖`"
+        />
+        <p>實際遊戲介面・示範角色與資料</p>
+      </section>
+    </div></Teleport
+  >
 </template>
-
-<style scoped>
-/* ─── Base ─── */
-.landing {
-  min-height: 100vh;
-  background: #06040f;
-  color: #e8dcc8;
-  font-family: 'Georgia', '游明朝', 'YuMincho', serif;
-  overflow-x: hidden;
-}
-
-/* ─── Particle Canvas ─── */
-.particle-canvas {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.55;
-}
-
-/* ─── HERO ─── */
-.hero {
-  position: relative;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 60px 20px 80px;
-  overflow: hidden;
-}
-
-.hero-bg-pattern {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(120, 60, 10, 0.35), transparent),
-    radial-gradient(ellipse 50% 50% at 20% 80%, rgba(80, 20, 120, 0.25), transparent),
-    radial-gradient(ellipse 50% 50% at 80% 20%, rgba(20, 60, 120, 0.2), transparent);
-  z-index: 1;
-}
-
-.hero-inner {
-  position: relative;
-  z-index: 2;
-  max-width: 820px;
-}
-
-.hero-badge {
-  display: inline-block;
-  border: 1px solid rgba(200, 160, 74, 0.6);
-  color: #c8a04a;
-  font-size: 12px;
-  letter-spacing: 6px;
-  padding: 6px 20px;
-  margin-bottom: 40px;
-  background: rgba(200, 160, 74, 0.06);
-  animation: pulse-border 3s ease-in-out infinite;
-}
-
-.season-banner {
-  margin: 14px auto 4px;
-  padding: 10px 22px;
-  max-width: 560px;
-  border: 1px solid rgba(56, 189, 248, 0.45);
-  border-radius: 12px;
-  background: linear-gradient(135deg, rgba(14, 116, 144, 0.25), rgba(30, 58, 138, 0.3));
-  backdrop-filter: blur(4px);
-}
-.season-tag {
-  display: inline-block;
-  padding: 2px 10px;
-  margin-right: 8px;
-  font-size: 0.72rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  color: #0c1222;
-  background: linear-gradient(90deg, #7dd3fc, #38bdf8);
-  border-radius: 999px;
-}
-.season-name { font-weight: 900; font-size: 1.02rem; color: #bae6fd; }
-.season-date {
-  display: block;
-  margin-top: 4px;
-  font-size: 0.8rem;
-  color: #fcd34d;
-  font-weight: 700;
-}
-.season-highlights {
-  margin-top: 6px;
-  font-size: 0.78rem;
-  color: #cbd5e1;
-  letter-spacing: 0.02em;
-}
-
-@keyframes pulse-border {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(200, 160, 74, 0); }
-  50% { box-shadow: 0 0 18px 2px rgba(200, 160, 74, 0.25); }
-}
-
-.hero-title-wrap { margin-bottom: 30px; }
-
-.hero-deco-line {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #c8a04a, #c8a04a, transparent);
-  margin: 18px auto;
-  width: 80%;
-  max-width: 500px;
-  opacity: 0.6;
-}
-
-.hero-title { margin: 0; }
-
-.hero-jp {
-  display: block;
-  font-size: clamp(48px, 10vw, 96px);
-  font-weight: 400;
-  letter-spacing: 0.15em;
-  background: linear-gradient(135deg, #ffd770 0%, #c8a04a 40%, #fff3b0 60%, #c8a04a 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  filter: drop-shadow(0 0 30px rgba(200, 160, 74, 0.5));
-  animation: title-glow 4s ease-in-out infinite;
-}
-
-@keyframes title-glow {
-  0%, 100% { filter: drop-shadow(0 0 20px rgba(200, 160, 74, 0.4)); }
-  50% { filter: drop-shadow(0 0 40px rgba(200, 160, 74, 0.8)); }
-}
-
-.hero-sub-kanji {
-  display: block;
-  font-size: clamp(13px, 2.5vw, 18px);
-  letter-spacing: 0.4em;
-  color: #b09060;
-  margin-top: 10px;
-  font-weight: 400;
-}
-
-.hero-desc {
-  font-size: clamp(14px, 2vw, 17px);
-  line-height: 1.9;
-  color: #c0b090;
-  letter-spacing: 0.05em;
-  margin: 0 auto 28px;
-  max-width: 520px;
-}
-
-.hero-stats {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-  max-width: 620px;
-  margin: 0 auto 40px;
-}
-
-.hero-stat {
-  padding: 12px 10px;
-  border: 1px solid rgba(200, 160, 74, 0.18);
-  background:
-    linear-gradient(180deg, rgba(200, 160, 74, 0.08), rgba(255, 255, 255, 0.015)),
-    rgba(6, 4, 15, 0.52);
-}
-
-.hero-stat strong {
-  display: block;
-  color: #ffd770;
-  font-family: 'Courier New', monospace;
-  font-size: 26px;
-  line-height: 1;
-  text-shadow: 0 0 20px rgba(200, 160, 74, 0.35);
-}
-
-.hero-stat span {
-  display: block;
-  margin-top: 6px;
-  color: #8a7860;
-  font-size: 10px;
-  letter-spacing: 0.18em;
-}
-
-.hero-corner, .cta-corner {
-  position: absolute;
-  width: 28px;
-  height: 28px;
-  border-color: rgba(200, 160, 74, 0.55);
-  border-style: solid;
-}
-.hero-corner.tl, .cta-corner.tl { top: -2px; left: -2px; border-width: 2px 0 0 2px; }
-.hero-corner.tr, .cta-corner.tr { top: -2px; right: -2px; border-width: 2px 2px 0 0; }
-.hero-corner.bl, .cta-corner.bl { bottom: -2px; left: -2px; border-width: 0 0 2px 2px; }
-.hero-corner.br, .cta-corner.br { bottom: -2px; right: -2px; border-width: 0 2px 2px 0; }
-
-.hero-scroll-hint {
-  position: absolute;
-  bottom: 28px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 11px;
-  letter-spacing: 4px;
-  color: rgba(200, 160, 74, 0.5);
-  animation: float-down 2.5s ease-in-out infinite;
-  z-index: 2;
-}
-
-@keyframes float-down {
-  0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.5; }
-  50% { transform: translateX(-50%) translateY(8px); opacity: 1; }
-}
-
-/* ─── Sections ─── */
-.section {
-  position: relative;
-  z-index: 1;
-  padding: 80px 24px;
-}
-
-.section-dark {
-  background: rgba(255, 255, 255, 0.02);
-  border-top: 1px solid rgba(200, 160, 74, 0.08);
-  border-bottom: 1px solid rgba(200, 160, 74, 0.08);
-}
-
-.section-header {
-  text-align: center;
-  margin-bottom: 56px;
-}
-
-.sect-ornament {
-  font-size: 11px;
-  letter-spacing: 8px;
-  color: #c8a04a;
-  margin-bottom: 12px;
-  opacity: 0.8;
-}
-
-.sect-title {
-  font-size: clamp(24px, 4vw, 38px);
-  font-weight: 400;
-  letter-spacing: 0.2em;
-  margin: 0 0 12px;
-  background: linear-gradient(135deg, #ffd770, #c8a04a, #ffd770);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.sect-sub {
-  font-size: 14px;
-  color: #8a7860;
-  letter-spacing: 0.08em;
-  margin: 0;
-}
-
-/* ─── Reveal Animation ─── */
-.reveal {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ─── Card hint ─── */
-.card-hint {
-  font-size: 10px;
-  letter-spacing: 2px;
-  color: var(--zc, var(--jc, var(--ac, #c8a04a)));
-  opacity: 0;
-  margin-top: 10px;
-  transition: opacity 0.25s;
-}
-.zone-card:hover .card-hint,
-.job-card:hover .card-hint,
-.attr-card:hover .card-hint { opacity: 0.7; }
-
-/* ─── Zones Grid ─── */
-.zones-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  max-width: 1100px;
-  margin: 0 auto;
-}
-.zone-card {
-  flex: 0 0 200px;
-  max-width: 220px;
-  position: relative;
-  padding: 28px 20px;
-  text-align: center;
-  border: 1px solid color-mix(in srgb, var(--zc) 40%, transparent);
-  border-radius: 2px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--zc) 8%, #06040f) 0%, #06040f 100%);
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-.zone-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 36px color-mix(in srgb, var(--zc) 30%, transparent);
-}
-.zone-emoji { font-size: 36px; margin-bottom: 10px; display: block; filter: drop-shadow(0 0 8px var(--zc)); }
-.zone-lv { font-size: 11px; letter-spacing: 3px; color: var(--zc); margin-bottom: 8px; opacity: 0.85; }
-.zone-name { font-size: 18px; letter-spacing: 0.15em; margin-bottom: 10px; color: #f0e8d8; }
-.zone-desc { font-size: 12px; color: #7a6e60; line-height: 1.6; margin-bottom: 12px; }
-.zone-monsters { font-size: 11px; letter-spacing: 2px; color: color-mix(in srgb, var(--zc) 70%, #888); }
-.zone-glow {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--zc), transparent);
-  opacity: 0.7;
-}
-
-/* ─── Jobs Grid ─── */
-.jobs-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 16px;
-  max-width: 1100px;
-  margin: 0 auto;
-}
-.job-card {
-  flex: 0 0 160px;
-  max-width: 180px;
-  position: relative;
-  padding: 28px 16px;
-  text-align: center;
-  border: 1px solid color-mix(in srgb, var(--jc) 30%, transparent);
-  border-radius: 2px;
-  background: linear-gradient(160deg, color-mix(in srgb, var(--jc) 6%, #0a0812) 0%, #0a0812 100%);
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-.job-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px color-mix(in srgb, var(--jc) 35%, transparent);
-}
-.job-icon { font-size: 32px; margin-bottom: 10px; display: block; filter: drop-shadow(0 0 6px var(--jc)); }
-.job-sub { font-size: 9px; letter-spacing: 5px; color: var(--jc); margin-bottom: 6px; opacity: 0.7; font-family: 'Courier New', monospace; }
-.job-name { font-size: 18px; letter-spacing: 0.2em; margin-bottom: 10px; color: #f0e8d8; }
-.job-desc { font-size: 11px; color: #6a6058; line-height: 1.6; }
-.job-shine {
-  position: absolute;
-  top: 0; left: -100%;
-  width: 60%; height: 100%;
-  background: linear-gradient(105deg, transparent, rgba(255,255,255,0.04), transparent);
-  transition: left 0.5s;
-}
-.job-card:hover .job-shine { left: 150%; }
-
-/* ─── Attributes Grid ─── */
-.attrs-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 16px;
-  max-width: 900px;
-  margin: 0 auto;
-}
-.attr-card {
-  flex: 0 0 160px;
-  max-width: 180px;
-  position: relative;
-  padding: 24px 16px;
-  text-align: center;
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: 2px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.3s;
-}
-.attr-card:hover { transform: scale(1.05); }
-.attr-border {
-  position: absolute;
-  inset: 0;
-  border: 1px solid color-mix(in srgb, var(--ac) 35%, transparent);
-  border-radius: 2px;
-  pointer-events: none;
-}
-.attr-key { font-size: 30px; font-family: 'Courier New', monospace; font-weight: 700; letter-spacing: 3px; color: var(--ac); text-shadow: 0 0 20px var(--ac); margin-bottom: 6px; }
-.attr-name { font-size: 14px; letter-spacing: 0.3em; color: #c0a870; margin-bottom: 8px; }
-.attr-desc { font-size: 11px; color: #5a5048; line-height: 1.5; }
-
-/* ─── Equipment Tier Sets ─── */
-.tier-section {
-  background:
-    linear-gradient(180deg, rgba(200, 160, 74, 0.035), rgba(255, 255, 255, 0.01)),
-    repeating-linear-gradient(90deg, rgba(200, 160, 74, 0.04) 0 1px, transparent 1px 72px);
-  border-top: 1px solid rgba(200, 160, 74, 0.08);
-  border-bottom: 1px solid rgba(200, 160, 74, 0.08);
-}
-
-.tier-rules {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  max-width: 980px;
-  margin: -20px auto 28px;
-}
-
-.tier-rule {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  border: 1px solid rgba(200, 160, 74, 0.14);
-  background: rgba(6, 4, 15, 0.5);
-  color: #9f927c;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.tier-rule-mark {
-  color: #c8a04a;
-  font-family: 'Courier New', monospace;
-  font-size: 12px;
-  letter-spacing: 2px;
-}
-
-.tier-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-  max-width: 1120px;
-  margin: 0 auto;
-}
-
-.tier-card {
-  position: relative;
-  min-height: 260px;
-  padding: 22px 18px;
-  border: 1px solid color-mix(in srgb, var(--tc) 35%, transparent);
-  background:
-    linear-gradient(160deg, color-mix(in srgb, var(--tc) 12%, #08050f) 0%, #08050f 72%),
-    radial-gradient(circle at 30% 10%, color-mix(in srgb, var(--tc) 18%, transparent), transparent 34%);
-  overflow: hidden;
-  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
-}
-
-.tier-card::after {
-  content: '';
-  position: absolute;
-  inset: auto 18px 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--tc), transparent);
-  opacity: 0.75;
-}
-
-.tier-card:hover {
-  transform: translateY(-6px);
-  border-color: color-mix(in srgb, var(--tc) 65%, transparent);
-  box-shadow: 0 18px 42px color-mix(in srgb, var(--tc) 20%, transparent);
-}
-
-.tier-card-head {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 22px;
-}
-
-.tier-letter {
-  display: grid;
-  place-items: center;
-  width: 52px;
-  height: 52px;
-  border: 1px solid color-mix(in srgb, var(--tc) 60%, transparent);
-  color: var(--tc);
-  font-family: 'Courier New', monospace;
-  font-size: 30px;
-  font-weight: 700;
-  text-shadow: 0 0 18px color-mix(in srgb, var(--tc) 70%, transparent);
-  background: color-mix(in srgb, var(--tc) 8%, transparent);
-}
-
-.tier-label {
-  color: #f0e8d8;
-  font-size: 16px;
-  letter-spacing: 0.16em;
-  margin-bottom: 5px;
-}
-
-.tier-identity {
-  color: color-mix(in srgb, var(--tc) 70%, #8a7860);
-  font-size: 11px;
-  line-height: 1.5;
-}
-
-.tier-effect-list {
-  display: grid;
-  gap: 10px;
-}
-
-.tier-effect {
-  padding: 10px 12px;
-  border-left: 2px solid color-mix(in srgb, var(--tc) 65%, transparent);
-  background: color-mix(in srgb, var(--tc) 7%, transparent);
-  color: #c8bda8;
-  font-size: 13px;
-  line-height: 1.5;
-  letter-spacing: 0.04em;
-}
-
-/* ─── Team Tower ─── */
-.tower-section {
-  background:
-    radial-gradient(circle at 20% 10%, rgba(45, 212, 191, 0.12), transparent 28%),
-    radial-gradient(circle at 80% 35%, rgba(251, 191, 36, 0.12), transparent 30%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(6, 4, 15, 0.9));
-}
-
-.tower-overview {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
-  max-width: 980px;
-  margin: -20px auto 28px;
-}
-
-.tower-stat {
-  position: relative;
-  padding: 20px 16px;
-  text-align: center;
-  border: 1px solid rgba(45, 212, 191, 0.22);
-  background: linear-gradient(160deg, rgba(45, 212, 191, 0.08), rgba(255, 255, 255, 0.015));
-  overflow: hidden;
-}
-
-.tower-stat::after {
-  content: '';
-  position: absolute;
-  inset: auto 20px 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #2dd4bf, transparent);
-}
-
-.tower-stat-num {
-  color: #e8dcc8;
-  font-family: 'Courier New', monospace;
-  font-size: 30px;
-  font-weight: 700;
-  text-shadow: 0 0 22px rgba(45, 212, 191, 0.45);
-}
-
-.tower-stat-label {
-  margin-top: 6px;
-  color: #7ccfc1;
-  font-size: 11px;
-  letter-spacing: 0.2em;
-}
-
-.tower-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
-  gap: 22px;
-  max-width: 1120px;
-  margin: 0 auto;
-}
-
-.tower-stage-list {
-  display: grid;
-  gap: 12px;
-}
-
-.tower-stage {
-  display: flex;
-  gap: 16px;
-  align-items: stretch;
-  padding: 16px;
-  border: 1px solid color-mix(in srgb, var(--twc) 32%, transparent);
-  background:
-    linear-gradient(90deg, color-mix(in srgb, var(--twc) 10%, #08050f), rgba(8, 5, 15, 0.9)),
-    radial-gradient(circle at 0% 50%, color-mix(in srgb, var(--twc) 18%, transparent), transparent 35%);
-  transition: transform 0.3s, border-color 0.3s;
-}
-
-.tower-stage:hover {
-  transform: translateX(6px);
-  border-color: color-mix(in srgb, var(--twc) 62%, transparent);
-}
-
-.tower-floor {
-  display: grid;
-  place-items: center;
-  min-width: 78px;
-  color: var(--twc);
-  border: 1px solid color-mix(in srgb, var(--twc) 50%, transparent);
-  font-family: 'Courier New', monospace;
-  font-weight: 700;
-  letter-spacing: 1px;
-}
-
-.tower-stage-name {
-  color: #f0e8d8;
-  font-size: 17px;
-  letter-spacing: 0.16em;
-  margin-bottom: 8px;
-}
-
-.tower-stage-bonus {
-  color: color-mix(in srgb, var(--twc) 78%, #c0b090);
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-.tower-stage-monster {
-  color: #7a7060;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.tower-side {
-  display: grid;
-  gap: 16px;
-}
-
-.tower-panel {
-  padding: 22px;
-  border: 1px solid rgba(200, 160, 74, 0.16);
-  background: rgba(6, 4, 15, 0.62);
-}
-
-.tower-panel-title {
-  color: #dac890;
-  font-size: 16px;
-  letter-spacing: 0.18em;
-  margin-bottom: 14px;
-}
-
-.tower-rule {
-  position: relative;
-  padding: 10px 0 10px 18px;
-  color: #9f927c;
-  border-bottom: 1px solid rgba(200, 160, 74, 0.08);
-  font-size: 13px;
-  line-height: 1.7;
-}
-
-.tower-rule::before {
-  content: '';
-  position: absolute;
-  top: 19px;
-  left: 0;
-  width: 6px;
-  height: 6px;
-  background: #2dd4bf;
-  box-shadow: 0 0 12px rgba(45, 212, 191, 0.65);
-  transform: rotate(45deg);
-}
-
-.tower-reward {
-  display: grid;
-  grid-template-columns: 54px 1fr;
-  gap: 12px;
-  align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(200, 160, 74, 0.08);
-}
-
-.tower-reward span {
-  color: #2dd4bf;
-  font-family: 'Courier New', monospace;
-  font-size: 13px;
-}
-
-.tower-reward strong {
-  color: #c0b090;
-  font-size: 13px;
-  line-height: 1.5;
-  font-weight: 400;
-}
-
-/* ─── Features Grid ─── */
-.features-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-.feat-card {
-  flex: 0 0 280px;
-  max-width: 300px;
-  padding: 28px 24px;
-  border: 1px solid rgba(200, 160, 74, 0.12);
-  border-radius: 2px;
-  background: rgba(200, 160, 74, 0.03);
-  transition: background 0.3s, border-color 0.3s;
-}
-.feat-card:hover { background: rgba(200, 160, 74, 0.07); border-color: rgba(200, 160, 74, 0.3); }
-.feat-icon { font-size: 28px; margin-bottom: 12px; }
-.feat-title { font-size: 16px; letter-spacing: 0.15em; color: #dac890; margin-bottom: 10px; }
-.feat-desc { font-size: 13px; color: #6a6058; line-height: 1.7; }
-
-/* ─── CTA Section ─── */
-.cta-section {
-  position: relative;
-  z-index: 1;
-  padding: 100px 24px 60px;
-  text-align: center;
-  overflow: hidden;
-}
-.cta-bg-pattern {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 70% 70% at 50% 50%, rgba(100, 50, 10, 0.3), transparent);
-  z-index: -1;
-}
-.cta-inner {
-  position: relative;
-  display: inline-block;
-  padding: 60px 80px;
-  max-width: 600px;
-}
-.cta-ornament { font-size: 32px; color: #c8a04a; margin-bottom: 20px; display: block; text-shadow: 0 0 20px rgba(200, 160, 74, 0.6); }
-.cta-title {
-  font-size: clamp(28px, 5vw, 48px);
-  font-weight: 400;
-  letter-spacing: 0.25em;
-  margin: 0 0 16px;
-  background: linear-gradient(135deg, #ffd770, #c8a04a, #ffd770);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.cta-desc { font-size: 14px; color: #8a7860; letter-spacing: 0.08em; line-height: 1.8; margin: 0; }
-
-.dc-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 32px;
-  padding: 14px 32px;
-  background: #5865F2;
-  color: #fff;
-  font-size: 16px;
-  font-family: 'Georgia', serif;
-  letter-spacing: 0.1em;
-  text-decoration: none;
-  border-radius: 2px;
-  border: 1px solid rgba(255,255,255,0.2);
-  box-shadow: 0 0 24px rgba(88,101,242,0.55), 0 4px 16px rgba(0,0,0,0.4);
-  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-  position: relative;
-  overflow: hidden;
-}
-.dc-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%);
-  pointer-events: none;
-}
-.dc-btn:hover { background: #4752C4; transform: translateY(-3px); box-shadow: 0 0 36px rgba(88,101,242,0.75), 0 8px 24px rgba(0,0,0,0.5); }
-.dc-btn:active { transform: translateY(0); }
-.dc-btn-icon { display: flex; align-items: center; flex-shrink: 0; }
-
-.footer-copy { margin-top: 60px; font-size: 11px; letter-spacing: 4px; color: rgba(200, 160, 74, 0.3); }
-
-/* ─── Modal ─── */
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  background: rgba(4, 2, 10, 0.85);
-  backdrop-filter: blur(6px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-}
-
-.modal-panel {
-  position: relative;
-  background: linear-gradient(160deg, #0e0a1e 0%, #08050f 100%);
-  border: 1px solid color-mix(in srgb, var(--mc) 50%, transparent);
-  border-radius: 2px;
-  padding: 48px 40px 40px;
-  max-width: 520px;
-  width: 100%;
-  max-height: 85vh;
-  overflow-y: auto;
-  box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--mc) 15%, transparent),
-    0 30px 80px rgba(0, 0, 0, 0.8),
-    inset 0 1px 0 color-mix(in srgb, var(--mc) 20%, transparent);
-}
-
-.modal-panel::-webkit-scrollbar { width: 4px; }
-.modal-panel::-webkit-scrollbar-track { background: transparent; }
-.modal-panel::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--mc) 40%, transparent); border-radius: 2px; }
-
-.modal-close {
-  position: absolute;
-  top: 16px;
-  right: 20px;
-  background: none;
-  border: none;
-  color: #c8a04a;
-  font-size: 18px;
-  cursor: pointer;
-  opacity: 0.6;
-  transition: opacity 0.2s;
-  line-height: 1;
-}
-.modal-close:hover { opacity: 1; }
-
-.modal-corner {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border-color: color-mix(in srgb, var(--mc) 60%, transparent);
-  border-style: solid;
-}
-.modal-corner.tl { top: 8px; left: 8px; border-width: 1px 0 0 1px; }
-.modal-corner.tr { top: 8px; right: 8px; border-width: 1px 1px 0 0; }
-.modal-corner.bl { bottom: 8px; left: 8px; border-width: 0 0 1px 1px; }
-.modal-corner.br { bottom: 8px; right: 8px; border-width: 0 1px 1px 0; }
-
-.modal-head {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-
-.modal-emoji {
-  font-size: 48px;
-  filter: drop-shadow(0 0 12px var(--mc));
-  flex-shrink: 0;
-}
-
-.modal-attr-key {
-  font-size: 40px;
-  font-family: 'Courier New', monospace;
-  font-weight: 700;
-  color: var(--mc);
-  text-shadow: 0 0 20px var(--mc);
-  flex-shrink: 0;
-  letter-spacing: 2px;
-}
-
-.modal-badge-text {
-  font-size: 10px;
-  letter-spacing: 5px;
-  color: var(--mc);
-  opacity: 0.7;
-  font-family: 'Courier New', monospace;
-  margin-bottom: 4px;
-}
-
-.modal-title {
-  font-size: 28px;
-  letter-spacing: 0.2em;
-  color: #f0e8d8;
-  font-weight: 400;
-}
-
-.modal-deco-line {
-  height: 1px;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--mc) 80%, transparent), transparent);
-  margin-bottom: 24px;
-}
-
-.modal-section-label {
-  font-size: 10px;
-  letter-spacing: 4px;
-  color: var(--mc);
-  opacity: 0.8;
-  margin: 20px 0 8px;
-  font-family: 'Courier New', monospace;
-}
-
-.modal-intro {
-  font-size: 14px;
-  color: #a09080;
-  line-height: 1.8;
-  margin: 0;
-}
-
-.modal-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.modal-tag {
-  font-size: 12px;
-  padding: 4px 12px;
-  border: 1px solid color-mix(in srgb, var(--mc) 40%, transparent);
-  color: #c0b090;
-  background: color-mix(in srgb, var(--mc) 8%, transparent);
-  border-radius: 2px;
-  letter-spacing: 1px;
-}
-
-.modal-tag-stat {
-  font-family: 'Courier New', monospace;
-  font-weight: 700;
-  font-size: 14px;
-  color: var(--mc);
-  letter-spacing: 3px;
-}
-
-.modal-drops {
-  font-size: 13px;
-  color: #c0a870;
-  letter-spacing: 0.05em;
-  padding: 8px 14px;
-  border-left: 2px solid color-mix(in srgb, var(--mc) 50%, transparent);
-  background: color-mix(in srgb, var(--mc) 5%, transparent);
-}
-
-.modal-skill-list {
-  display: grid;
-  gap: 8px;
-}
-
-.modal-skill {
-  position: relative;
-  padding: 9px 12px 9px 26px;
-  border: 1px solid color-mix(in srgb, var(--mc) 24%, transparent);
-  background:
-    linear-gradient(90deg, color-mix(in srgb, var(--mc) 8%, transparent), transparent),
-    rgba(255, 255, 255, 0.015);
-  color: #c8bda8;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.modal-skill::before {
-  content: '';
-  position: absolute;
-  top: 17px;
-  left: 12px;
-  width: 6px;
-  height: 6px;
-  background: var(--mc);
-  box-shadow: 0 0 12px color-mix(in srgb, var(--mc) 70%, transparent);
-  transform: rotate(45deg);
-}
-
-.modal-tips {
-  font-size: 13px;
-  color: #7a7060;
-  line-height: 1.8;
-  margin: 0;
-}
-
-.modal-recommend {
-  margin-top: 20px;
-  font-size: 11px;
-  letter-spacing: 2px;
-  color: var(--mc);
-  opacity: 0.7;
-  text-align: center;
-  padding: 10px;
-  border: 1px solid color-mix(in srgb, var(--mc) 20%, transparent);
-}
-
-/* ─── Modal Transition ─── */
-.modal-enter-active { transition: all 0.25s ease; }
-.modal-leave-active { transition: all 0.2s ease; }
-.modal-enter-from { opacity: 0; }
-.modal-leave-to { opacity: 0; }
-.modal-enter-from .modal-panel { transform: scale(0.93) translateY(12px); }
-.modal-leave-to .modal-panel { transform: scale(0.95); }
-.modal-panel { transition: transform 0.25s ease; }
-
-/* ─── Responsive ─── */
-@media (max-width: 600px) {
-  .cta-inner { padding: 40px 30px; }
-  .section { padding: 60px 16px; }
-  .modal-panel { padding: 40px 24px 32px; }
-  .modal-title { font-size: 22px; }
-  .hero-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .tier-rules,
-  .tier-grid,
-  .tower-overview,
-  .tower-layout { grid-template-columns: 1fr; }
-  .tier-card { min-height: auto; }
-  .tower-stage { flex-direction: column; }
-  .tower-floor { min-height: 42px; }
-}
-
-@media (min-width: 601px) and (max-width: 980px) {
-  .tier-rules { grid-template-columns: 1fr; }
-  .tier-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .tower-overview { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .tower-layout { grid-template-columns: 1fr; }
-}
-</style>

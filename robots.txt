@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://otonashikoi.github.io/OtonashiKoiApp-website/sitemap.xml
