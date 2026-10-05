@@ -57,12 +57,12 @@ const features = [
         </div>
         <a class="home-creator-link" href="#creator">認識 VTuber 音無恋 →</a>
       </div>
-      <div class="home-portrait">
+      <div class="home-portrait is-illustration">
         <img
-          :src="portrait"
-          alt="VTuber 音無恋角色立繪，銀紫色短髮與紫白色服裝"
-          width="859"
-          height="2304"
+          :src="season"
+          alt="音無恋手持紅色楓葉的秋季插畫，紫白色服裝與柔和秋色背景"
+          width="836"
+          height="941"
           fetchpriority="high"
         /><span aria-hidden="true"
           >音無恋<br /><small>OTONASHI KOI</small></span

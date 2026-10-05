@@ -49,4 +49,4 @@ npm run preview -- --host 127.0.0.1 --port 5272
 
 ## 首頁與創作者（2026-10-05）
 
-獨立首頁以角色立繪、遊戲實際介面及短文介紹音無樂園；基礎教學、本季更新保留原內容。音無恋角色原始圖取自玩家端 `public/brand/otonashi-main.png`，未修改服裝與裝飾。身分依玩家端 `OnboardingGuide.tsx`（台灣 VTuber／遊戲設計師）及本人公開頻道，直播主題依現有公開影片與直播標題；不補寫未確認的生日、身高、出道日期或固定開播時間。YouTube 頻道網址透過官方 oEmbed 回傳的 `author_url` 核對：https://www.youtube.com/@%E9%9F%B3%E7%84%A1%E6%81%8B；Twitch：https://www.twitch.tv/otonashikoi 。
+獨立首頁以音無恋手持楓葉的秋季插畫、遊戲實際介面及短文介紹音無樂園；插畫保留完整比例，配合桌面與手機排版。個人介紹使用玩家端 `public/brand/otonashi-main.png` 的原始立繪，未修改服裝與裝飾。基礎教學、本季更新保留原內容。身分依玩家端 `OnboardingGuide.tsx`（台灣 VTuber／遊戲設計師）及本人公開頻道，直播主題依現有公開影片與直播標題；不補寫未確認的生日、身高、出道日期或固定開播時間。YouTube 頻道網址透過官方 oEmbed 回傳的 `author_url` 核對：https://www.youtube.com/@%E9%9F%B3%E7%84%A1%E6%81%8B；Twitch：https://www.twitch.tv/otonashikoi 。
