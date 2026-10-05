@@ -55,6 +55,7 @@ h1,
 h2,
 h3 {
   font-family: "Noto Serif TC", serif;
+  text-wrap: balance;
 }
 p {
   line-height: 1.85;
@@ -1668,5 +1669,472 @@ details p {
   .town-grid {
     grid-template-columns: 1fr;
     gap: 28px;
+  }
+}
+
+/* Evergreen handbook and seasonal release are separate reading views. */
+.site-header .page-tabs {
+  display: flex;
+  width: auto;
+  gap: 8px;
+  padding: 0;
+  order: initial;
+}
+.site-header .page-tabs a {
+  display: block;
+  min-width: 136px;
+  padding: 9px 20px 11px;
+  text-align: center;
+  border-bottom: 2px solid transparent;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+.page-tabs small {
+  display: block;
+  font-size: 0.55rem;
+  letter-spacing: 0.17em;
+  font-weight: 400;
+  margin-bottom: 3px;
+  opacity: 0.65;
+}
+.site-header .page-tabs a[aria-current="page"] {
+  color: #f0d197;
+  border-color: var(--gold);
+  background: linear-gradient(0deg, #c4964420, transparent);
+}
+.guide-intro {
+  display: grid;
+  grid-template-columns: 1.45fr 0.75fr;
+  gap: 25px 65px;
+  padding-top: 65px;
+  background: radial-gradient(ellipse at 85% 25%, #9a734518, transparent 60%);
+}
+.guide-intro h1 {
+  font-size: clamp(2.1rem, 4.3vw, 3.6rem);
+  line-height: 1.5;
+  margin: 18px 0 24px;
+  letter-spacing: 0.04em;
+}
+.guide-intro p:not(.eyebrow) {
+  max-width: 650px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: 14px;
+}
+.guide-intro .guide-lead {
+  color: #e8d6b9 !important;
+  font-size: 1.05rem !important;
+}
+.guide-host {
+  position: relative;
+  height: 350px;
+  overflow: hidden;
+  border-bottom: 1px solid #b08a5055;
+  align-self: center;
+}
+.guide-host img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center top;
+}
+.guide-host span {
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  right: 0;
+  width: fit-content;
+  margin: auto;
+  padding: 12px 20px;
+  background: #1e1814e8;
+  border-left: 2px solid var(--gold);
+  font-family: "Noto Serif TC", serif;
+  color: #ead5b1;
+  font-size: 0.85rem;
+  line-height: 1.8;
+}
+.handbook-index {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 34px;
+  grid-column: 1 / -1;
+  margin-top: 25px;
+  border-top: 1px solid #b08a5055;
+}
+.handbook-index a {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 17px 2px;
+  border-bottom: 1px solid #b08a5035;
+  font-size: 0.9rem;
+}
+.handbook-index span {
+  font-size: 0.65rem;
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+}
+.handbook-index b {
+  font-weight: 400;
+  margin-left: auto;
+  color: #ad9066;
+}
+.handbook-index a:hover {
+  color: var(--gold);
+  background: #c496440b;
+}
+.tutorial-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 38px 60px;
+}
+.tutorial-columns h3 {
+  margin-bottom: 16px;
+}
+.tutorial-columns p,
+.binding-guide p,
+.tutorial-callout p {
+  font-size: 0.88rem;
+  color: var(--muted);
+  margin-top: 12px;
+}
+.parchment-section .tutorial-columns p,
+.parchment-section .binding-guide p,
+.parchment-section .tutorial-callout p {
+  color: #716252;
+}
+.instruction-list {
+  margin: 0;
+  padding-left: 24px;
+  font-size: 0.9rem;
+  line-height: 1.85;
+}
+.instruction-list li {
+  padding-left: 6px;
+  margin: 12px 0;
+}
+.instruction-list li::marker {
+  color: var(--gold);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.parchment-section .instruction-list li::marker {
+  color: #986135;
+}
+.instruction-list a,
+.tutorial-columns .text-link {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.tutorial-note {
+  padding-left: 16px;
+  border-left: 2px solid #af8b5e66;
+  font-size: 0.8rem !important;
+}
+.binding-guide {
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 1px solid #94775145;
+}
+.binding-flow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 30px;
+  padding-left: 24px;
+  margin-top: 25px;
+}
+.binding-flow li {
+  padding-left: 5px;
+  font-size: 0.86rem;
+  line-height: 1.8;
+}
+.binding-flow li::marker {
+  color: #986135;
+  font-weight: 700;
+}
+.binding-flow p {
+  font-size: 0.8rem;
+}
+.binding-flow code {
+  display: inline-block;
+  padding: 2px 6px;
+  background: #9e784f15;
+  color: #67452f;
+  overflow-wrap: anywhere;
+  font-size: 0.85rem;
+}
+.tutorial-callout {
+  margin-top: 28px;
+  padding: 22px 25px;
+  border-left: 3px solid #a6793a;
+  background: #b58d4610;
+  font-size: 0.9rem;
+}
+.tutorial-callout p {
+  margin-top: 6px;
+}
+.tutorial-callout.risk {
+  border-color: #b77453;
+  background: #ad65361a;
+}
+.tutorial-callout.risk b {
+  color: #efbf9f;
+}
+.attribute-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px 35px;
+  margin-top: 30px;
+}
+.attribute-grid article {
+  padding: 20px 0 0;
+  border-top: 1px solid #b08a5035;
+}
+.attribute-grid b {
+  color: #e3be80;
+  letter-spacing: 0.05em;
+}
+.attribute-grid span {
+  margin-left: 8px;
+  font-weight: 400;
+  color: #d5c5b1;
+  font-size: 0.85rem;
+}
+.attribute-grid p {
+  font-size: 0.8rem;
+  margin-top: 8px;
+  color: var(--muted);
+}
+.enhance-ladder {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: 35px 0 20px;
+  border: 1px solid #ae88543d;
+}
+.enhance-ladder article {
+  padding: 24px 12px;
+  text-align: center;
+  border-right: 1px solid #ae88543d;
+}
+.enhance-ladder article:last-child {
+  border-right: 0;
+}
+.enhance-ladder b {
+  display: block;
+  font-family: "Noto Serif TC", serif;
+  font-size: 1.8rem;
+  color: #efd19f;
+}
+.enhance-ladder span {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.enhance-ladder strong {
+  display: block;
+  margin-top: 12px;
+  color: #cda369;
+  font-size: 1.05rem;
+}
+.extra-upgrades,
+.job-tutorial {
+  margin-top: 45px;
+  padding-top: 35px;
+  border-top: 1px solid #ae88543d;
+}
+.jobs-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.job-requirements {
+  margin: 20px 0 0;
+  border-top: 1px solid #b4976b33;
+  padding-top: 12px;
+  font-size: 0.75rem;
+  line-height: 1.8;
+}
+.job-requirements > div {
+  display: grid;
+  grid-template-columns: 63px minmax(0, 1fr);
+  gap: 10px;
+  margin: 6px 0;
+}
+.job-requirements dt {
+  color: #a99576;
+}
+.job-requirements dd {
+  margin: 0;
+  color: #e0cdae;
+  overflow-wrap: anywhere;
+}
+.update-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 25px;
+  margin-bottom: 35px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #b08a5035;
+}
+.update-index a,
+.season-change-list a {
+  color: #dcb981;
+  font-size: 0.85rem;
+  line-height: 1.8;
+}
+.update-index a:hover,
+.season-change-list a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.season-change-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 40px 55px;
+}
+.season-change-list article {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 16px;
+  border-top: 1px solid #b08a5035;
+  padding-top: 24px;
+}
+.season-change-list article > span {
+  color: #a98552;
+  font-family: "Noto Serif TC", serif;
+  font-size: 1.2rem;
+  padding-top: 3px;
+}
+.season-change-list h3 {
+  font-size: 1.1rem;
+}
+.season-change-list p {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 12px 0;
+}
+@media (max-width: 980px) {
+  :root {
+    scroll-padding-top: 145px;
+  }
+  .site-header {
+    gap: 12px;
+    padding-block: 12px 0;
+  }
+  .site-header .page-tabs {
+    order: 3;
+    width: 100%;
+    gap: 8px;
+  }
+  .site-header .page-tabs a {
+    flex: 1;
+    min-width: 0;
+    padding: 9px 12px 12px;
+  }
+  .header-play {
+    margin-left: auto;
+  }
+  .guide-intro {
+    gap: 25px 35px;
+    padding-top: 40px;
+  }
+  .tutorial-columns {
+    gap: 35px;
+  }
+  .binding-flow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .handbook-index {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .jobs-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 680px) {
+  :root {
+    scroll-padding-top: 130px;
+  }
+  .site-header .page-tabs a {
+    font-size: 0.85rem;
+  }
+  .page-tabs small {
+    display: none;
+  }
+  .guide-intro {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .guide-intro h1 {
+    margin-block: 14px 20px;
+  }
+  .guide-host {
+    height: 220px;
+    width: 260px;
+    max-width: 100%;
+    margin: auto;
+  }
+  .guide-host img {
+    object-position: 35% top;
+  }
+  .guide-host span {
+    font-size: 0.75rem;
+    right: -15px;
+    left: auto;
+    bottom: 14px;
+  }
+  .handbook-index {
+    gap: 0 20px;
+    margin-top: 10px;
+  }
+  .handbook-index a {
+    font-size: 0.8rem;
+    gap: 9px;
+    padding-block: 16px;
+  }
+  .tutorial-columns {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .binding-flow {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .binding-flow p {
+    margin-top: 6px;
+  }
+  .tutorial-callout {
+    padding: 18px;
+  }
+  .attribute-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+  .enhance-ladder {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .enhance-ladder article {
+    padding: 18px 10px;
+    border-bottom: 1px solid #ae88543d;
+  }
+  .enhance-ladder article:nth-child(even) {
+    border-right: 0;
+  }
+  .enhance-ladder article:last-child {
+    grid-column: 1 / -1;
+    border-bottom: 0;
+  }
+  .jobs-grid {
+    grid-template-columns: 1fr;
+  }
+  .season-change-list {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .season-change-list article {
+    gap: 10px;
+  }
+  .season-change-list h3 {
+    font-size: 1.02rem;
   }
 }
