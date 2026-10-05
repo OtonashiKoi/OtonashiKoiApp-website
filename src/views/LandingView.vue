@@ -78,7 +78,8 @@ function syncPage() {
       : "音無樂園｜楓紅漸漸・本季更新";
   nextTick(() => {
     const target = hash ? document.getElementById(hash) : null;
-    if (target) target.scrollIntoView({ block: "start" });
+    if (activeChapter.value) window.scrollTo(0, 0);
+    else if (target) target.scrollIntoView({ block: "start" });
     else if (!hash) window.scrollTo(0, 0);
   });
 }
