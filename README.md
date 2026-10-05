@@ -34,9 +34,10 @@ npm run preview -- --host 127.0.0.1 --port 5272
 
 ## 官網閱讀分區
 
+- 預設首頁及 `#home`：遊戲介紹、三個實際介面玩法介紹、`#creator` VTuber 音無恋個人介紹與官方頻道連結。
 - `#guide`：常態基礎教學，12 個章節；登入綁定、第一場戰鬥、裝備配點、強化鑲嵌、一般共鬥、地圖、世界王、職業轉職、組隊、合成、日常與 FAQ。
 - `#updates`：本季更新、改版六大內容、實際介面範例與限定稱號。
-- 頁首兩個分頁在桌面與手機均可切換；章節網址會自動選擇對應閱讀區，支援直接連結及瀏覽器上一頁。
+- 頁首三個分頁在桌面與手機均可切換；章節網址會自動選擇對應閱讀區，支援直接連結及瀏覽器上一頁。
 
 2026-10-05 教學核對來源：玩家端 settings／inventory／EnhanceModal／worldboss；後端 enhanceConfig、enhanceService、jobBadgeService、jobBadgeLevel、weeklyQuestService 與目前公開任務及世界王定義。YouTube 一般綁定使用直播聊天室限時綁定碼；一般強化失敗不會銷毀裝備，賭鬼模式另有破壞風險。一轉條件使用基礎屬性及指定武器，二轉採角色 Lv.35 加一轉徽章 Lv.20 的現行操作。
 
@@ -45,3 +46,7 @@ npm run preview -- --host 127.0.0.1 --port 5272
 基礎教學以 `PictureGuide.vue` 呈現 12 個圖文章節：大幅實際遊戲圖片搭配 3～4 個短步驟，同時顯示，圖片可點擊放大。桌面採兩欄、手機單欄；章節文字連結可直接跳到對應內容。完整規則保留在「查看完整說明」中。本季更新維持圖與短摘要的既有排版。
 
 新增截圖由玩家端實際 routes／EnhanceModal／PartyBattleScene 在隔離展示資料下拍攝，使用正式顯示條件（不顯示 DEV 登入），不登入或讀取真實玩家帳號。圖中帳號、裝備、綁定碼、隊伍、等級、金幣及報酬為示範；圖片供操作教學，不是數值或掉率證據。原始圖與驗證存於 `game-backups/official-website-visual-guide-20261005`；未改動遊戲功能或資料。
+
+## 首頁與創作者（2026-10-05）
+
+獨立首頁以角色立繪、遊戲實際介面及短文介紹音無樂園；基礎教學、本季更新保留原內容。音無恋角色原始圖取自玩家端 `public/brand/otonashi-main.png`，未修改服裝與裝飾。身分依玩家端 `OnboardingGuide.tsx`（台灣 VTuber／遊戲設計師）及本人公開頻道，直播主題依現有公開影片與直播標題；不補寫未確認的生日、身高、出道日期或固定開播時間。YouTube 頻道網址透過官方 oEmbed 回傳的 `author_url` 核對：https://www.youtube.com/@%E9%9F%B3%E7%84%A1%E6%81%8B；Twitch：https://www.twitch.tv/otonashikoi 。

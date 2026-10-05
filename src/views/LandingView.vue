@@ -1,6 +1,7 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 import PictureGuide from "../components/PictureGuide.vue";
+import HomePage from "../components/HomePage.vue";
 import guideLogin from "../assets/guide/login.webp";
 import guideBag from "../assets/guide/bag.webp";
 import guideEquipment from "../assets/guide/inventory.webp";
@@ -52,11 +53,16 @@ const updateSections = [
   { id: "screens", name: "介面範例" },
   { id: "titles", name: "限定稱號" },
 ];
-const activePage = ref(
-  ["guide", ...basicSections.map((n) => n.id)].includes(location.hash.slice(1))
-    ? "guide"
-    : "updates",
-);
+const homeSections = ["home", "game-intro", "creator"];
+function pageForHash(hash) {
+  if (homeSections.includes(hash) || !hash) return "home";
+  if (["guide", ...basicSections.map((n) => n.id)].includes(hash))
+    return "guide";
+  if (["updates", ...updateSections.map((n) => n.id)].includes(hash))
+    return "updates";
+  return "home";
+}
+const activePage = ref(pageForHash(location.hash.slice(1)));
 const activeChapter = ref(
   basicSections.find((n) => n.id === location.hash.slice(1))?.id || null,
 );
@@ -65,17 +71,13 @@ const chapterIndex = computed(() =>
 );
 function syncPage() {
   const hash = location.hash.slice(1);
-  if (hash !== "main")
-    activePage.value = ["guide", ...basicSections.map((n) => n.id)].includes(
-      hash,
-    )
-      ? "guide"
-      : "updates";
+  if (hash !== "main") activePage.value = pageForHash(hash);
   activeChapter.value = basicSections.find((n) => n.id === hash)?.id || null;
-  document.title =
-    activePage.value === "guide"
-      ? "音無樂園｜基礎教學・綁定、裝備、強化與職業指南"
-      : "音無樂園｜楓紅漸漸・本季更新";
+  document.title = {
+    home: "音無樂園官方網站｜網頁 RPG・VTuber 音無恋",
+    guide: "音無樂園｜基礎教學・綁定、裝備、強化與職業指南",
+    updates: "音無樂園｜楓紅漸漸・本季更新",
+  }[activePage.value];
   nextTick(() => {
     const target = hash ? document.getElementById(hash) : null;
     if (target) target.scrollIntoView({ block: "start" });
@@ -714,11 +716,14 @@ const faqs = [
 <template>
   <a class="skip-link" href="#main">跳至主要內容</a>
   <header class="site-header">
-    <a class="brand" href="#updates"
+    <a class="brand" href="#home"
       ><span class="brand-mark" aria-hidden="true">❋</span
       ><span>音無樂園<small>OTONASHI KOI</small></span></a
     >
     <nav class="page-tabs" aria-label="官網內容分類">
+      <a href="#home" :aria-current="activePage === 'home' ? 'page' : undefined"
+        ><small>HOME</small>首頁</a
+      >
       <a
         href="#guide"
         :aria-current="activePage === 'guide' ? 'page' : undefined"
@@ -738,6 +743,13 @@ const faqs = [
     >
   </header>
   <main id="main">
+    <div class="page-pane" v-show="activePage === 'home'" data-page="home">
+      <HomePage
+        :game-url="gameUrl"
+        :discord-url="discordUrl"
+        @zoom="openImage"
+      />
+    </div>
     <div
       class="page-pane"
       v-show="activePage === 'updates'"
@@ -2117,7 +2129,7 @@ const faqs = [
     </div>
   </main>
   <footer class="site-footer">
-    <a class="brand" href="#updates"
+    <a class="brand" href="#home"
       ><span class="brand-mark" aria-hidden="true">❋</span
       ><span>音無樂園<small>OTONASHI KOI</small></span></a
     >
@@ -2126,6 +2138,7 @@ const faqs = [
         >網頁遊戲 ↗</a
       ><a :href="discordUrl" target="_blank" rel="noopener noreferrer"
         >Discord 社群 ↗</a
+      ><a href="#home">首頁</a><a href="#creator">音無恋</a
       ><a href="#guide">基礎教學</a><a href="#updates">本季更新</a
       ><a href="#faq">常見問題</a>
     </div>
