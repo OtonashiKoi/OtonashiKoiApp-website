@@ -2544,3 +2544,207 @@ details p {
     padding-top: 5px;
   }
 }
+/* Illustrated articles: pictures and concise text remain visible together. */
+.guide-intro {
+  display: block;
+  padding-block: 40px 30px;
+}
+.guide-intro h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin: 12px 0 15px;
+}
+.guide-intro .guide-host,
+.guide-intro .hero-actions {
+  display: none;
+}
+.guide-topic-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #b08a5035;
+}
+.guide-topic-links a {
+  font-size: 0.8rem;
+  color: #cbbba3;
+}
+.guide-topic-links a:hover {
+  color: #efd19f;
+}
+.guide-topic-links span {
+  font-size: 0.6rem;
+  color: #9d794d;
+  margin-right: 8px;
+}
+.guide-topic-links b {
+  display: none;
+}
+.basic-guide-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 45px 55px;
+  padding: 20px max(6vw, 24px) 65px;
+  counter-reset: handbook;
+  align-items: start;
+}
+.guide-card.visual-guide-section {
+  padding: 24px 0 0;
+  margin: 0;
+  min-width: 0;
+  border-top: 1px solid #b08a5035;
+  counter-increment: handbook;
+}
+.guide-card .section-heading {
+  margin-bottom: 20px;
+}
+.guide-card > .section-heading .eyebrow {
+  display: none;
+}
+.guide-card > .section-heading h2 {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 1.35rem;
+  letter-spacing: 0.03em;
+}
+.guide-card > .section-heading h2::before {
+  content: counter(handbook, decimal-leading-zero);
+  color: #a98552;
+  font-size: 1rem;
+  font-weight: 500;
+}
+.guide-pictures {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 12px;
+  background: #2b201617;
+  border: 1px solid #b08a5035;
+}
+.guide-pictures.single-picture {
+  grid-template-columns: 1fr;
+}
+.guide-pictures button {
+  position: relative;
+  padding: 0;
+  width: 100%;
+  background: #0e0d0d;
+  border: 1px solid #b08a5035;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.guide-pictures img {
+  width: 100%;
+  height: 350px;
+  object-fit: contain;
+}
+.guide-pictures button > span {
+  position: absolute;
+  bottom: 7px;
+  right: 7px;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  color: #e6c895;
+  border-radius: 50%;
+  background: #17120fe8;
+  border: 1px solid #b08a5080;
+}
+.picture-guide-steps {
+  display: grid;
+  gap: 14px;
+  padding: 0;
+  margin: 22px 0 0;
+  list-style: none;
+}
+.picture-guide-steps li {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 10px;
+}
+.picture-guide-steps li > span {
+  color: #aa824e;
+  font-size: 0.7rem;
+  line-height: 1.8;
+}
+.picture-guide-steps b {
+  color: #e2cba8;
+  font-size: 0.87rem;
+  font-weight: 500;
+}
+.picture-guide-steps p {
+  color: #b9aa98;
+  font-size: 0.8rem;
+  line-height: 1.75;
+  margin-top: 4px;
+}
+.picture-guide-note {
+  padding-left: 13px;
+  border-left: 2px solid #a57942;
+  color: #c2a47e;
+  font-size: 0.75rem;
+  line-height: 1.8;
+  margin-top: 22px;
+}
+.guide-card .reference-details {
+  margin-top: 24px;
+}
+.guide-card .reference-details > summary {
+  font-size: 0.77rem;
+  padding-block: 15px;
+}
+.guide-card .reference-content {
+  display: block;
+}
+.guide-card .reference-content .tutorial-columns {
+  grid-template-columns: 1fr;
+}
+.guide-card .reference-content .jobs-grid {
+  grid-template-columns: 1fr;
+}
+.guide-card .reference-content .map-road,
+.guide-card .reference-content .attribute-grid {
+  grid-template-columns: 1fr;
+}
+@media (max-width: 980px) {
+  .basic-guide-grid {
+    gap: 35px 28px;
+  }
+  .guide-pictures img {
+    height: 300px;
+  }
+  .guide-pictures {
+    padding: 8px;
+    gap: 8px;
+  }
+}
+@media (max-width: 680px) {
+  .guide-intro {
+    padding-block: 30px 22px;
+  }
+  .guide-topic-links {
+    gap: 12px 16px;
+  }
+  .guide-topic-links a {
+    font-size: 0.73rem;
+  }
+  .basic-guide-grid {
+    grid-template-columns: 1fr;
+    gap: 35px;
+    padding-inline: 24px;
+  }
+  .guide-card > .section-heading h2 {
+    font-size: 1.25rem;
+  }
+  .guide-pictures img {
+    height: 290px;
+  }
+  .picture-guide-steps {
+    gap: 12px;
+  }
+}
+.guide-card .reference-details > summary::after {
+  content: none;
+}
