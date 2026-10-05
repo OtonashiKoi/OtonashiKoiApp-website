@@ -2138,3 +2138,409 @@ details p {
     font-size: 1.02rem;
   }
 }
+/* Visual handbook: one chapter at a time, screenshots lead the lesson. */
+.guide-intro .guide-host {
+  height: 265px;
+}
+.handbook-index {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 22px;
+  border: 0;
+}
+.handbook-index a {
+  display: block;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #b08a5035;
+  background: #221b1680;
+}
+.handbook-index a > img {
+  width: 100%;
+  height: 135px;
+  object-fit: cover;
+  object-position: center 22%;
+  opacity: 0.85;
+  transition: opacity 0.2s;
+}
+.handbook-index a:hover > img {
+  opacity: 1;
+}
+.handbook-index a > div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+}
+.chapter-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px max(6vw, 24px);
+  border-bottom: 1px solid #b08a5035;
+  color: #d8c5a8;
+  font-size: 0.85rem;
+}
+.chapter-topbar > span {
+  margin-left: auto;
+}
+.chapter-topbar select {
+  font: inherit;
+  max-width: 170px;
+  padding: 8px 12px;
+  color: #e7d2b1;
+  background: #241c17;
+  border: 1px solid #a5804c66;
+  border-radius: 3px;
+}
+.chapter-topbar select:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+.visual-guide-section {
+  padding-top: 45px;
+  padding-bottom: 45px;
+}
+.visual-guide-section > .section-heading {
+  margin-bottom: 30px;
+}
+.visual-guide-section h2 {
+  font-size: clamp(1.6rem, 3.5vw, 2.35rem);
+}
+.visual-lesson {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: 65px;
+  align-items: center;
+  max-width: 1050px;
+  margin: auto;
+}
+.lesson-screen {
+  padding: 24px;
+  background: radial-gradient(ellipse at center, #71523622, transparent 75%);
+  text-align: center;
+}
+.lesson-image {
+  display: block;
+  margin: auto;
+  padding: 0;
+  width: min(100%, 300px);
+  position: relative;
+  background: #0c0b0b;
+  border: 1px solid #9c794d80;
+  border-radius: 8px;
+  box-shadow: 0 18px 45px #0006;
+}
+.lesson-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 7px;
+}
+.lesson-marker {
+  position: absolute;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  border-radius: 50%;
+  color: #21160d;
+  background: #f4cf79;
+  border: 2px solid #fff0c9;
+  box-shadow:
+    0 0 0 5px #e7b85b40,
+    0 3px 10px #000b;
+  font-size: 0.85rem;
+  font-weight: 700;
+  translate: -50% -50%;
+  pointer-events: none;
+}
+.lesson-zoom {
+  position: absolute;
+  bottom: 9px;
+  right: 9px;
+  color: #e7d2b1;
+  background: #15110dea;
+  border: 1px solid #d1ab6980;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  line-height: 26px;
+  font-size: 1.1rem;
+}
+.lesson-screen figcaption {
+  margin-top: 13px;
+  font-size: 0.65rem;
+  color: #9d8b73;
+}
+.lesson-progress {
+  color: #b69058;
+  letter-spacing: 0.2em;
+  font-size: 0.65rem;
+  margin-bottom: 12px;
+}
+.lesson-instructions h3 {
+  font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+  color: #f0d8b2;
+}
+.lesson-caption {
+  font-size: 0.95rem;
+  color: #c4b5a3;
+  margin-top: 15px;
+  max-width: 410px;
+}
+.lesson-step-list {
+  display: grid;
+  gap: 0;
+  margin-top: 32px;
+  border-top: 1px solid #b08a5035;
+}
+.lesson-step-list button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 17px 12px;
+  text-align: left;
+  background: transparent;
+  color: #b7a894;
+  border-bottom: 1px solid #b08a5035;
+  font-size: 0.88rem;
+}
+.lesson-step-list button span {
+  color: #b18d58;
+  font-size: 0.7rem;
+}
+.lesson-step-list button b {
+  margin-left: auto;
+  font-weight: 400;
+  color: #b18d58;
+}
+.lesson-step-list button[aria-pressed="true"] {
+  color: #f0d8b2;
+  background: linear-gradient(90deg, #b08a501b, transparent);
+  box-shadow: inset 2px 0 #d1ab69;
+}
+.lesson-warning {
+  margin-top: 24px;
+  border-left: 2px solid #bc8754;
+  padding-left: 13px;
+  font-size: 0.8rem;
+  line-height: 1.8;
+  color: #d1ae83;
+}
+.lesson-paging {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-top: 25px;
+  font-size: 0.7rem;
+  color: #a28e72;
+}
+.lesson-paging button {
+  width: 38px;
+  height: 36px;
+  color: #ddc095;
+  background: #2d231a;
+  border: 1px solid #b08a5055;
+  border-radius: 3px;
+}
+.lesson-paging button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.reference-details {
+  border-top: 1px solid #b08a5040;
+  border-bottom: 1px solid #b08a5040;
+  margin-top: 32px;
+}
+.reference-details > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 4px;
+  cursor: pointer;
+  color: #c9ad81;
+  font-size: 0.85rem;
+  list-style: none;
+}
+.reference-details > summary::-webkit-details-marker {
+  display: none;
+}
+.reference-details[open] > summary span {
+  rotate: 45deg;
+}
+.reference-content {
+  padding: 25px;
+  margin-bottom: 25px;
+  border: 1px solid #b08a5030;
+  gap: 30px;
+}
+.reference-content .section-heading {
+  margin-bottom: 25px;
+}
+.reference-content .section-heading h2 {
+  font-size: 1.4rem;
+}
+.reference-content .instruction-list {
+  font-size: 0.82rem;
+}
+.reference-content .craft-visual {
+  max-width: 230px;
+  margin: auto;
+}
+.reference-content .screenshot {
+  max-height: none;
+}
+.chapter-paging {
+  display: flex;
+  justify-content: space-between;
+  gap: 22px;
+  font-size: 0.85rem;
+  color: #c9ad81;
+  padding-top: 30px;
+}
+.chapter-paging a:hover,
+.chapter-topbar a:hover {
+  color: #f0d8b2;
+}
+.update-picture {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  padding: 0;
+  background: #201914;
+  border: 1px solid #b08a5035;
+}
+.update-picture img {
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+  object-position: center 28%;
+}
+.season-change-list article:last-child .update-picture img {
+  object-fit: contain;
+  padding: 12px;
+}
+.update-more {
+  font-size: 0.85rem;
+}
+.update-more > summary {
+  color: #dcb981;
+  cursor: pointer;
+  padding: 4px 0 8px;
+}
+@media (max-width: 980px) {
+  .handbook-index {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .visual-lesson {
+    gap: 30px;
+  }
+  .lesson-screen {
+    padding: 15px;
+  }
+}
+@media (max-width: 680px) {
+  .guide-intro {
+    grid-template-columns: 1fr;
+  }
+  .guide-intro .guide-host {
+    display: none;
+  }
+  .handbook-index {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .handbook-index a > img {
+    height: 110px;
+  }
+  .handbook-index a > div {
+    padding: 12px 9px;
+    gap: 7px;
+    font-size: 0.77rem;
+  }
+  .chapter-topbar {
+    padding: 12px 20px;
+    gap: 12px;
+    font-size: 0.8rem;
+  }
+  .chapter-topbar > span {
+    display: none;
+  }
+  .chapter-topbar select {
+    max-width: 160px;
+    font-size: 0.75rem;
+  }
+  .visual-guide-section {
+    padding-block: 32px;
+  }
+  .visual-lesson {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .lesson-screen {
+    padding: 0 12px;
+  }
+  .lesson-image {
+    width: min(100%, 250px);
+  }
+  .lesson-instructions {
+    padding-top: 10px;
+  }
+  .lesson-caption {
+    font-size: 0.85rem;
+  }
+  .lesson-step-list {
+    margin-top: 20px;
+  }
+  .lesson-step-list button {
+    font-size: 0.82rem;
+    padding-block: 14px;
+  }
+  .lesson-warning {
+    margin-top: 20px;
+  }
+  .reference-content {
+    padding: 16px;
+  }
+  .chapter-paging {
+    font-size: 0.77rem;
+    padding-top: 24px;
+    gap: 12px;
+  }
+  .update-picture img {
+    height: 165px;
+  }
+}
+.lesson-mobile-steps {
+  display: none;
+}
+@media (max-width: 680px) {
+  .lesson-mobile-steps {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-bottom: 4px;
+  }
+  .lesson-mobile-steps button {
+    width: 33px;
+    height: 33px;
+    border: 1px solid #a5804c66;
+    border-radius: 50%;
+    color: #c9ad81;
+    background: transparent;
+    font-size: 0.8rem;
+  }
+  .lesson-mobile-steps button[aria-pressed="true"] {
+    background: #d1ab69;
+    color: #21160d;
+  }
+  .lesson-mobile-steps > span {
+    flex-basis: 100%;
+    color: #e2c699;
+    font-size: 0.85rem;
+    padding-top: 5px;
+  }
+}

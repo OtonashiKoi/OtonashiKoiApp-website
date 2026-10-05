@@ -39,3 +39,9 @@ npm run preview -- --host 127.0.0.1 --port 5272
 - 頁首兩個分頁在桌面與手機均可切換；章節網址會自動選擇對應閱讀區，支援直接連結及瀏覽器上一頁。
 
 2026-10-05 教學核對來源：玩家端 settings／inventory／EnhanceModal／worldboss；後端 enhanceConfig、enhanceService、jobBadgeService、jobBadgeLevel、weeklyQuestService 與目前公開任務及世界王定義。YouTube 一般綁定使用直播聊天室限時綁定碼；一般強化失敗不會銷毀裝備，賭鬼模式另有破壞風險。一轉條件使用基礎屬性及指定武器，二轉採角色 Lv.35 加一轉徽章 Lv.20 的現行操作。
+
+## 圖像教學（2026-10-05）
+
+基礎教學改為圖片章節目錄，依 hash 只顯示目前選中的一章。每章以 `VisualLesson.vue` 提供 3～4 步操作：點步驟切換實際介面截圖、數字標記操作位置、點圖放大。舊完整教學保留在「查看完整說明」中；本季六項改版也用圖與短摘要呈現，詳細內容可展開。
+
+新增截圖由玩家端實際 routes／EnhanceModal／PartyBattleScene 在隔離展示資料下拍攝，使用正式顯示條件（不顯示 DEV 登入），不登入或讀取真實玩家帳號。圖中帳號、裝備、綁定碼、隊伍、等級、金幣及報酬為示範；圖片供操作教學，不是數值或掉率證據。原始圖與驗證存於 `game-backups/official-website-visual-guide-20261005`；未改動遊戲功能或資料。
