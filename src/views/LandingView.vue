@@ -846,6 +846,16 @@ const faqs = [
             這一區只整理「楓紅漸漸」的改版內容。登入、強化、穿裝與職業操作的完整教學，請到另一頁查閱。
           </p>
         </div>
+        <article class="season-change-list" aria-label="胡桃限時活動">
+          <article>
+            <span>活動</span>
+            <div>
+              <h3>北風雀神・胡桃｜限時一週，10/15 下架</h3>
+              <p>出戰 → 活動。Lv.40 起可挑戰，單一本體共鬥，每場 50,000 金幣；擊倒後 60 分鐘重生。可攜帶最多 10 罐藥水，元素師可在交戰中切換招式。活動至 10/15 16:25（台灣時間）。</p>
+              <a href="https://otonashikoi.org/">進入音無樂園 →</a>
+            </div>
+          </article>
+        </article>
         <nav class="update-index" aria-label="本季更新章節">
           <a v-for="n in updateSections" :key="n.id" :href="`#${n.id}`"
             >{{ n.name }} ↓</a
