@@ -846,7 +846,15 @@ const faqs = [
             這一區只整理「楓紅漸漸」的改版內容。登入、強化、穿裝與職業操作的完整教學，請到另一頁查閱。
           </p>
         </div>
-        <article class="season-change-list" aria-label="胡桃限時活動">
+        <article class="season-change-list" aria-label="活動世界王">
+          <article>
+            <span>活動</span>
+            <div>
+              <h3>爆走饅頭兔｜10/25 截止</h3>
+              <p>出戰 → 活動。Lv.40 起可挑戰，每次入場 5,000 金幣；單一本體 450 萬生命值，持續共鬥，擊倒後 30 分鐘重生。70% 與 40% 的蒸氣大招需要全隊戳破場上的漫畫字。活動至 10/25 23:59（台灣時間）。</p>
+              <a href="https://otonashikoi.org/">進入音無樂園 →</a>
+            </div>
+          </article>
           <article>
             <span>活動</span>
             <div>
